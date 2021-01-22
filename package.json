@@ -1,0 +1,19 @@
+{
+  "name": "com.dtl.toolnity",
+  "version": "1.0.0",
+  "displayName": "Toolnity",
+  "description": "Editor Tools and Gameplay Utilities for Unity",
+  "unity": "2019.1",
+  "keywords":
+  [
+    "DTL",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Gameplay"
+  ],
+  "author": 
+  {
+    "name": "DTL"
+  }
+}
