@@ -29,7 +29,7 @@ namespace Toolnity
             if (scenesWithChanges)
             {
                 SaveCurrentModifiedScenesIfUserWantsTo();
-                Debug.Log("------------------------- SCENES SAVED --------------------------");
+                Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
             }
 
             AssetDatabase.SaveAssets();

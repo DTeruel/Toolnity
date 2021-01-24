@@ -38,7 +38,7 @@ namespace Toolnity
 
 					DontDestroyOnLoad(singletonObject);
 
-					myInstance = tmpInstance; // ensure myInstance is never partially intialized
+					myInstance = tmpInstance; // ensure myInstance is never partially initiated
 
 					return myInstance;
 				}
@@ -63,6 +63,7 @@ namespace Toolnity
 		private void OnDestroy()
 		{
 			shuttingDown = true;
+			OnSingletonDestroy();
 		}
 
 		protected virtual void OnSingletonDestroy()
