@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class HierarchyWindow
+	public class HierarchyObjectEnabled
 	{
 		private const string CHANGE_ALL_OPTION_NAME = "Tools/Toolnity/Hierarchy Utils/Change All Selected Objects";
 		private const float BUTTON_SIZE = 15;
@@ -15,7 +15,7 @@ namespace Toolnity
 
 		private static bool changeAllSelectedObjects;
 
-		static HierarchyWindow()
+		static HierarchyObjectEnabled()
 		{
 			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
 			EditorApplication.delayCall += DelayCall;
@@ -41,7 +41,7 @@ namespace Toolnity
 		private static void HierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
 		{
 			var gameObject = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
-			if (!gameObject)
+			if (gameObject == null)
 			{
 				return;
 			}
