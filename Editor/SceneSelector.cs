@@ -11,7 +11,7 @@ namespace EditorUtils
 	public class SceneSelector : EditorWindow
 	{
 		private const string ACTIVE_OPTION_NAME = "Tools/Toolnity/Scene Selector/Active";
-		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Use Scenes just in build";
+		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Search scenes just in build";
 
 		private static int sceneNameIndex;
 		private static bool active;
