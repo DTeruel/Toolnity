@@ -24,6 +24,8 @@ namespace Toolnity
 	[InitializeOnLoad]
 	internal static class SceneAutoLoader
 	{
+		private const string LOAD_MASTER_OPTION_NAME = "Tools/Toolnity/Scene Autoload/Load Master On Play";
+		
 		static SceneAutoLoader()
 		{
 			EditorApplication.playModeStateChanged += OnPlayModeChanged;
@@ -37,32 +39,22 @@ namespace Toolnity
 			if (!string.IsNullOrEmpty(masterScene))
 			{
 				MasterScene = masterScene;
-				LoadMasterOnPlay = true;
+				LoadMasterOnPlay = EditorPrefs.GetBool(LOAD_MASTER_OPTION_NAME, true);
+				if (Menu.GetChecked(LOAD_MASTER_OPTION_NAME))
+				{
+					Menu.SetChecked(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
+				}
 			}
 		}
 
-		[MenuItem("Tools/Toolnity/Scene Autoload/Load Master On Play", true)]
-		private static bool ShowLoadMasterOnPlay()
+		[MenuItem(LOAD_MASTER_OPTION_NAME + " _F8")]
+		private static void ToggleLoadMasterOnPlay()
 		{
-			return !LoadMasterOnPlay;
-		}
-
-		[MenuItem("Tools/Toolnity/Scene Autoload/Load Master On Play")]
-		private static void EnableLoadMasterOnPlay()
-		{
-			LoadMasterOnPlay = true;
-		}
-
-		[MenuItem("Tools/Toolnity/Scene Autoload/Don't Load Master On Play", true)]
-		private static bool ShowDontLoadMasterOnPlay()
-		{
-			return LoadMasterOnPlay;
-		}
-
-		[MenuItem("Tools/Toolnity/Scene Autoload/Don't Load Master On Play")]
-		private static void DisableLoadMasterOnPlay()
-		{
-			LoadMasterOnPlay = false;
+			LoadMasterOnPlay = !LoadMasterOnPlay;
+			Menu.SetChecked(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
+			EditorPrefs.SetBool(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
+			
+			Debug.Log("[Toolnity] Load Master On Play: " + LoadMasterOnPlay);
 		}
 
 		private static void OnPlayModeChanged(PlayModeStateChange state)
