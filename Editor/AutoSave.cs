@@ -32,6 +32,8 @@ namespace Toolnity
 			Menu.SetChecked(MENU_NAME, isActive);
 			EditorPrefs.SetBool(MENU_NAME, isActive);
 			SetMode();
+			
+			Debug.Log("[Toolnity] AutoSave On Run: " + isActive);
 		}
 
 		private static void SetMode()
@@ -66,11 +68,11 @@ namespace Toolnity
 			if (scenesWithChanges)
 			{
 				SaveCurrentModifiedScenesIfUserWantsTo();
-				Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
+				Debug.Log("[Toolnity] - - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
 			}
 
 			AssetDatabase.SaveAssets();
-			Debug.Log("+++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
+			Debug.Log("[Toolnity] +++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace EditorUtils
 	public class SceneSelector : EditorWindow
 	{
 		private const string ACTIVE_OPTION_NAME = "Tools/Toolnity/Scene Selector/Active";
-		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Search scenes just in build";
+		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Search just scenes in build";
 
 		private static int sceneNameIndex;
 		private static bool active;
@@ -59,6 +59,8 @@ namespace EditorUtils
 			EditorPrefs.SetBool(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
 
 			UpdateScenes();
+			
+			Debug.Log("[Toolnity] Search just scenes in build settings : " + justScenesInBuild);
 		}
 
 		private static void OnSceneGUI(SceneView sceneView)

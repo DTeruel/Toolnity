@@ -29,11 +29,11 @@ namespace Toolnity
             if (scenesWithChanges)
             {
                 SaveCurrentModifiedScenesIfUserWantsTo();
-                Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
+                Debug.Log("[Toolnity] - - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
             }
 
             AssetDatabase.SaveAssets();
-            Debug.Log("+++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
+            Debug.Log("[Toolnity] +++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
         }
     }
 }
