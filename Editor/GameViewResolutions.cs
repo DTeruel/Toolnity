@@ -59,7 +59,7 @@ namespace Toolnity
 				Name = "[Land] iPhones Top - Ratio: 19.5:9"
 			},
 			new ResolutionInfo
-				{SizeType = GameViewSizeType.AspectRatio, Width = 16, Height = 9, Name = "[Land] iPhones Meh - Ratio"}
+				{SizeType = GameViewSizeType.AspectRatio, Width = 16, Height = 9, Name = "[Land] iPhones Old - Ratio"}
 		};
 
 		private static readonly ResolutionInfo[] LandscapeResolutions =
