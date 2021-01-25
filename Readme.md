@@ -5,7 +5,7 @@
 The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
 
 
-##Editor Tools
+## Editor Tools
 
   #### Auto Save
    * Save the Scene and the Project everytime you run the game
@@ -42,7 +42,7 @@ The big part of the content is made from scratch, but some classes are from othe
    * Option to run from an specific Scene everytime you press Play
 
 --------------------------------
-##Gameplay Utilities
+## Gameplay Utilities
 
   #### Autos
    * Scripts to perform easy actions (Bounce Object, Color Changer, Scale Anim, ...)
