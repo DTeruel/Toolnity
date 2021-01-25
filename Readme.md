@@ -17,15 +17,18 @@ The big part of the content is made from scratch, but some classes are from othe
    * F12: Shortcut to save all your Scenes opened and Project
 
   #### Scene Selector
-   * Adds small button in the Scene View to open easily any scene on your project.
+   * Adds small button in the Scene View to open easily any scene on your project
+   
 ![](Screenshots/SceneSelector.png?raw=true)
 
   #### Hierarchy Colorizer
    * Add color to any game object in the Hierarchy View
+   
 ![](Screenshots/HierarchyColorizer.png?raw=true)
 
   #### Hierarchy Object Active
    * Enable and Disable objects easily direct from the Hierarchy View
+   
 ![](Screenshots/HierarchyObjectActive.png?raw=true)
 
   #### Camera Shorcuts
@@ -36,6 +39,7 @@ The big part of the content is made from scratch, but some classes are from othe
 
   #### Game View Resolution
    * Add different mobile resolutions and aspect rations to your Game View
+   
 ![](Screenshots/GameViewResolutions.png?raw=true)
 
   #### Play Game
