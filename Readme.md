@@ -4,11 +4,11 @@
 
 ![](Screenshots/Tools.png?raw=true)
 
-The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
-
 The repository is ready to be used directly in Unity without the need to download it. You can add it to your project using the Repo-URL in the Project Manager.
 
 ![](Screenshots/PackageManager.png?raw=true)
+
+The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
 
 --------------------------------
 ## Editor Tools
