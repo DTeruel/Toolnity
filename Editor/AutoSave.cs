@@ -9,7 +9,7 @@ namespace Toolnity
 	[InitializeOnLoad]
 	public class AutoSave
 	{
-		private const string MENU_NAME = "Tools/Toolnity/Save Project/Autosave On Run";
+		private const string MENU_NAME = "Tools/Toolnity/Auto Save/Autosave On Run";
 		private static bool isActive;
 
 		static AutoSave()
