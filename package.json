@@ -1,19 +1,17 @@
 {
-  "name": "com.dtl.toolnity",
+  "name": "com.dteruel.toolnity",
   "version": "1.0.0",
   "displayName": "Toolnity",
-  "description": "Editor Tools and Gameplay Utilities for Unity",
+  "description": "Editor Tools and Gameplay Utilities for Unity.",
   "unity": "2019.1",
-  "keywords":
-  [
-    "DTL",
+  "keywords": [
+    "DTeruel",
     "Tools",
     "Utilities",
     "Editor",
     "Gameplay"
   ],
-  "author": 
-  {
-    "name": "DTL"
+  "author": {
+    "name": "DTeruel"
   }
 }

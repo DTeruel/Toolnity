@@ -5,24 +5,28 @@
 The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
 
 
-##Editor Tools
+--------------------------------
+## Editor Tools
 
   #### Auto Save
    * Save the Scene and the Project everytime you run the game
 
-   * You can disable this option in "Tools/Toonity/Auto Save"
+   * You can disable this option in "Tools/Toolnity/Auto Save"
 
   #### Save Project
    * F12: Shortcut to save all your Scenes opened and Project
 
   #### Scene Selector
    * Adds small button in the Scene View to open easily any scene on your project.
+![](Screenshots/SceneSelector.png?raw=true)
 
   #### Hierarchy Colorizer
    * Add color to any game object in the Hierarchy View
+![](Screenshots/HierarchyColorizer.png?raw=true)
 
   #### Hierarchy Object Active
    * Enable and Disable objects easily direct from the Hierarchy View
+![](Screenshots/HierarchyObjectActive.png?raw=true)
 
   #### Camera Shorcuts
    * F1: Toggle Camera in Top/Bottom View
@@ -32,6 +36,7 @@ The big part of the content is made from scratch, but some classes are from othe
 
   #### Game View Resolution
    * Add different mobile resolutions and aspect rations to your Game View
+![](Screenshots/GameViewResolutions.png?raw=true)
 
   #### Play Game
    * F5: Play / Stop
@@ -42,7 +47,7 @@ The big part of the content is made from scratch, but some classes are from othe
    * Option to run from an specific Scene everytime you press Play
 
 --------------------------------
-##Gameplay Utilities
+## Gameplay Utilities
 
   #### Autos
    * Scripts to perform easy actions (Bounce Object, Color Changer, Scale Anim, ...)
