@@ -6,7 +6,7 @@ using static UnityEditor.SceneManagement.EditorSceneManager;
 
 namespace Toolnity
 {
-    public class SaveProject : MonoBehaviour
+    public static class SaveProject
     {
         [MenuItem("Tools/Toolnity/Save Project/Save All _F12")]
         private static void SaveAll()

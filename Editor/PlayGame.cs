@@ -1,10 +1,9 @@
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
 
 namespace Toolnity
 {
-	public class PlayGame : MonoBehaviour
+	public static class PlayGame
 	{
 		[MenuItem("Tools/Toolnity/Play Game/Play | Stop _F5")]
 		private static void PlayStop()

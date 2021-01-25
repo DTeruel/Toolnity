@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Toolnity
 {
-	public class CameraShortcuts : MonoBehaviour
+	public static class CameraShortcuts
 	{
 		private static bool bottomFirst;
 		private static bool rightFirst;

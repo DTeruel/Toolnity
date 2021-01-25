@@ -7,7 +7,7 @@ using static UnityEditor.SceneManagement.EditorSceneManager;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class AutoSave
+	public static class AutoSave
 	{
 		private const string MENU_NAME = "Tools/Toolnity/Auto Save/Autosave On Run";
 		private static bool isActive;

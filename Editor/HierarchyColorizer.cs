@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class HierarchyColorizer
+	public static class HierarchyColorizer
 	{
 		private const string UNDO_APPLY_COLOR_NAME = "Modify Hierarchy Color";
 

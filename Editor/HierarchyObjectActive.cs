@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class HierarchyObjectActive
+	public static class HierarchyObjectActive
 	{
 		private const string CHANGE_ALL_OPTION_NAME = "Tools/Toolnity/Hierarchy Utils/Change All Selected Objects";
 		private const float BUTTON_SIZE = 15;
