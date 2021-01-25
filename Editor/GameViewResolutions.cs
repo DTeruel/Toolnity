@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Toolnity
 {
-	public static class GameWindow
+	public static class GameViewResolutions
 	{
 		#region Context Menu
 		private struct ResolutionInfo
@@ -184,7 +184,7 @@ namespace Toolnity
 		private static readonly object GameViewSizesInstance;
 		private static readonly MethodInfo GetGroupMethod;
 
-		static GameWindow()
+		static GameViewResolutions()
 		{
 			var sizesType = typeof(Editor).Assembly.GetType("UnityEditor.GameViewSizes");
 			var singleType = typeof(ScriptableSingleton<>).MakeGenericType(sizesType);
