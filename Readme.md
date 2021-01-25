@@ -91,3 +91,13 @@ The big part of the content is made from scratch, but some classes are from othe
 
   #### Singleton
    * Set as Singleton any of your classes
+
+
+--------------------------------
+## Support
+This is an Open Source project that I'm developing in my spare time. You can use it as you want or contact with me for any feedback or suggestion.
+You can contribute supporting me as a Sponsor in GitHub to keep working on more and better Tools and Features for Unity.
+
+[https://github.com/sponsors/DTeruel](https://github.com/sponsors/DTeruel)
+
+Thank you!
