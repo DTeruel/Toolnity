@@ -7,6 +7,7 @@ namespace Toolnity
 		[SerializeField] private bool startActivated;
 
 		protected bool Running;
+		protected bool Initiated;
 
 		protected abstract void InitInternal();
 
@@ -18,10 +19,14 @@ namespace Toolnity
 
 		private void Start()
 		{
-			Running = false;
-
+			if (Initiated)
+			{
+				return;
+			}
+			
 			InitInternal();
-
+			Initiated = true;
+			
 			if (startActivated)
 			{
 				Play();
@@ -30,6 +35,11 @@ namespace Toolnity
 
 		public void Play()
 		{
+			if (!Initiated)
+			{
+				Start();
+			}
+			
 			Running = true;
 			PlayInternal();
 		}
