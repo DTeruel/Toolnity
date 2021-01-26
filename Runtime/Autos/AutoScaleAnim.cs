@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Toolnity
 {
@@ -24,9 +25,6 @@ namespace Toolnity
 
 		protected override void StopInternal()
 		{
-			lerpValue = 0;
-			timer = 0;
-			UpdateScale();
 		}
 
 		protected override void UpdateInternal()
@@ -39,6 +37,9 @@ namespace Toolnity
 				}
 				else
 				{
+					lerpValue = 1;
+					UpdateScale();
+					
 					Stop();
 					return;
 				}
