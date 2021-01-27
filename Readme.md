@@ -2,11 +2,11 @@
 
 **Toolnity** is a bunch of Editor Tools and Gameplay Utilities for Unity.
 
-![](Screenshots/Tools.png?raw=true)
+![Tools](Screenshots/Tools.png)
 
 The repository is ready to be used directly in Unity without the need to download it. You can add it to your project using the Repo-URL in the Project Manager.
 
-![](Screenshots/PackageManager.png?raw=true)
+![PackageManager](Screenshots/PackageManager.pnge)
 
 The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
 
@@ -24,17 +24,17 @@ The big part of the content is made from scratch, but some classes are from othe
   #### Scene Selector
    * Adds small button in the Scene View to open easily any scene on your project
    
-![](Screenshots/SceneSelector.png?raw=true)
+![SceneSelector](Screenshots/SceneSelector.png)
 
   #### Hierarchy Colorizer
    * Add color to any game object in the Hierarchy View
    
-![](Screenshots/HierarchyColorizer.png?raw=true)
+![HierarchyColorizer](Screenshots/HierarchyColorizer.png)
 
   #### Hierarchy Object Active
    * Enable and Disable objects easily direct from the Hierarchy View
    
-![](Screenshots/HierarchyObjectActive.png?raw=true)
+![](Screenshots/HierarchyObjectActive.png)
 
   #### Camera Shorcuts
    * F1: Toggle Camera in Top/Bottom View
@@ -45,7 +45,7 @@ The big part of the content is made from scratch, but some classes are from othe
   #### Game View Resolution
    * Add different mobile resolutions and aspect rations to your Game View
    
-![](Screenshots/GameViewResolutions.png?raw=true)
+![GameViewResolutions](Screenshots/GameViewResolutions.png)
 
   #### Play Game
    * F5: Play / Stop
