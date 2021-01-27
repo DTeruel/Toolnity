@@ -76,6 +76,7 @@ namespace EditorUtils
 			if (GUILayout.Button(buttonText))
 			{
 				showSceneLauncher = !showSceneLauncher;
+				UpdateScenes();
 			}
 			
 			if (showSceneLauncher)
