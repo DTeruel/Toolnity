@@ -82,17 +82,17 @@ namespace EditorUtils
 			{
 				buttonText = "<";
 
-				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "");
-				if (justScenesInBuild != newJustScenesInBuild)
-				{
-					ToggleJustScenesInBuild();
-				}
-
 				var newSelection = EditorGUILayout.Popup(sceneNameIndex, NamesList.ToArray());
 				if (sceneNameIndex != newSelection)
 				{
 					sceneNameIndex = newSelection;
 					EditorSceneManager.OpenScene(PathsList[sceneNameIndex]);
+				}
+
+				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "");
+				if (justScenesInBuild != newJustScenesInBuild)
+				{
+					ToggleJustScenesInBuild();
 				}
 			}
 			else
