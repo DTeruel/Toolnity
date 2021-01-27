@@ -34,7 +34,7 @@ The big part of the content is made from scratch, but some classes are from othe
   #### Hierarchy Object Active
    * Enable and Disable objects easily direct from the Hierarchy View
    
-![](Screenshots/HierarchyObjectActive.png)
+![HierarchyObjectActive](Screenshots/HierarchyObjectActive.png)
 
   #### Camera Shorcuts
    * F1: Toggle Camera in Top/Bottom View
