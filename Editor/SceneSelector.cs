@@ -1,25 +1,26 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.SceneManagement.EditorSceneManager;
 
-namespace EditorUtils
+namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class SceneSelector : EditorWindow
+	public static class SceneSelector
 	{
 		private const string ACTIVE_OPTION_NAME = "Tools/Toolnity/Scene Selector/Active";
 		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Search just scenes in build";
 
-		private static int sceneNameIndex;
 		private static bool active;
 		private static bool justScenesInBuild;
 		private static bool showSceneLauncher;
 		private static readonly List<string> NamesList = new List<string>();
 		private static readonly List<string> PathsList = new List<string>();
 		private static string buttonText;
+
+		private static GUIStyle popupMiddleAlignment;
 
 		static SceneSelector()
 		{
@@ -37,7 +38,6 @@ namespace EditorUtils
 
 			UpdateScenes();
 			
-			EditorSceneManager.sceneOpened += SceneOpenedCallback;
 			SceneView.duringSceneGui += OnSceneGUI;
 		}
 		
@@ -70,6 +70,13 @@ namespace EditorUtils
 				return;
 			}
 			
+			if (popupMiddleAlignment == null)
+			{
+				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
+				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
+				popupMiddleAlignment.fontSize = 12;
+			}
+
 			Handles.BeginGUI();
 			GUILayout.BeginHorizontal();
 			
@@ -83,11 +90,11 @@ namespace EditorUtils
 			{
 				buttonText = "<";
 
-				var newSelection = EditorGUILayout.Popup(sceneNameIndex, NamesList.ToArray());
-				if (sceneNameIndex != newSelection)
+				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
+				if (newSelection > 0)
 				{
-					sceneNameIndex = newSelection;
-					EditorSceneManager.OpenScene(PathsList[sceneNameIndex]);
+					AutoSave();
+					OpenScene(PathsList[newSelection]);
 				}
 
 				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "");
@@ -106,24 +113,23 @@ namespace EditorUtils
 			Handles.EndGUI();
 		}
 
-		private static void SceneOpenedCallback(Scene scene, OpenSceneMode mode)
+		private static void AutoSave()
 		{
-			if (mode != OpenSceneMode.Single)
+			var scenesWithChanges = false;
+			for (var i = 0; i < SceneManager.sceneCount; i++)
 			{
-				return;
+				var scene = SceneManager.GetSceneAt(i);
+				if (scene.isDirty)
+				{
+					scenesWithChanges = true;
+				}
 			}
 
-			CheckSceneIndex(scene);
-		}
-
-		private static void CheckSceneIndex(Scene scene)
-		{
-			for (var i = 0; i < NamesList.Count; i++)
+			if (scenesWithChanges)
 			{
-				if (NamesList[i] == scene.name)
+				if (SaveCurrentModifiedScenesIfUserWantsTo())
 				{
-					sceneNameIndex = i;
-					return;
+					Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
 				}
 			}
 		}
@@ -132,7 +138,9 @@ namespace EditorUtils
 		{
 			NamesList.Clear();
 			PathsList.Clear();
-
+			NamesList.Add("- Select Scene - ");
+			PathsList.Add(" ");
+			
 			if (justScenesInBuild)
 			{
 				GetScenesFromBuild();
@@ -141,13 +149,6 @@ namespace EditorUtils
 			{
 				GetScenesFromProject();
 			}
-
-			if (sceneNameIndex >= NamesList.Count)
-			{
-				sceneNameIndex = 0;
-			}
-
-			CheckSceneIndex(SceneManager.GetActiveScene());
 		}
 
 		private static void GetScenesFromBuild()
@@ -162,7 +163,6 @@ namespace EditorUtils
 					PathsList.Add(sceneInfo[i].path);
 				}
 			}
-
 		}
 
 		private static void GetScenesFromProject()

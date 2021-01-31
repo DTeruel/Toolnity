@@ -20,6 +20,8 @@ namespace EditorUtils
 		private static readonly List<string> PathsList = new List<string>();
 		private static string buttonText;
 
+		private static GUIStyle popupMiddleAlignment;
+
 		static ToDoListSelector()
 		{
 			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
@@ -50,6 +52,13 @@ namespace EditorUtils
 				return;
 			}
 			
+			if (popupMiddleAlignment == null)
+			{
+				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
+				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
+				popupMiddleAlignment.fontSize = 12;
+			}
+			
 			Handles.BeginGUI();
 			GUILayout.BeginHorizontal();
 			
@@ -63,7 +72,7 @@ namespace EditorUtils
 			{
 				buttonText = "<";
 
-				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray());
+				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
 					Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]) };
