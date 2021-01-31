@@ -138,7 +138,7 @@ namespace Toolnity
 		{
 			NamesList.Clear();
 			PathsList.Clear();
-			NamesList.Add("- Select Scene - ");
+			NamesList.Add("- Open Scene - ");
 			PathsList.Add(" ");
 			
 			if (justScenesInBuild)

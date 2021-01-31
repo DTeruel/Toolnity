@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using Toolnity;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace EditorUtils
 {
@@ -91,7 +89,7 @@ namespace EditorUtils
 		public static void UpdateToDoLists()
 		{
 			NamesList.Clear();
-			NamesList.Add(" - Select Assets -");
+			NamesList.Add(" - Select Asset -");
 			
 			PathsList.Clear();
 			PathsList.Add("");
