@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
@@ -56,6 +57,7 @@ namespace Toolnity
 				CheckSelectedObjectsActive(gameObject, value);
 
 				MakeSceneDirty();
+				MakePrefabDirty();
 			}
 		}
 
@@ -94,6 +96,16 @@ namespace Toolnity
 			if (!EditorApplication.isPlaying)
 			{
 				EditorSceneManager.MarkSceneDirty(activeScene);
+			}
+		}
+		
+		private static void MakePrefabDirty()
+		{
+			
+			var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+			if (prefabStage != null)
+			{
+				EditorSceneManager.MarkSceneDirty(prefabStage.scene);
 			}
 		}
 	}
