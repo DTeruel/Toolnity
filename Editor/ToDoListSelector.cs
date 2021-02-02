@@ -22,17 +22,18 @@ namespace EditorUtils
 
 		static ToDoListSelector()
 		{
-			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
-			if (Menu.GetChecked(ACTIVE_OPTION_NAME))
-			{
-				Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-			}
+			EditorApplication.delayCall += DelayCall;
+			SceneView.duringSceneGui += OnSceneGUI;
 
 			UpdateToDoLists();
-			
-			SceneView.duringSceneGui += OnSceneGUI;
 		}
-		
+
+		private static void DelayCall()
+		{
+			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
+			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
+		}
+
 		[MenuItem(ACTIVE_OPTION_NAME)]
 		public static void ToggleActive()
 		{

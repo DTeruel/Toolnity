@@ -7,22 +7,21 @@ using static UnityEditor.SceneManagement.EditorSceneManager;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public static class AutoSave
+	public class AutoSave : EditorWindow
 	{
 		private const string MENU_NAME = "Tools/Toolnity/Auto Save/Autosave On Run";
 		private static bool isActive;
-
+		
 		static AutoSave()
 		{
-			EditorApplication.delayCall += () =>
-			{
-				isActive = EditorPrefs.GetBool(MENU_NAME, true);
-				if (Menu.GetChecked(MENU_NAME))
-				{
-					Menu.SetChecked(MENU_NAME, isActive);
-				}
-				SetMode();
-			};
+			EditorApplication.delayCall += DelayCall;
+		}
+		
+		private static void DelayCall()
+		{
+			isActive = EditorPrefs.GetBool(MENU_NAME, true);
+			Menu.SetChecked(MENU_NAME, isActive);
+			SetMode();
 		}
 
 		[MenuItem(MENU_NAME)]

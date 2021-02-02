@@ -24,21 +24,18 @@ namespace Toolnity
 
 		static SceneSelector()
 		{
+			EditorApplication.delayCall += DelayCall;
+			SceneView.duringSceneGui += OnSceneGUI;
+			UpdateScenes();
+		}
+
+		private static void DelayCall()
+		{
 			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
-			if (Menu.GetChecked(ACTIVE_OPTION_NAME))
-			{
-				Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-			}
+			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
 
 			justScenesInBuild = EditorPrefs.GetBool(JUST_SCENES_IN_BUILD_OPTION_NAME, false);
-			if (Menu.GetChecked(JUST_SCENES_IN_BUILD_OPTION_NAME))
-			{
-				Menu.SetChecked(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
-			}
-
-			UpdateScenes();
-			
-			SceneView.duringSceneGui += OnSceneGUI;
+			Menu.SetChecked(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
 		}
 		
 		[MenuItem(ACTIVE_OPTION_NAME)]

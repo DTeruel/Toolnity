@@ -18,17 +18,14 @@ namespace Toolnity
 
 		static HierarchyObjectActive()
 		{
-			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
 			EditorApplication.delayCall += DelayCall;
+			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
 		}
 
 		private static void DelayCall()
 		{
 			changeAllSelectedObjects = EditorPrefs.GetBool(CHANGE_ALL_OPTION_NAME, true);
-			if (Menu.GetChecked(CHANGE_ALL_OPTION_NAME))
-			{
-				Menu.SetChecked(CHANGE_ALL_OPTION_NAME, changeAllSelectedObjects);
-			}
+			Menu.SetChecked(CHANGE_ALL_OPTION_NAME, changeAllSelectedObjects);
 		}
 
 		[MenuItem(CHANGE_ALL_OPTION_NAME)]
