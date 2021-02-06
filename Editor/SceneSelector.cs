@@ -102,7 +102,7 @@ namespace Toolnity
 			}
 			else
 			{
-				buttonText = ">";
+				buttonText = "S";
 			}
 
 			GUILayout.FlexibleSpace();

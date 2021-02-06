@@ -79,7 +79,7 @@ namespace EditorUtils
 			}
 			else
 			{
-				buttonText = ">";
+				buttonText = "T";
 			}
 
 			GUILayout.FlexibleSpace();
@@ -90,7 +90,7 @@ namespace EditorUtils
 		public static void UpdateToDoLists()
 		{
 			NamesList.Clear();
-			NamesList.Add(" - Select Asset -");
+			NamesList.Add(" - Select ToDo List -");
 			
 			PathsList.Clear();
 			PathsList.Add("");
@@ -99,7 +99,7 @@ namespace EditorUtils
 
 			if (NamesList.Count == 1)
 			{
-				NamesList[0] = " - No Assets Found -";
+				NamesList[0] = " - No ToDo Lists Found -";
 			}
 		}
 		
