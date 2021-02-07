@@ -60,6 +60,8 @@ namespace Toolnity
             DrawNewTask();
             DrawCompletedTasks();
             DrawConfiguration();
+            
+            EditorUtility.SetDirty(target);
         }
 
         #region TASKS
