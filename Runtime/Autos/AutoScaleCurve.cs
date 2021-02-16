@@ -6,6 +6,7 @@ namespace Toolnity
 	{
 		[SerializeField] private AnimationCurve scaleAnimation;
 		[SerializeField] private float speed = 1.0f;
+		[SerializeField] private bool loop;
 		
 		private float currentLerpValue;
 
@@ -29,7 +30,14 @@ namespace Toolnity
 			transform.localScale = Vector3.one * scaleAnimation.Evaluate(currentLerpValue);
 			if (currentLerpValue > 1)
 			{
-				Stop();
+				if (loop)
+				{
+					currentLerpValue -= 1;
+				}
+				else
+				{
+					Stop();
+				}
 			}
 		}
 	}
