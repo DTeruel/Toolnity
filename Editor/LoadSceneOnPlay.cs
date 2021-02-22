@@ -13,7 +13,7 @@ namespace Toolnity
 	/// Scene auto loader.
 	/// </summary>
 	/// <description>
-	/// This class adds a File > Scene Autoload menu containing options to select
+	/// This class adds a menu containing options to select
 	/// a "master scene" enable it to be auto-loaded when the user presses play
 	/// in the editor. When enabled, the selected scene will be loaded on play,
 	/// then the original scene will be reloaded on stop.
@@ -22,16 +22,16 @@ namespace Toolnity
 	/// http://forum.unity3d.com/threads/157502-Executing-first-scene-in-build-settings-when-pressing-play-button-in-editor
 	/// </description>
 	[InitializeOnLoad]
-	internal static class SceneAutoLoader
+	internal static class LoadSceneOnPlay
 	{
-		private const string LOAD_MASTER_OPTION_NAME = "Tools/Toolnity/Scene Autoload/Load Master On Play";
+		private const string LOAD_MASTER_OPTION_NAME = "Tools/Toolnity/Load Scene On Play/Active";
 		
-		static SceneAutoLoader()
+		static LoadSceneOnPlay()
 		{
 			EditorApplication.playModeStateChanged += OnPlayModeChanged;
 		}
 
-		[MenuItem("Tools/Toolnity/Scene Autoload/Select Master Scene...")]
+		[MenuItem("Tools/Toolnity/Load Scene On Play/Select Master Scene...")]
 		private static void SelectMasterScene()
 		{
 			var masterScene = EditorUtility.OpenFilePanel("Select Master Scene", Application.dataPath, "unity");
@@ -103,9 +103,9 @@ namespace Toolnity
 			}
 		}
 
-		private const string C_EDITOR_PREF_LOAD_MASTER_ON_PLAY = "SceneAutoLoader.LoadMasterOnPlay";
-		private const string C_EDITOR_PREF_MASTER_SCENE = "SceneAutoLoader.MasterScene";
-		private const string C_EDITOR_PREF_PREVIOUS_SCENE = "SceneAutoLoader.PreviousScene";
+		private const string C_EDITOR_PREF_LOAD_MASTER_ON_PLAY = "LoadSceneOnPlay.Active";
+		private const string C_EDITOR_PREF_MASTER_SCENE = "LoadSceneOnPlay.MasterScene";
+		private const string C_EDITOR_PREF_PREVIOUS_SCENE = "LoadSceneOnPlay.PreviousScene";
 
 		private static bool LoadMasterOnPlay
 		{
