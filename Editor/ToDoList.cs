@@ -10,25 +10,25 @@ namespace Toolnity
     {
         public List<ToDoElement> tasks = new List<ToDoElement>();
         public List<ToDoElement> completedTasks = new List<ToDoElement>();
-        public List<string> assigners = new List<string>();
-        public List<string> priorities = new List<string>();
+        public List<string> parameters1 = new List<string>();
+        public List<string> parameters2 = new List<string>();
         public bool configurationEnabled;
         public bool showCompletedTasks;
 
         public ToDoList()
         {
-            assigners.Add("Design");
-            assigners.Add("Art");
-            assigners.Add("Programming");
-            assigners.Add("Audio");
-            assigners.Add("Animation");
-            assigners.Add("VFX");
+            parameters1.Add("Design");
+            parameters1.Add("Art");
+            parameters1.Add("Programming");
+            parameters1.Add("Audio");
+            parameters1.Add("Animation");
+            parameters1.Add("VFX");
             
-            priorities.Add("Normal");
-            priorities.Add("Very High");
-            priorities.Add("High");
-            priorities.Add("Low");
-            priorities.Add("Very Low");
+            parameters2.Add("Normal");
+            parameters2.Add("Very High");
+            parameters2.Add("High");
+            parameters2.Add("Low");
+            parameters2.Add("Very Low");
         }
     }
 
@@ -36,14 +36,14 @@ namespace Toolnity
     public class ToDoElement
     {
         public string description;
-        public int priorityId;
-        public int assignerId;
+        public int parameter2Id;
+        public int paramerer1Id;
 
         public ToDoElement()
         {
             description = "";
-            priorityId = 0;
-            assignerId = 0;
+            parameter2Id = 0;
+            paramerer1Id = 0;
         }
     }
 }

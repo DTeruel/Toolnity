@@ -65,13 +65,13 @@ namespace Toolnity
         }
 
         #region TASKS
-        private static GUIStyle[] RectangleColor;
+        private static GUIStyle[] rectangleColor;
 
         private void DrawTasks(string title, IReadOnlyList<ToDoElement> list, bool taskCompleted = false)
         {
             var toDoList = (ToDoList)target;
             
-            if (RectangleColor == null)
+            if (rectangleColor == null)
             {
                 CreateRectangleColors();
             }
@@ -82,8 +82,8 @@ namespace Toolnity
 
             for (var i = 0; i < list.Count; i++)
             {
-                var rectangleColorIndex = list[i].assignerId % RectangleColor.Length;
-                EditorGUILayout.BeginHorizontal(RectangleColor[rectangleColorIndex]);
+                var rectangleColorIndex = list[i].paramerer1Id % rectangleColor.Length;
+                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
                 DrawUpDownButtons(i, list.Count);
                 GUILayout.FlexibleSpace();
                 list[i].description = DrawDescription(list[i].description);
@@ -95,11 +95,11 @@ namespace Toolnity
                 EditorGUILayout.Space();
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal(RectangleColor[rectangleColorIndex]);
+                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
                 GUILayout.Space(LEFT_RIGHT_OPTIONS_OFFSET);
-                list[i].assignerId = DrawDropdown(list[i].assignerId, toDoList.assigners.ToArray());
+                list[i].paramerer1Id = DrawDropdown(list[i].paramerer1Id, toDoList.parameters1.ToArray());
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
-                list[i].priorityId = DrawDropdown(list[i].priorityId, toDoList.priorities.ToArray());
+                list[i].parameter2Id = DrawDropdown(list[i].parameter2Id, toDoList.parameters2.ToArray());
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
                 DrawCompleteButton(i, taskCompleted);
                 GUILayout.Space(LEFT_RIGHT_OPTIONS_OFFSET);
@@ -111,7 +111,7 @@ namespace Toolnity
 
         private static void CreateRectangleColors()
         {
-            RectangleColor = new []
+            rectangleColor = new []
             {
                 new GUIStyle
                 {
@@ -313,9 +313,9 @@ namespace Toolnity
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                DrawConfigList("ASSIGNERS", toDoList.assigners);
+                DrawConfigList("PARAMETERS 1", toDoList.parameters1);
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
-                DrawConfigList("PRIORITIES", toDoList.priorities);
+                DrawConfigList("PARAMETERS 2", toDoList.parameters2);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
             }
