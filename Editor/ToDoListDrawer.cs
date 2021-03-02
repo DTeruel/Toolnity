@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -49,6 +50,11 @@ namespace Toolnity
                 toggleCentered = GUI.skin.GetStyle("Toggle");
                 toggleCentered.alignment = TextAnchor.MiddleCenter;
             }
+            
+            if (rectangleColor == null)
+            {
+                CreateRectangleColors();
+            }
         }
 
         public override void OnInspectorGUI()
@@ -70,11 +76,6 @@ namespace Toolnity
         private void DrawTasks(string title, IReadOnlyList<ToDoElement> list, bool taskCompleted = false)
         {
             var toDoList = (ToDoList)target;
-            
-            if (rectangleColor == null)
-            {
-                CreateRectangleColors();
-            }
             
             EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
             EditorGUILayout.LabelField(title, titleCenteredLabel);
@@ -145,14 +146,14 @@ namespace Toolnity
                 {
                     normal =
                     {
-                        background = MakeTex(1, 1, new Color(0.0f, 1.0f, 1.0f, 0.5f))
+                        background = MakeTex(1, 1, new Color(0.0f, 0.2f, 0.2f))
                     }
                 },
                 new GUIStyle
                 {
                     normal =
                     {
-                        background = MakeTex(1, 1, new Color(1.0f, 0.0f, 1.0f, 0.5f))
+                        background = MakeTex(1, 1, new Color(0.2f, 0.0f, 0.2f))
                     }
                 }
             };
@@ -313,7 +314,7 @@ namespace Toolnity
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                DrawConfigList("PARAMETERS 1", toDoList.parameters1);
+                DrawConfigList("PARAMETERS 1", toDoList.parameters1, true);
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
                 DrawConfigList("PARAMETERS 2", toDoList.parameters2);
                 GUILayout.FlexibleSpace();
@@ -321,14 +322,25 @@ namespace Toolnity
             }
         }
 
-        private void DrawConfigList(string title, IList<string> list)
+        private void DrawConfigList(string title, IList<string> list, bool changeColors = false)
         {
             EditorGUILayout.BeginVertical();
             GUILayout.Label(title, titleCenteredLabel);
             GUILayout.Space(DEFAULT_VERTICAL_OFFSET);
             for (var i = 0; i < list.Count; i++)
             {
-                list[i] = GUILayout.TextField(list[i], fieldCentered);
+                if (changeColors)
+                {
+                    var rectangleColorIndex = i % rectangleColor.Length;
+                    var originalBackground = fieldCentered.normal.background;
+                    fieldCentered.normal.background = rectangleColor[rectangleColorIndex].normal.background;
+                    list[i] = GUILayout.TextField(list[i], fieldCentered);
+                    fieldCentered.normal.background = originalBackground;
+                }
+                else
+                {
+                    list[i] = GUILayout.TextField(list[i], fieldCentered);
+                }
             }
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("-"))
