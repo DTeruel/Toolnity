@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,45 +22,20 @@ namespace Toolnity
         private GUIStyle fieldCentered;
         private GUIStyle centeredDropdown;
         private GUIStyle toggleCentered;
+        private bool createCommonVars;
 
-        private void CheckCommonVars()
+        #region MAIN
+        public void OnEnable()
         {
-            if (titleCenteredLabel == null)
-            {
-                titleCenteredLabel = GUI.skin.GetStyle("Label");
-                titleCenteredLabel.alignment = TextAnchor.MiddleCenter;
-                titleCenteredLabel.fontStyle = FontStyle.Bold;
-                titleCenteredLabel.fontSize = 15;
-            }
-
-            if (fieldCentered == null)
-            {
-                fieldCentered = GUI.skin.GetStyle("TextField");
-                fieldCentered.alignment = TextAnchor.MiddleCenter;
-            }
-
-            if (centeredDropdown == null)
-            {
-                centeredDropdown = GUI.skin.GetStyle("Popup");
-                centeredDropdown.alignment = TextAnchor.MiddleCenter;
-            }
-
-            if (toggleCentered == null)
-            {
-                toggleCentered = GUI.skin.GetStyle("Toggle");
-                toggleCentered.alignment = TextAnchor.MiddleCenter;
-            }
-            
-            if (rectangleColor == null)
-            {
-                CreateRectangleColors();
-            }
+            createCommonVars = true;
         }
 
         public override void OnInspectorGUI()
         {
-            CheckCommonVars();
-
+            if (createCommonVars)
+            {
+                CreateCommonVars();
+            }
             var toDoList = (ToDoList)target;
             DrawTasks("TASKS", toDoList.tasks);
             DrawNewTask();
@@ -69,7 +44,8 @@ namespace Toolnity
 
             EditorUtility.SetDirty(target);
         }
-
+        #endregion
+        
         #region TASKS
         private static GUIStyle[] rectangleColor;
 
@@ -108,55 +84,6 @@ namespace Toolnity
 
                 EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
             }
-        }
-
-        private static void CreateRectangleColors()
-        {
-            rectangleColor = new []
-            {
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.1f, 0.2f, 0.1f))
-                    }
-                },
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.2f, 0.1f, 0.1f))
-                    }
-                },
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.1f, 0.1f, 0.2f))
-                    }
-                },
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.2f, 0.2f, 0.1f))
-                    }
-                },
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.0f, 0.2f, 0.2f))
-                    }
-                },
-                new GUIStyle
-                {
-                    normal =
-                    {
-                        background = MakeTex(1, 1, new Color(0.2f, 0.0f, 0.2f))
-                    }
-                }
-            };
         }
 
         private static Texture2D MakeTex(int width, int height, Color col)
@@ -357,6 +284,82 @@ namespace Toolnity
         #endregion
 
         #region UTILS
+        private void CreateCommonVars()
+        {
+            titleCenteredLabel = new GUIStyle(GUI.skin.GetStyle("Label"))
+            {
+                alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 15
+            };
+
+            fieldCentered = new GUIStyle(GUI.skin.GetStyle("TextField"))
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
+
+            centeredDropdown = new GUIStyle(GUI.skin.GetStyle("Popup"))
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
+
+            toggleCentered = new GUIStyle(GUI.skin.GetStyle("Toggle"))
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
+
+            CreateRectangleColors();
+
+            createCommonVars = false;
+        }
+
+        private static void CreateRectangleColors()
+        {
+            rectangleColor = new []
+            {
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.1f, 0.2f, 0.1f))
+                    }
+                },
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.2f, 0.1f, 0.1f))
+                    }
+                },
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.1f, 0.1f, 0.2f))
+                    }
+                },
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.2f, 0.2f, 0.1f))
+                    }
+                },
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.0f, 0.2f, 0.2f))
+                    }
+                },
+                new GUIStyle
+                {
+                    normal =
+                    {
+                        background = MakeTex(1, 1, new Color(0.2f, 0.0f, 0.2f))
+                    }
+                }
+            };
+        }
+
         private void SwitchElementsInList(int originIndex, int destinyIndex)
         {
             var toDoList = (ToDoList)target;
