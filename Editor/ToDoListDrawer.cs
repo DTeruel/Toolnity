@@ -21,7 +21,7 @@ namespace Toolnity
         private GUIStyle titleCenteredLabel;
         private GUIStyle fieldCentered;
         private GUIStyle centeredDropdown;
-        private GUIStyle toggleCentered;
+        private GUIStyle textAreaCentered;
         private bool createCommonVars;
 
         #region MAIN
@@ -131,12 +131,11 @@ namespace Toolnity
             EditorGUILayout.EndVertical();
         }
 
-        private static string DrawDescription(string description)
+        private string DrawDescription(string description)
         {
-            description = EditorGUILayout.TextArea(
+            description = GUILayout.TextArea(
                 description,
-                GUILayout.Height(50),
-                GUILayout.Width(Screen.width - DESCRIPTION_SCREEN_WIDTH_REDUCTION));
+                textAreaCentered);
             GUILayout.FlexibleSpace();
 
             return description;
@@ -301,11 +300,14 @@ namespace Toolnity
                 alignment = TextAnchor.MiddleCenter
             };
 
-            toggleCentered = new GUIStyle(GUI.skin.GetStyle("Toggle"))
+            textAreaCentered = new GUIStyle(GUI.skin.GetStyle("TextArea"))
             {
-                alignment = TextAnchor.MiddleCenter
+                alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Bold,
+                fixedHeight = 50,
+                fixedWidth = Screen.width - DESCRIPTION_SCREEN_WIDTH_REDUCTION
             };
-
+                
             CreateRectangleColors();
 
             createCommonVars = false;
