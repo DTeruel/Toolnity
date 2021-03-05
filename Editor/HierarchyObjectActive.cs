@@ -13,6 +13,7 @@ namespace Toolnity
 		private const string CHANGE_ALL_OPTION_NAME = "Tools/Toolnity/Hierarchy Utils/Change All Selected Objects";
 		private const float BUTTON_SIZE = 15;
 		private const float BUTTON_OFFSET = 2 + BUTTON_SIZE * 2;
+		private const float BUTTON_ROOT_PREFAB_OFFSET = BUTTON_OFFSET + BUTTON_SIZE;
 
 		private static bool changeAllSelectedObjects;
 
@@ -44,7 +45,12 @@ namespace Toolnity
 				return;
 			}
 
-			var r = new Rect(selectionRect) {x = BUTTON_OFFSET, width = BUTTON_SIZE};
+			var offset = BUTTON_OFFSET;
+			if (selectionRect.y == 0 && gameObject.transform.childCount > 0)
+			{
+				offset = BUTTON_ROOT_PREFAB_OFFSET;
+			}
+			var r = new Rect(selectionRect) {x = offset, width = BUTTON_SIZE};
 			var value = GUI.Toggle(r, gameObject.activeSelf, "");
 
 			if (gameObject.activeSelf != value)
