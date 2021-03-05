@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,12 +9,13 @@ namespace Toolnity
     public class ToDoListDrawer : Editor
     {
         private const float DEFAULT_VERTICAL_OFFSET = 15;
+        private const float MIDDLE_VERTICAL_OFFSET = 10;
         private const float UP_DOWN_BUTTON_WIDTH = 50;
         private const float DELETE_BUTTON_WIDTH = 25;
         private const float DESCRIPTION_SCREEN_WIDTH_REDUCTION = 120;
         private const float LEFT_RIGHT_OPTIONS_OFFSET = 70;
         private const float OPTIONS_HORIZONTAL_OFFSET = 20;
-        private const float TASK_VERTICAL_OFFSET = 20;
+        private const float TASK_VERTICAL_OFFSET = 2;
         private const float NEW_TASK_HEIGHT = 35;
 
         private GUIStyle titleCenteredLabel;
@@ -38,7 +38,7 @@ namespace Toolnity
             }
             var toDoList = (ToDoList)target;
             DrawTasks("TASKS", toDoList.tasks);
-            DrawNewTask();
+            DrawNewTaskButton();
             DrawCompletedTasks();
             DrawConfiguration();
 
@@ -60,6 +60,11 @@ namespace Toolnity
             for (var i = 0; i < list.Count; i++)
             {
                 var rectangleColorIndex = list[i].paramerer1Id % rectangleColor.Length;
+
+                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
+                GUILayout.Label(" ");
+                EditorGUILayout.EndHorizontal();
+                
                 EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
                 DrawUpDownButtons(i, list.Count);
                 GUILayout.FlexibleSpace();
@@ -82,6 +87,10 @@ namespace Toolnity
                 GUILayout.Space(LEFT_RIGHT_OPTIONS_OFFSET);
                 EditorGUILayout.EndHorizontal();
 
+                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
+                GUILayout.Label(" ");
+                EditorGUILayout.EndHorizontal();
+                
                 EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
             }
         }
@@ -178,8 +187,10 @@ namespace Toolnity
             }
         }
 
-        private void DrawNewTask()
+        private void DrawNewTaskButton()
         {
+            EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
+            
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("NEW TASK",
@@ -191,7 +202,6 @@ namespace Toolnity
             }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
         }
         #endregion
 
@@ -201,7 +211,7 @@ namespace Toolnity
         {
             var toDoList = (ToDoList)target;
 
-            EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
+            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -209,8 +219,6 @@ namespace Toolnity
                 " SHOW COMPLETED TASKS");
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
 
             if (toDoList.showCompletedTasks && toDoList.completedTasks.Count > 0)
             {
@@ -225,8 +233,8 @@ namespace Toolnity
         {
             var toDoList = (ToDoList)target;
 
-            EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
-
+            EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
+            
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             toDoList.configurationEnabled = GUILayout.Toggle(toDoList.configurationEnabled,
@@ -234,15 +242,15 @@ namespace Toolnity
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
+            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
 
             if (toDoList.configurationEnabled)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                DrawConfigList("PARAMETERS 1", toDoList.parameters1, true);
+                DrawConfigList("PARAMETER #1", toDoList.parameters1, true);
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
-                DrawConfigList("PARAMETERS 2", toDoList.parameters2);
+                DrawConfigList("PARAMETER #2", toDoList.parameters2);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
             }
