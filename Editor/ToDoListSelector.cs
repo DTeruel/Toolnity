@@ -75,6 +75,7 @@ namespace Toolnity
 				if (newSelection > 0)
 				{
 					Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]) };
+					showSceneLauncher = false;
 				}
 			}
 			else
