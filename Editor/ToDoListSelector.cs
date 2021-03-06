@@ -4,7 +4,7 @@ using Toolnity;
 using UnityEditor;
 using UnityEngine;
 
-namespace EditorUtils
+namespace Toolnity
 {
 	[InitializeOnLoad]
 	public class ToDoListSelector : EditorWindow

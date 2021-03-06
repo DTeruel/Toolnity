@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Toolnity
 {
-	public class AutoScaleAnim : AutoBaseClass
+	public class AutoColorAnim : AutoBaseClass
 	{
+		[SerializeField] private Image image;
+		[SerializeField] private Color colorStart;
+		[SerializeField] private Color colorEnd;
 		[SerializeField] private AnimationCurve lerpAnimation;
 		[SerializeField] private float duration = 1;
-		[SerializeField] private bool loop;
+		[SerializeField] private bool loop = true;
 
 		private float timer;
 		private float lerpValue;
@@ -15,7 +19,7 @@ namespace Toolnity
 		{
 			Reset();
 		}
-
+		
 		protected override void InitInternal()
 		{
 		}
@@ -29,7 +33,7 @@ namespace Toolnity
 		{
 			lerpValue = 0;
 			timer = 0;
-			UpdateScale();
+			UpdateColor();
 		}
 
 		protected override void StopInternal()
@@ -38,14 +42,13 @@ namespace Toolnity
 
 		protected override void UpdateInternal()
 		{
-			UpdateScale();
+			UpdateColor();
 			UpdateTimer();
 		}
 
-		private void UpdateScale()
+		private void UpdateColor()
 		{
-			var scale = lerpAnimation.Evaluate(lerpValue);
-			gameObject.transform.localScale = Vector3.one * scale;
+			image.color = Color.Lerp(colorStart, colorEnd, lerpAnimation.Evaluate(lerpValue));
 		}
 
 		private void UpdateTimer()
@@ -61,7 +64,7 @@ namespace Toolnity
 				{
 					timer = duration;
 					lerpValue = 1;
-					UpdateScale();
+					UpdateColor();
 					Stop();
 					return;
 				}
