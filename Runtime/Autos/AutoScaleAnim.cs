@@ -7,6 +7,7 @@ namespace Toolnity
 		[SerializeField] private AnimationCurve lerpAnimation;
 		[SerializeField] private float duration = 1;
 		[SerializeField] private bool loop;
+		[SerializeField] private bool canBeInterrupted = true;
 
 		private float timer;
 		private float lerpValue;
@@ -22,6 +23,11 @@ namespace Toolnity
 
 		protected override void PlayInternal()
 		{
+			if (Running && !canBeInterrupted)
+			{
+				return;
+			}
+			
 			Reset();
 		}
 		

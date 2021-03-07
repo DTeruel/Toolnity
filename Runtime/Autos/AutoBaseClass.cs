@@ -40,8 +40,8 @@ namespace Toolnity
 				Start();
 			}
 			
-			Running = true;
 			PlayInternal();
+			Running = true;
 		}
 
 		public void Stop()
