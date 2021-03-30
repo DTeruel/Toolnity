@@ -38,7 +38,7 @@ namespace Toolnity
         
         private static void DuringSceneGUI(SceneView sceneView)
         {
-            if (!active || Event.current.modifiers != EventModifiers.Shift || Event.current.button != 0 || Event.current.type != EventType.MouseDown)
+            if (!active || Event.current.modifiers != EventModifiers.Shift || Event.current.button != 1 || Event.current.type != EventType.MouseDown)
             {
                 return;
             }
