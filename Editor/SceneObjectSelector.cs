@@ -13,13 +13,14 @@ namespace Toolnity
         
         private static bool active;
         private static readonly List<GameObject> GameObjectsPicked = new List<GameObject>();
+        private static SceneObjectSelectorPopup popup = new SceneObjectSelectorPopup();
 
         static SceneObjectSelector () 
         {
             EditorApplication.delayCall += DelayCall;
             
-            SceneView.duringSceneGui -= DuringSceneGUI;
-            SceneView.duringSceneGui += DuringSceneGUI;
+            SceneView.beforeSceneGui -= BeforeSceneGui;
+            SceneView.beforeSceneGui += BeforeSceneGui;
         }
 
         private static void DelayCall()
@@ -36,28 +37,39 @@ namespace Toolnity
             EditorPrefs.SetBool(ACTIVE_OPTION_NAME, active);
         }
         
-        private static void DuringSceneGUI(SceneView sceneView)
+        private static void BeforeSceneGui(SceneView sceneView)
         {
-            if (!active || Event.current.modifiers != EventModifiers.Shift || Event.current.button != 1 || Event.current.type != EventType.MouseDown)
+            if (!active || !Event.current.shift || Event.current.button != 0 || Event.current.type != EventType.MouseDown)
             {
                 return;
             }
             
             Event.current.Use();
+            
             PickGameObjects();
             ShowPopup();
         }
 
         private static void PickGameObjects()
         {
+            Selection.objects = null;
             GameObjectsPicked.Clear();
 
+            AddGameObjectsInMousePosition(true);
+            AddGameObjectsInMousePosition(false);
+        }
+
+        private static void AddGameObjectsInMousePosition(bool selectPrefabRoot)
+        {
             for(var i = 0; i < NUM_MAX_ITEMS_TO_ADD; i++)
             {
-                var gameObject = HandleUtility.PickGameObject(Event.current.mousePosition, selectPrefabRoot: false, ignore: GameObjectsPicked.ToArray());
+                var gameObject = HandleUtility.PickGameObject(Event.current.mousePosition, selectPrefabRoot, GameObjectsPicked.ToArray());
                 if (gameObject != null)
                 {
-                    GameObjectsPicked.Add(gameObject);
+                    if(!GameObjectsPicked.Contains(gameObject))
+                    {
+                        GameObjectsPicked.Add(gameObject);
+                    }
                 }
                 else
                 {
@@ -65,7 +77,7 @@ namespace Toolnity
                 }
             }
         }
-        
+
         private static void ShowPopup()
         {
             if (GameObjectsPicked.Count == 0)
@@ -73,7 +85,7 @@ namespace Toolnity
                 return;
             }
 
-            var popup = new SceneObjectSelectorPopup(GameObjectsPicked);
+            popup.Init(GameObjectsPicked);
             var rect = new Rect(Event.current.mousePosition, Vector2.zero);
             PopupWindow.Show(rect, popup);
         }
