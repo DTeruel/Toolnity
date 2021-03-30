@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -7,35 +7,41 @@ namespace Toolnity
 {
 	internal sealed class SceneObjectSelectorPopup : PopupWindowContent
 	{
-		private const float WINDOW_WIDTH = 400f;
+		private const float WINDOW_WIDTH = 300f;
 		private const float BUTTON_HEIGHT = 20f;
 		
-		private readonly List<GameObject> objectsToShow;
-		private readonly List<Texture2D> thumbnails = new List<Texture2D>();
+		private List<GameObject> objectsToShow;
+		private List<Texture2D> thumbnails = new List<Texture2D>();
 		private GUIStyle buttonStyle;
 		private GUIStyle boxStyle;
-		private Vector2 maxSize;
+		private Vector2 windowSize;
 
-		public SceneObjectSelectorPopup(List<GameObject> gameObjectsPicked)
+		public void Init(List<GameObject> gameObjectsPicked)
 		{
 			objectsToShow = gameObjectsPicked;
 
-			CreateStyles();
 			GenerateThumbnails();
 			SetWindowSizeAndPosition();
 		}
 
-		private void CreateStyles()
+		private void CheckStyles()
 		{
-			buttonStyle = new GUIStyle(GUI.skin.GetStyle("Button"))
+			if (buttonStyle == null)
 			{
-				fixedHeight = BUTTON_HEIGHT
-			};
-			boxStyle = new GUIStyle(GUI.skin.GetStyle("Box"))
+				buttonStyle = new GUIStyle(GUI.skin.GetStyle("Button"))
+				{
+					fixedHeight = BUTTON_HEIGHT
+				};
+			}
+
+			if (boxStyle == null)
 			{
-				fixedWidth = BUTTON_HEIGHT,
-				fixedHeight = BUTTON_HEIGHT
-			};
+				boxStyle = new GUIStyle(GUI.skin.GetStyle("Box"))
+				{
+					fixedWidth = BUTTON_HEIGHT,
+					fixedHeight = BUTTON_HEIGHT
+				};
+			}
 		}
 
 		private void GenerateThumbnails()
@@ -49,11 +55,13 @@ namespace Toolnity
 
 		private void SetWindowSizeAndPosition()
 		{
-			maxSize = new Vector2(WINDOW_WIDTH, 2 + objectsToShow.Count * 2 + objectsToShow.Count * BUTTON_HEIGHT);
+			windowSize = new Vector2(WINDOW_WIDTH, 2 + objectsToShow.Count * 2 + objectsToShow.Count * BUTTON_HEIGHT);
 		}
 
 		public override void OnGUI(Rect rect)
 		{
+			CheckStyles();
+			
 			for (var i = 0; i < objectsToShow.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
@@ -66,7 +74,8 @@ namespace Toolnity
 				GUILayout.EndHorizontal();
 			}
 			
-			editorWindow.maxSize = maxSize;
+			editorWindow.minSize = windowSize;
+			editorWindow.maxSize = windowSize;
 			editorWindow.Repaint();
 		}
 
