@@ -7,7 +7,7 @@ namespace Toolnity
 {
 	internal sealed class SceneObjectSelectorPopup : PopupWindowContent
 	{
-		private const float WINDOW_WIDTH = 300f;
+		private const float WINDOW_WIDTH = 400f;
 		private const float BUTTON_HEIGHT = 20f;
 		
 		private readonly List<GameObject> objectsToShow;
