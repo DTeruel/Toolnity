@@ -39,7 +39,7 @@ namespace Toolnity
         
         private static void BeforeSceneGui(SceneView sceneView)
         {
-            if (!active || !Event.current.shift || Event.current.button != 0 || Event.current.type != EventType.MouseDown)
+            if (!active || !Event.current.shift || !Event.current.control || Event.current.button != 0 || Event.current.type != EventType.MouseDown)
             {
                 return;
             }
