@@ -1,15 +1,27 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolnity
 {
     public class FavoritesAsset : ScriptableObject
     {
-        public int CurrentListIndex = 0;
+        public int CurrentListIndex;
         public List<FavoritesList> FavoriteLists = new List<FavoritesList>();
-        public FavoritesList CurrentList => FavoriteLists[CurrentListIndex];
+        public FavoritesList CurrentList
+        {
+            get
+            {
+                if (FavoriteLists.Count == 0)
+                {
+                    AddList();
+                }
+                
+                return FavoriteLists[CurrentListIndex];
+            }
+        }
 
         public void AddList()
         {
@@ -26,6 +38,7 @@ namespace Toolnity
 
             FavoriteLists.Add(new FavoritesList(title));
             CurrentListIndex = FavoriteLists.Count - 1;
+            EditorUtility.SetDirty(this);
         }
 
         public void RemoveList(int index)
@@ -38,6 +51,7 @@ namespace Toolnity
                     CurrentListIndex--;
                 }
             }
+            EditorUtility.SetDirty(this);
         }
 
         public string[] NameList()
@@ -48,6 +62,41 @@ namespace Toolnity
                 nameList[i] = FavoriteLists[i].Name;
             }
             return nameList;
+        }
+
+        public void AddToCurrentList(IEnumerable<Object> favoriteObjects)
+        {
+            CurrentList.Add(favoriteObjects);
+            EditorUtility.SetDirty(this);
+        }
+
+        public void AddToCurrentList(Object favoriteObject)
+        {
+            CurrentList.Add(favoriteObject);
+            EditorUtility.SetDirty(this);
+        }
+
+        public void RemoveFromCurrentList(IEnumerable<Object> favoriteObjects)
+        {
+            CurrentList.Remove(favoriteObjects);
+            EditorUtility.SetDirty(this);
+        }
+
+        public void RemoveFromCurrentList(Object favoriteObject)
+        {
+            CurrentList.Remove(favoriteObject);
+            EditorUtility.SetDirty(this);
+        }
+
+        public void ClearCurrentList()
+        {
+            CurrentList.Clear();
+            EditorUtility.SetDirty(this);
+        }
+
+        public void SetCurrentListName(string newName)
+        {
+            CurrentList.Name = newName;
         }
     }
 }

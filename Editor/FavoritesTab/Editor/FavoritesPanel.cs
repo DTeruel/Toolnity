@@ -29,7 +29,7 @@ namespace Toolnity
         private static readonly Color SelectPro = new Color(0.3f, 0.3f, 0.3f);
 
         private static FavoritesAsset favoritesAsset;
-        private static FavoritesAsset FavoritesAsset { get { if (!favoritesAsset) InitFavoriteSave(); return favoritesAsset; } }
+        private static FavoritesAsset FavoritesAsset { get { if (!favoritesAsset) CheckFavoriteAsset(); return favoritesAsset; } }
         private ReorderableList reorderableList;
 
         private bool guiStyleDefined;
@@ -69,13 +69,12 @@ namespace Toolnity
 
             if (addObjects.Count > 0)
             {
-                FavoritesAsset.CurrentList.Add(addObjects);
+                FavoritesAsset.AddToCurrentList(addObjects);
             }
             else
             {
-                FavoritesAsset.CurrentList.Remove(removeObjects);
+                FavoritesAsset.RemoveFromCurrentList(removeObjects);
             }
-
             favoritesPanelEditorWindow.Repaint();
         }
 
@@ -113,7 +112,7 @@ namespace Toolnity
 
             if (addObjects.Count > 0)
             {
-                FavoritesAsset.CurrentList.Add(addObjects);
+                FavoritesAsset.AddToCurrentList(addObjects);
             }
         }
 
@@ -129,7 +128,7 @@ namespace Toolnity
             var bObject = (Object)favObject;
             if (bObject && FavoritesAsset.CurrentList.Contains(bObject))
             {
-                FavoritesAsset.CurrentList.Remove(bObject);
+                FavoritesAsset.RemoveFromCurrentList(bObject);
             }
         }
 
@@ -137,7 +136,7 @@ namespace Toolnity
         {
             if (EditorUtility.DisplayDialog("Clear the list \"" + FavoritesAsset.CurrentList.Name + "\"?", "Are you sure you want delete all the Favorites of the list \"" + FavoritesAsset.CurrentList.Name + "\"?", "Yes", "No"))
             {
-                FavoritesAsset.CurrentList.Clear();
+                FavoritesAsset.ClearCurrentList();
             }
         }
 
@@ -151,38 +150,30 @@ namespace Toolnity
             {
                 showDefaultBackground = false, headerHeight = 0F, footerHeight = 0F, drawElementCallback = DrawFavoriteElement
             };
-            InitFavoriteSave();
+            CheckFavoriteAsset();
             guiStyleDefined = false;
         }
 
-        private static void InitFavoriteSave()
+        private static void CheckFavoriteAsset()
         {
+            if (favoritesAsset)
+            {
+                return;
+            }
+            
+            var favoriteAssetFound = AssetDatabase.FindAssets("t:FavoritesAsset");
+            if (favoriteAssetFound.Length > 0)
+            {
+                favoritesAsset = AssetDatabase.LoadAssetAtPath<FavoritesAsset>(AssetDatabase.GUIDToAssetPath(favoriteAssetFound[0]));
+            }
+
             if (!favoritesAsset)
             {
-                var favoriteSaveFind = AssetDatabase.FindAssets("t:FavoritesAsset");
-                if (favoriteSaveFind.Length > 0)
-                {
-                    favoritesAsset = AssetDatabase.LoadAssetAtPath<FavoritesAsset>(AssetDatabase.GUIDToAssetPath(favoriteSaveFind[0]));
-                }
-
-                if (!favoritesAsset)
-                {
-                    var favoriteSavePath = "";
-                    var favoriteSavePathFind = AssetDatabase.FindAssets("FavoritesAsset t:Script");
-                    if (favoriteSavePathFind.Length > 0)
-                    {
-                        favoriteSavePath = ((AssetDatabase.GUIDToAssetPath(favoriteSavePathFind[0])).Replace("FavoritesAsset.cs", "FavoritesAsset.asset"));
-                    }
-
-                    if (!favoriteSavePath.Contains("FavoritesAsset.asset"))
-                    {
-                        favoriteSavePath = "Assets/FavoritesAsset.asset";
-                    }
-
-                    favoritesAsset = CreateInstance<FavoritesAsset>();
-                    AssetDatabase.CreateAsset(favoritesAsset, favoriteSavePath);
-                    AssetDatabase.SaveAssets();
-                }
+                favoritesAsset = CreateInstance<FavoritesAsset>();
+                AssetDatabase.CreateAsset(favoritesAsset, "Assets/FavoritesAsset.asset");
+                favoritesAsset.AddList();
+                EditorUtility.SetDirty(FavoritesAsset);
+                AssetDatabase.SaveAssets();
             }
         }
         
@@ -293,23 +284,27 @@ namespace Toolnity
                 Repaint();
             }
         }
+
+        private void CheckGUIStyles()
+        {
+            if (guiStyleDefined)
+            {
+                return;
+            }
+            
+            guiStyleDefined = true;
+            reorderableListLabelGuiStyle = new GUIStyle(EditorStyles.label);
+            reorderableListLabelGuiStyle.focused.textColor = reorderableListLabelGuiStyle.normal.textColor;
+            editButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("editicon.sml").image);
+            plusButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("Toolbar Plus").image);
+            minusButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("Toolbar Minus").image);
+        }
         
         public void OnGUI()
         {
-            if (!guiStyleDefined)
-            {
-                guiStyleDefined = true;
-                
-                reorderableListLabelGuiStyle = new GUIStyle(EditorStyles.label);
-                reorderableListLabelGuiStyle.focused.textColor = reorderableListLabelGuiStyle.normal.textColor;
-                
-                editButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("editicon.sml").image);
-                plusButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("Toolbar Plus").image);
-                minusButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("Toolbar Minus").image);
-            }
-
+            CheckGUIStyles();
+            
             GUILayout.BeginVertical();
-
             GUILayout.BeginHorizontal();
             
             if (GUILayout.Button(editButtonGuiStyle, GUILayout.ExpandWidth(false)))
@@ -320,7 +315,8 @@ namespace Toolnity
             if (editNameList)
             {
                 GUI.SetNextControlName("EditNameList");
-                FavoritesAsset.CurrentList.Name = EditorGUILayout.TextField(FavoritesAsset.CurrentList.Name, EditorStyles.toolbarTextField, GUILayout.ExpandWidth(true));
+                FavoritesAsset.SetCurrentListName(
+                    EditorGUILayout.TextField(FavoritesAsset.CurrentList.Name, EditorStyles.toolbarTextField, GUILayout.ExpandWidth(true)));
                 EditorGUI.FocusTextInControl("EditNameList");
             }
             else
