@@ -33,6 +33,7 @@ namespace Toolnity
         private ReorderableList reorderableList;
 
         private bool guiStyleDefined;
+        private GUIStyle toolbarPopupGuiStyle;
         private GUIStyle reorderableListLabelGuiStyle;
         private GUIContent editButtonGuiStyle;
         private GUIContent plusButtonGuiStyle;
@@ -148,7 +149,10 @@ namespace Toolnity
         {
             reorderableList = new ReorderableList(null, typeof(GameObject), false, false, false, false)
             {
-                showDefaultBackground = false, headerHeight = 0F, footerHeight = 0F, drawElementCallback = DrawFavoriteElement
+                showDefaultBackground = false, 
+                headerHeight = 0f, 
+                footerHeight = 0f, 
+                drawElementCallback = DrawFavoriteElement
             };
             CheckFavoriteAsset();
             guiStyleDefined = false;
@@ -172,7 +176,6 @@ namespace Toolnity
                 favoritesAsset = CreateInstance<FavoritesAsset>();
                 AssetDatabase.CreateAsset(favoritesAsset, "Assets/FavoritesAsset.asset");
                 favoritesAsset.AddList();
-                EditorUtility.SetDirty(FavoritesAsset);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -293,6 +296,8 @@ namespace Toolnity
             }
             
             guiStyleDefined = true;
+            toolbarPopupGuiStyle = new GUIStyle(EditorStyles.toolbarPopup);
+            toolbarPopupGuiStyle.alignment = TextAnchor.MiddleCenter;
             reorderableListLabelGuiStyle = new GUIStyle(EditorStyles.label);
             reorderableListLabelGuiStyle.focused.textColor = reorderableListLabelGuiStyle.normal.textColor;
             editButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("editicon.sml").image);
@@ -321,7 +326,7 @@ namespace Toolnity
             }
             else
             {
-                FavoritesAsset.CurrentListIndex = EditorGUILayout.Popup(FavoritesAsset.CurrentListIndex, FavoritesAsset.NameList(), EditorStyles.toolbarPopup);
+                FavoritesAsset.CurrentListIndex = EditorGUILayout.Popup(FavoritesAsset.CurrentListIndex, FavoritesAsset.NameList(), toolbarPopupGuiStyle);
             }
 
             if (editNameList && ((Event.current.type == EventType.MouseUp && Event.current.button == 0) || Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Return))
