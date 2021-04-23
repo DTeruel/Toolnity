@@ -75,7 +75,9 @@ namespace Toolnity
 			}
 
 			Handles.BeginGUI();
+			GUILayout.BeginVertical();
 			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
 			
 			if (GUILayout.Button(buttonText))
 			{
@@ -107,6 +109,8 @@ namespace Toolnity
 
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
+			GUILayout.FlexibleSpace();
+			GUILayout.EndVertical();
 			Handles.EndGUI();
 		}
 
