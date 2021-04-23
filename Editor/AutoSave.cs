@@ -9,46 +9,21 @@ namespace Toolnity
 	[InitializeOnLoad]
 	public class AutoSave : EditorWindow
 	{
-		private const string MENU_NAME = "Tools/Toolnity/Auto Save/Autosave On Run";
-		private static bool isActive;
+		public const string AUTO_SAVE_SETTINGS_ENABLED = "Toolnity/Auto Save/Enabled";
 		
 		static AutoSave()
 		{
-			EditorApplication.delayCall += DelayCall;
+			EditorApplication.playModeStateChanged += AutoSaveOnPlay;
 		}
 		
-		private static void DelayCall()
+		private static void AutoSaveOnPlay(PlayModeStateChange state)
 		{
-			isActive = EditorPrefs.GetBool(MENU_NAME, true);
-			Menu.SetChecked(MENU_NAME, isActive);
-			SetMode();
-		}
-
-		[MenuItem(MENU_NAME)]
-		private static void ToggleMode()
-		{
-			isActive = !isActive;
-			Menu.SetChecked(MENU_NAME, isActive);
-			EditorPrefs.SetBool(MENU_NAME, isActive);
-			SetMode();
-			
-			Debug.Log("[Toolnity] AutoSave On Run: " + isActive);
-		}
-
-		private static void SetMode()
-		{
-			if (isActive)
+			var enabledOption = EditorPrefs.GetBool(AUTO_SAVE_SETTINGS_ENABLED, true);
+			if (!enabledOption)
 			{
-				EditorApplication.playModeStateChanged += AutoSaveOnRun;
+				return;
 			}
-			else
-			{
-				EditorApplication.playModeStateChanged -= AutoSaveOnRun;
-			}
-		}
 
-		private static void AutoSaveOnRun(PlayModeStateChange state)
-		{
 			if (EditorApplication.isPlaying)
 			{
 				return;
@@ -68,7 +43,7 @@ namespace Toolnity
 			{
 				if (SaveCurrentModifiedScenesIfUserWantsTo())
 				{
-					Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
+					Debug.Log("-------------------------------- SCENES SAVED --------------------------------");
 				}
 			}
 

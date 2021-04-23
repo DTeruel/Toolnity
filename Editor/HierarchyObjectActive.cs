@@ -10,34 +10,24 @@ namespace Toolnity
 	[InitializeOnLoad]
 	public static class HierarchyObjectActive
 	{
-		private const string CHANGE_ALL_OPTION_NAME = "Tools/Toolnity/Hierarchy Utils/Change All Selected Objects";
-		private const float BUTTON_SIZE = 15;
-		private const float BUTTON_OFFSET = 2 + BUTTON_SIZE * 2;
-
-		private static bool changeAllSelectedObjects;
+		public const string HIERARCHY_OBJECT_SETTINGS_ENABLED = "Toolnity/Hierarchy Object/Enabled";
+		
+		private const float ButtonSize = 15;
+		private const float ButtonOffset = 2 + ButtonSize * 2;
 
 		static HierarchyObjectActive()
 		{
-			EditorApplication.delayCall += DelayCall;
 			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
-		}
-
-		private static void DelayCall()
-		{
-			changeAllSelectedObjects = EditorPrefs.GetBool(CHANGE_ALL_OPTION_NAME, true);
-			Menu.SetChecked(CHANGE_ALL_OPTION_NAME, changeAllSelectedObjects);
-		}
-
-		[MenuItem(CHANGE_ALL_OPTION_NAME)]
-		private static void ToggleMode()
-		{
-			changeAllSelectedObjects = !changeAllSelectedObjects;
-			Menu.SetChecked(CHANGE_ALL_OPTION_NAME, changeAllSelectedObjects);
-			EditorPrefs.SetBool(CHANGE_ALL_OPTION_NAME, changeAllSelectedObjects);
 		}
 
 		private static void HierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
 		{
+			var enabledOption = EditorPrefs.GetBool(HIERARCHY_OBJECT_SETTINGS_ENABLED, true);
+			if (!enabledOption)
+			{
+				return;
+			}
+
 			var gameObject = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
 			if (gameObject == null)
 			{
@@ -50,7 +40,7 @@ namespace Toolnity
 				return;
 			}
 			
-			var r = new Rect(selectionRect) {x = BUTTON_OFFSET, width = BUTTON_SIZE};
+			var r = new Rect(selectionRect) {x = ButtonOffset, width = ButtonSize};
 			var value = GUI.Toggle(r, gameObject.activeSelf, "");
 
 			if (gameObject.activeSelf != value)
@@ -66,7 +56,7 @@ namespace Toolnity
 
 		private static void CheckSelectedObjectsActive(Object currentObject, bool value)
 		{
-			if (!changeAllSelectedObjects || !IsCurrentObjectSelected(currentObject))
+			if (!IsCurrentObjectSelected(currentObject))
 			{
 				return;
 			}

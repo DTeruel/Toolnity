@@ -5,7 +5,7 @@ namespace Toolnity
 {
 	public static class PlayGame
 	{
-		[MenuItem("Tools/Toolnity/Play Game/Play | Stop _F5")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Game Play | Stop _F5", priority = 10)]
 		private static void PlayStop()
 		{
 			if (EditorApplication.isPlaying)
@@ -17,13 +17,13 @@ namespace Toolnity
 			EditorApplication.EnterPlaymode();
 		}
 
-		[MenuItem("Tools/Toolnity/Play Game/Pause | Resume _F6")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Game Pause | Resume _F6", priority = 10)]
 		private static void PauseResume()
 		{
 			EditorApplication.isPaused = !EditorApplication.isPaused;
 		}
 
-		[MenuItem("Tools/Toolnity/Play Game/Next Frame _F7")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Game Next Frame _F7", priority = 10)]
 		private static void NextFrame()
 		{
 			EditorApplication.Step();

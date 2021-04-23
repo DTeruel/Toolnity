@@ -8,7 +8,7 @@ namespace Toolnity
 {
     public static class SaveProject
     {
-        [MenuItem("Tools/Toolnity/Save Project/Save All _F12")]
+        [MenuItem("Tools/Toolnity/Shortcuts/Project Save All _F12", priority = 100)]
         private static void SaveAll()
         {
             if (EditorApplication.isPlaying)
@@ -30,7 +30,7 @@ namespace Toolnity
             {
                 if (SaveCurrentModifiedScenesIfUserWantsTo())
                 {
-                    Debug.Log("- - - - - - - - - - - - - - - - - - - - - - - SCENES SAVED - - - - - - - - - - - - - - - - - - - - - - -");
+                    Debug.Log("-------------------------------- SCENES SAVED --------------------------------");
                 }
             }
 

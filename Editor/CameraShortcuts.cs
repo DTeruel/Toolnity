@@ -10,7 +10,7 @@ namespace Toolnity
 		private static bool rightFirst;
 		private static bool backFirst;
 
-		[MenuItem("Tools/Toolnity/Camera/Top-Bottom _F1")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Camera Top-Bottom _F1", priority = -10)]
 		private static void SwitchTopBottomCamera()
 		{
 			if (bottomFirst)
@@ -25,7 +25,7 @@ namespace Toolnity
 			bottomFirst = !bottomFirst;
 		}
 
-		[MenuItem("Tools/Toolnity/Camera/Left-Right _F2")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Camera Left-Right _F2", priority = -10)]
 		private static void SwitchLeftRightCamera()
 		{
 			if (rightFirst)
@@ -40,7 +40,7 @@ namespace Toolnity
 			rightFirst = !rightFirst;
 		}
 
-		[MenuItem("Tools/Toolnity/Camera/Front-Back _F3")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Camera Front-Back _F3", priority = -10)]
 		private static void SwitchFrontBackCamera()
 		{
 			if (backFirst)
@@ -61,7 +61,7 @@ namespace Toolnity
 			SceneView.lastActiveSceneView.Repaint();
 		}
 
-		[MenuItem("Tools/Toolnity/Camera/Perspective-Orthographic _F4")]
+		[MenuItem("Tools/Toolnity/Shortcuts/Camera Perspective-Orthographic _F4", priority = -10)]
 		private static void PerspectiveOrthographicCamera()
 		{
 			SceneView.lastActiveSceneView.orthographic = !SceneView.lastActiveSceneView.orthographic;

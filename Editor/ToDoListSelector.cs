@@ -9,10 +9,8 @@ namespace Toolnity
 	[InitializeOnLoad]
 	public class ToDoListSelector : EditorWindow
 	{
-		private const string ACTIVE_OPTION_NAME = "Tools/Toolnity/To Do List/Active";
+		public const string TODO_LIST_ENABLED = "Toolnity/To Do List/Enabled";
 
-		private static bool active;
-		private static bool justScenesInBuild;
 		private static bool showSceneLauncher;
 		private static readonly List<string> NamesList = new List<string>();
 		private static readonly List<string> PathsList = new List<string>();
@@ -22,35 +20,19 @@ namespace Toolnity
 
 		static ToDoListSelector()
 		{
-			EditorApplication.delayCall += DelayCall;
 			SceneView.duringSceneGui += OnSceneGUI;
-
-			UpdateToDoLists();
-		}
-
-		private static void DelayCall()
-		{
-			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
-			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-		}
-
-		[MenuItem(ACTIVE_OPTION_NAME)]
-		public static void ToggleActive()
-		{
-			active = !active;
-			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-			EditorPrefs.SetBool(ACTIVE_OPTION_NAME, active);
 
 			UpdateToDoLists();
 		}
 
 		private static void OnSceneGUI(SceneView sceneView)
 		{
-			if (!active)
+			var enabledOption = EditorPrefs.GetBool(TODO_LIST_ENABLED, true);
+			if (!enabledOption)
 			{
 				return;
 			}
-			
+
 			if (popupMiddleAlignment == null)
 			{
 				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
@@ -121,6 +103,15 @@ namespace Toolnity
 					NamesList.Add(toDoList.name);
 					PathsList.Add(path);
 				}
+			}
+		}
+
+		internal class ToDoListDropdownPostprocessor : AssetPostprocessor
+		{
+			private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets,
+				string[] movedAssets, string[] movedFromAssetPaths)
+			{
+				UpdateToDoLists();
 			}
 		}
 	}

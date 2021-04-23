@@ -24,37 +24,43 @@ namespace Toolnity
 	[InitializeOnLoad]
 	internal static class LoadSceneOnPlay
 	{
-		private const string LOAD_MASTER_OPTION_NAME = "Tools/Toolnity/Load Scene On Play/Active";
+		public const string LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED = "Toolnity/Load Scene On Play/Enabled";
+
+		private const string EditorPrefMasterScene = "LoadSceneOnPlay.MasterScene";
+		private const string EditorPrefPreviousScene = "LoadSceneOnPlay.PreviousScene";
+
+		private static bool LoadMasterOnPlay
+		{
+			get => EditorPrefs.GetBool(LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
+			set => EditorPrefs.SetBool(LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, value);
+		}
+
+		public static string MasterScene
+		{
+			get => EditorPrefs.GetString(EditorPrefMasterScene, "Master.unity");
+			set => EditorPrefs.SetString(EditorPrefMasterScene, value);
+		}
+
+		private static string PreviousScene
+		{
+			get => EditorPrefs.GetString(EditorPrefPreviousScene, SceneManager.GetActiveScene().path);
+			set => EditorPrefs.SetString(EditorPrefPreviousScene, value);
+		}
 		
 		static LoadSceneOnPlay()
 		{
 			EditorApplication.playModeStateChanged += OnPlayModeChanged;
 		}
 
-		[MenuItem("Tools/Toolnity/Load Scene On Play/Select Master Scene...")]
-		private static void SelectMasterScene()
+		public static void SelectMasterScene()
 		{
 			var masterScene = EditorUtility.OpenFilePanel("Select Master Scene", Application.dataPath, "unity");
 			masterScene = masterScene.Replace(Application.dataPath, "Assets");
 			if (!string.IsNullOrEmpty(masterScene))
 			{
 				MasterScene = masterScene;
-				LoadMasterOnPlay = EditorPrefs.GetBool(LOAD_MASTER_OPTION_NAME, true);
-				if (Menu.GetChecked(LOAD_MASTER_OPTION_NAME))
-				{
-					Menu.SetChecked(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
-				}
+				LoadMasterOnPlay = true;
 			}
-		}
-
-		[MenuItem(LOAD_MASTER_OPTION_NAME + " _F8")]
-		private static void ToggleLoadMasterOnPlay()
-		{
-			LoadMasterOnPlay = !LoadMasterOnPlay;
-			Menu.SetChecked(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
-			EditorPrefs.SetBool(LOAD_MASTER_OPTION_NAME, LoadMasterOnPlay);
-			
-			Debug.Log("[Toolnity] Load Master On Play: " + LoadMasterOnPlay);
 		}
 
 		private static void OnPlayModeChanged(PlayModeStateChange state)
@@ -101,28 +107,6 @@ namespace Toolnity
 					Debug.LogError($"error: scene not found: {PreviousScene}");
 				}
 			}
-		}
-
-		private const string C_EDITOR_PREF_LOAD_MASTER_ON_PLAY = "LoadSceneOnPlay.Active";
-		private const string C_EDITOR_PREF_MASTER_SCENE = "LoadSceneOnPlay.MasterScene";
-		private const string C_EDITOR_PREF_PREVIOUS_SCENE = "LoadSceneOnPlay.PreviousScene";
-
-		private static bool LoadMasterOnPlay
-		{
-			get => EditorPrefs.GetBool(C_EDITOR_PREF_LOAD_MASTER_ON_PLAY, false);
-			set => EditorPrefs.SetBool(C_EDITOR_PREF_LOAD_MASTER_ON_PLAY, value);
-		}
-
-		private static string MasterScene
-		{
-			get => EditorPrefs.GetString(C_EDITOR_PREF_MASTER_SCENE, "Master.unity");
-			set => EditorPrefs.SetString(C_EDITOR_PREF_MASTER_SCENE, value);
-		}
-
-		private static string PreviousScene
-		{
-			get => EditorPrefs.GetString(C_EDITOR_PREF_PREVIOUS_SCENE, SceneManager.GetActiveScene().path);
-			set => EditorPrefs.SetString(C_EDITOR_PREF_PREVIOUS_SCENE, value);
 		}
 	}
 }

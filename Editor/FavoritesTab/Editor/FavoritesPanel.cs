@@ -19,11 +19,11 @@ namespace Toolnity
 
         private Object lastObjectSelected ;
         private double lastObjectSelectedAt;
-        private const double LAST_OBJECT_SELECTED_TICK_OPEN = 0.5f;
-        private const double LAST_OBJECT_SELECTED_TICK_PING = 2f;
+        private const double LastObjectSelectedTickOpen = 0.5f;
+        private const double LastObjectSelectedTickPing = 2f;
 
         private double nextUpdate;
-        private const double UPDATE_TICK = 0.15f;
+        private const double UpdateTick = 0.15f;
 
         private static readonly Color SelectNoPro = new Color(0.55f, 0.55f, 0.55f); 
         private static readonly Color SelectPro = new Color(0.3f, 0.3f, 0.3f);
@@ -45,7 +45,7 @@ namespace Toolnity
 
         #region Menu Item Methods
 
-        [MenuItem("Window/Favorites", priority = 1100)]
+        [MenuItem("Tools/Toolnity/Favorites Panel", priority = 1500)]
         public static void ShowWindow()
         {
             favoritesPanelEditorWindow = GetWindow<FavoritesPanel>("Favorites");
@@ -222,11 +222,11 @@ namespace Toolnity
                         Selection.activeObject = currentObject;
                         if (lastObjectSelected == currentObject)
                         {
-                            if (lastObjectSelectedAt + LAST_OBJECT_SELECTED_TICK_OPEN > EditorApplication.timeSinceStartup)
+                            if (lastObjectSelectedAt + LastObjectSelectedTickOpen > EditorApplication.timeSinceStartup)
                             {
                                 AssetDatabase.OpenAsset(currentObject);
                             }
-                            else if (lastObjectSelectedAt + LAST_OBJECT_SELECTED_TICK_PING > EditorApplication.timeSinceStartup)
+                            else if (lastObjectSelectedAt + LastObjectSelectedTickPing > EditorApplication.timeSinceStartup)
                             {
                                 EditorGUIUtility.PingObject(currentObject);
                             }
@@ -283,7 +283,7 @@ namespace Toolnity
         {
             if (EditorApplication.timeSinceStartup > nextUpdate)
             {
-                nextUpdate = EditorApplication.timeSinceStartup + UPDATE_TICK;
+                nextUpdate = EditorApplication.timeSinceStartup + UpdateTick;
                 Repaint();
             }
         }

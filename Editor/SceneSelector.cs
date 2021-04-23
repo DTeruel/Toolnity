@@ -10,10 +10,9 @@ namespace Toolnity
 	[InitializeOnLoad]
 	public static class SceneSelector
 	{
-		private const string ACTIVE_OPTION_NAME = "Tools/Toolnity/Scene Selector/Active";
-		private const string JUST_SCENES_IN_BUILD_OPTION_NAME = "Tools/Toolnity/Scene Selector/Search just scenes in build";
+		public const string SCENE_SELECTOR_ENABLED = "Toolnity/Scene Selector/Enabled";
+		private const string SceneSelectorJustScenesInBuild = "Toolnity/Scene Selector/JustScenesInBuild";
 
-		private static bool active;
 		private static bool justScenesInBuild;
 		private static bool showSceneLauncher;
 		private static readonly List<string> NamesList = new List<string>();
@@ -24,36 +23,14 @@ namespace Toolnity
 
 		static SceneSelector()
 		{
-			EditorApplication.delayCall += DelayCall;
 			SceneView.duringSceneGui += OnSceneGUI;
 			UpdateScenes();
 		}
 
-		private static void DelayCall()
-		{
-			active = EditorPrefs.GetBool(ACTIVE_OPTION_NAME, true);
-			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-
-			justScenesInBuild = EditorPrefs.GetBool(JUST_SCENES_IN_BUILD_OPTION_NAME, false);
-			Menu.SetChecked(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
-		}
-		
-		[MenuItem(ACTIVE_OPTION_NAME)]
-		public static void ToggleActive()
-		{
-			active = !active;
-			Menu.SetChecked(ACTIVE_OPTION_NAME, active);
-			EditorPrefs.SetBool(ACTIVE_OPTION_NAME, active);
-
-			UpdateScenes();
-		}
-		
-		[MenuItem(JUST_SCENES_IN_BUILD_OPTION_NAME)]
 		private static void ToggleJustScenesInBuild()
 		{
 			justScenesInBuild = !justScenesInBuild;
-			Menu.SetChecked(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
-			EditorPrefs.SetBool(JUST_SCENES_IN_BUILD_OPTION_NAME, justScenesInBuild);
+			EditorPrefs.SetBool(SceneSelectorJustScenesInBuild, justScenesInBuild);
 
 			UpdateScenes();
 			
@@ -62,11 +39,12 @@ namespace Toolnity
 
 		private static void OnSceneGUI(SceneView sceneView)
 		{
-			if (!active)
+			var enabledOption = EditorPrefs.GetBool(SCENE_SELECTOR_ENABLED, true);
+			if (!enabledOption)
 			{
 				return;
 			}
-			
+
 			if (popupMiddleAlignment == null)
 			{
 				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
@@ -135,7 +113,7 @@ namespace Toolnity
 			}
 		}
 
-		public static void UpdateScenes()
+		private static void UpdateScenes()
 		{
 			NamesList.Clear();
 			PathsList.Clear();
@@ -180,14 +158,14 @@ namespace Toolnity
 				}
 			}
 		}
-	}
 
-	internal class SceneDropdownPostprocessor : AssetPostprocessor
-	{
-		private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets,
-			string[] movedAssets, string[] movedFromAssetPaths)
+		internal class SceneDropdownPostprocessor : AssetPostprocessor
 		{
-			SceneSelector.UpdateScenes();
+			private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets,
+				string[] movedAssets, string[] movedFromAssetPaths)
+			{
+				UpdateScenes();
+			}
 		}
 	}
 }

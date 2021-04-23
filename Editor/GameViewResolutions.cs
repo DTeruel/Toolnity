@@ -88,7 +88,7 @@ namespace Toolnity
 		};
 
 
-		[MenuItem("Tools/Toolnity/Game View/Add Portrait Aspect Ratios")]
+		[MenuItem("Tools/Toolnity/Mobile Resolutions/Add Portrait Aspect Ratios", false, 10)]
 		public static void AddPortraitAspectRatios()
 		{
 			foreach (var resolution in PortraitRatios)
@@ -97,7 +97,7 @@ namespace Toolnity
 			}
 		}
 
-		[MenuItem("Tools/Toolnity/Game View/Add Portrait Resolutions")]
+		[MenuItem("Tools/Toolnity/Mobile Resolutions/Add Portrait Resolutions", false, 10)]
 		public static void AddPortraitResolutions()
 		{
 			foreach (var resolution in PortraitResolutions)
@@ -106,7 +106,7 @@ namespace Toolnity
 			}
 		}
 
-		[MenuItem("Tools/Toolnity/Game View/Add Landscape Aspect Ratios")]
+		[MenuItem("Tools/Toolnity/Mobile Resolutions/Add Landscape Aspect Ratios", false, 10)]
 		public static void AddLandscapeAspectRatios()
 		{
 			foreach (var resolution in LandscapeRatios)
@@ -115,7 +115,7 @@ namespace Toolnity
 			}
 		}
 
-		[MenuItem("Tools/Toolnity/Game View/Add Landscape Resolutions")]
+		[MenuItem("Tools/Toolnity/Mobile Resolutions/Add Landscape Resolutions", false, 10)]
 		public static void AddLandscapeResolutions()
 		{
 			foreach (var resolution in LandscapeResolutions)
@@ -124,7 +124,7 @@ namespace Toolnity
 			}
 		}
 
-		[MenuItem("Tools/Toolnity/Game View/Clean Custom Resolutions")]
+		[MenuItem("Tools/Toolnity/Mobile Resolutions/Clean Custom Resolutions", false, 50)]
 		public static void CleanCustomResolutions()
 		{
 			foreach (var resolution in PortraitRatios)
