@@ -1,23 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class RuntimeSet<T> : ScriptableObject
+namespace Toolnity
 {
-    public List<T> Items = new List<T>();
-
-    public void Add(T item)
+    public abstract class RuntimeSet<T> : ScriptableObject
     {
-        if (!Items.Contains(item))
+        public List<T> items = new List<T>();
+
+        public void OnEnable()
         {
-            Items.Add(item);
+            items.Clear();
         }
-    }
 
-    public void Remove(T item)
-    {
-        if (Items.Contains(item))
+        public void OnDisable()
         {
-            Items.Remove(item);
+            items.Clear();
+        }
+        
+        public virtual bool Add(T item)
+        {
+            if (items.Contains(item))
+            {
+                return false;
+            }
+
+            items.Add(item);
+            return true;
+        }
+
+        public virtual bool Remove(T item)
+        {
+            if (!items.Contains(item))
+            {
+                return false;
+            }
+
+            items.Remove(item);
+            return true;
         }
     }
 }
