@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,13 +7,21 @@ namespace Toolnity
 {
 	public class StoryboardCreator : MonoBehaviour
 	{
+		[Serializable]
+		private struct StoryboardScreen
+		{
+			public Camera camera;
+			public string dialog;
+		}
+		
 		private const string DEFAULT_SCREENSHOT_NAME = "Screen";
 		
 		[SerializeField] private bool takeScreenshotsOnPlay;
 		[SerializeField] private string screenshotName = DEFAULT_SCREENSHOT_NAME;
 		[SerializeField] private int width = 2560;
 		[SerializeField] private int height = 1440;
-		[SerializeField] private Camera[] cameras;
+		[SerializeField] private StoryboardDialog dialogPrefab;
+		[SerializeField] private StoryboardScreen[] screens;
 
 		private bool takeScreenshot;
 
@@ -39,7 +48,7 @@ namespace Toolnity
 			
 			takeScreenshot = false;
 			
-			if (cameras.Length == 0)
+			if (screens.Length == 0)
 			{
 				Debug.Log("[Storyboard Creator] No cameras to take screenshots.");
 				return;
@@ -48,9 +57,9 @@ namespace Toolnity
 			Debug.Log("[Storyboard Creator] Taking Screenshots...");
 			
 			CheckScreenshotName();
-			for (var i = 0; i < cameras.Length; i++)
+			for (var i = 0; i < screens.Length; i++)
 			{
-				TakeScreenshot(cameras[i], i + 1);
+				TakeScreenshot(screens[i], i + 1);
 			}
 
 			AssetDatabase.Refresh();
@@ -64,12 +73,21 @@ namespace Toolnity
 			}
 		}
 
-		private void TakeScreenshot(Camera cameraToCapture, int index)
+		private void TakeScreenshot(StoryboardScreen screen, int index)
 		{
+			var cameraToCapture = screen.camera;
 			if (cameraToCapture == null)
 			{
 				return;
 			}
+
+			StoryboardDialog dialogInstance = null;
+			if (!string.IsNullOrEmpty(screen.dialog) && dialogPrefab)
+			{
+				dialogInstance = Instantiate(dialogPrefab);
+				dialogInstance.SetDialog(cameraToCapture, screen.dialog);
+			}
+			cameraToCapture.Render();
 
 			var rt = new RenderTexture(width, height, 24);
 			cameraToCapture.targetTexture = rt;
@@ -88,8 +106,12 @@ namespace Toolnity
 				System.IO.Directory.CreateDirectory(directory);
 			}
 			System.IO.File.WriteAllBytes(directory + filename, bytes);
-
 			Debug.Log($"[Storyboard Creator] Took screenshot: {filename}");
+
+			if (dialogInstance)
+			{
+				DestroyImmediate(dialogInstance.gameObject);
+			}
 		}
 
 		private string GetScreenshotDirectory()
