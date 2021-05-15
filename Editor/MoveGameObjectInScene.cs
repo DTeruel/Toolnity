@@ -32,11 +32,11 @@ namespace Toolnity
 
 		private static void DelayCall()
 		{
-			PluginData.CopyCoordinateX = EditorPrefs.GetBool(COPY_COORDINATE_X_OPTION_NAME, true);
+			PluginData.CopyCoordinateX = EditorPrefs.GetBool(Application.dataPath + COPY_COORDINATE_X_OPTION_NAME, true);
 			Menu.SetChecked(COPY_COORDINATE_X_OPTION_NAME, PluginData.CopyCoordinateX);
-			PluginData.CopyCoordinateY = EditorPrefs.GetBool(COPY_COORDINATE_Y_OPTION_NAME, true);
+			PluginData.CopyCoordinateY = EditorPrefs.GetBool(Application.dataPath + COPY_COORDINATE_Y_OPTION_NAME, true);
 			Menu.SetChecked(COPY_COORDINATE_Y_OPTION_NAME, PluginData.CopyCoordinateY);
-			PluginData.CopyCoordinateZ = EditorPrefs.GetBool(COPY_COORDINATE_Z_OPTION_NAME, true);
+			PluginData.CopyCoordinateZ = EditorPrefs.GetBool(Application.dataPath + COPY_COORDINATE_Z_OPTION_NAME, true);
 			Menu.SetChecked(COPY_COORDINATE_Z_OPTION_NAME, PluginData.CopyCoordinateZ);
 		}
 
@@ -45,7 +45,7 @@ namespace Toolnity
 		{
 			PluginData.CopyCoordinateX = !PluginData.CopyCoordinateX;
 			Menu.SetChecked(COPY_COORDINATE_X_OPTION_NAME, PluginData.CopyCoordinateX);
-			EditorPrefs.SetBool(COPY_COORDINATE_X_OPTION_NAME, PluginData.CopyCoordinateX);
+			EditorPrefs.SetBool(Application.dataPath + COPY_COORDINATE_X_OPTION_NAME, PluginData.CopyCoordinateX);
 		}
 
 		[MenuItem(COPY_COORDINATE_Y_OPTION_NAME)]
@@ -53,7 +53,7 @@ namespace Toolnity
 		{
 			PluginData.CopyCoordinateY = !PluginData.CopyCoordinateY;
 			Menu.SetChecked(COPY_COORDINATE_Y_OPTION_NAME, PluginData.CopyCoordinateY);
-			EditorPrefs.SetBool(COPY_COORDINATE_Y_OPTION_NAME, PluginData.CopyCoordinateY);
+			EditorPrefs.SetBool(Application.dataPath + COPY_COORDINATE_Y_OPTION_NAME, PluginData.CopyCoordinateY);
 		}
 
 		[MenuItem(COPY_COORDINATE_Z_OPTION_NAME)]
@@ -61,7 +61,7 @@ namespace Toolnity
 		{
 			PluginData.CopyCoordinateZ = !PluginData.CopyCoordinateZ;
 			Menu.SetChecked(COPY_COORDINATE_Z_OPTION_NAME, PluginData.CopyCoordinateZ);
-			EditorPrefs.SetBool(COPY_COORDINATE_Z_OPTION_NAME, PluginData.CopyCoordinateZ);
+			EditorPrefs.SetBool(Application.dataPath + COPY_COORDINATE_Z_OPTION_NAME, PluginData.CopyCoordinateZ);
 		}
 
 		private static void OnSceneGUI()

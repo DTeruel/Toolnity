@@ -31,20 +31,20 @@ namespace Toolnity
 
 		private static bool LoadMasterOnPlay
 		{
-			get => EditorPrefs.GetBool(LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
-			set => EditorPrefs.SetBool(LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, value);
+			get => EditorPrefs.GetBool(Application.dataPath + LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
+			set => EditorPrefs.SetBool(Application.dataPath + LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, value);
 		}
 
 		public static string MasterScene
 		{
-			get => EditorPrefs.GetString(EditorPrefMasterScene, "Master.unity");
-			set => EditorPrefs.SetString(EditorPrefMasterScene, value);
+			get => EditorPrefs.GetString(Application.dataPath + EditorPrefMasterScene, "Master.unity");
+			set => EditorPrefs.SetString(Application.dataPath + EditorPrefMasterScene, value);
 		}
 
 		private static string PreviousScene
 		{
-			get => EditorPrefs.GetString(EditorPrefPreviousScene, SceneManager.GetActiveScene().path);
-			set => EditorPrefs.SetString(EditorPrefPreviousScene, value);
+			get => EditorPrefs.GetString(Application.dataPath + EditorPrefPreviousScene, SceneManager.GetActiveScene().path);
+			set => EditorPrefs.SetString(Application.dataPath + EditorPrefPreviousScene, value);
 		}
 		
 		static LoadSceneOnPlay()

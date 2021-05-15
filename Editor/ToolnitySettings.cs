@@ -66,11 +66,11 @@ namespace Toolnity
 
         private static bool ShowToggleOption(string label, string settingsKey, bool defaultValue = true)
         {
-            var currentOption = EditorPrefs.GetBool(settingsKey, defaultValue);
+            var currentOption = EditorPrefs.GetBool(Application.dataPath + settingsKey, defaultValue);
             var changedOption = EditorGUILayout.Toggle(label, currentOption);
             if (currentOption != changedOption)
             {
-                EditorPrefs.SetBool(settingsKey, changedOption);
+                EditorPrefs.SetBool(Application.dataPath + settingsKey, changedOption);
             }
 
             return changedOption;

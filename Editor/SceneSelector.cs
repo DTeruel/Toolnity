@@ -11,7 +11,7 @@ namespace Toolnity
 	public static class SceneSelector
 	{
 		public const string SCENE_SELECTOR_ENABLED = "Toolnity/Scene Selector/Enabled";
-		private const string SceneSelectorJustScenesInBuild = "Toolnity/Scene Selector/JustScenesInBuild";
+		private const string SCENE_SELECTOR_JUST_SCENES_IN_BUILD = "Toolnity/Scene Selector/JustScenesInBuild";
 
 		private static bool justScenesInBuild;
 		private static bool showSceneLauncher;
@@ -30,7 +30,7 @@ namespace Toolnity
 		private static void ToggleJustScenesInBuild()
 		{
 			justScenesInBuild = !justScenesInBuild;
-			EditorPrefs.SetBool(SceneSelectorJustScenesInBuild, justScenesInBuild);
+			EditorPrefs.SetBool(Application.dataPath + SCENE_SELECTOR_JUST_SCENES_IN_BUILD, justScenesInBuild);
 
 			UpdateScenes();
 			
@@ -39,7 +39,7 @@ namespace Toolnity
 
 		private static void OnSceneGUI(SceneView sceneView)
 		{
-			var enabledOption = EditorPrefs.GetBool(SCENE_SELECTOR_ENABLED, true);
+			var enabledOption = EditorPrefs.GetBool(Application.dataPath + SCENE_SELECTOR_ENABLED, true);
 			if (!enabledOption)
 			{
 				return;

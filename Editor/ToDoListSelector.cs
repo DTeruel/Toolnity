@@ -27,7 +27,7 @@ namespace Toolnity
 
 		private static void OnSceneGUI(SceneView sceneView)
 		{
-			var enabledOption = EditorPrefs.GetBool(TODO_LIST_ENABLED, true);
+			var enabledOption = EditorPrefs.GetBool(Application.dataPath + TODO_LIST_ENABLED, true);
 			if (!enabledOption)
 			{
 				return;

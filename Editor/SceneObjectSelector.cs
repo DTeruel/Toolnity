@@ -22,7 +22,7 @@ namespace Toolnity
         
         private static void BeforeSceneGui(SceneView sceneView)
         {
-            var enabledOption = EditorPrefs.GetBool(SCENE_OBJECT_SELECTOR_ENABLED, true);
+            var enabledOption = EditorPrefs.GetBool(Application.dataPath + SCENE_OBJECT_SELECTOR_ENABLED, true);
             if (!enabledOption)
             {
                 return;

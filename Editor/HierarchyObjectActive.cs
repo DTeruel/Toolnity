@@ -22,7 +22,7 @@ namespace Toolnity
 
 		private static void HierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
 		{
-			var enabledOption = EditorPrefs.GetBool(HIERARCHY_OBJECT_SETTINGS_ENABLED, true);
+			var enabledOption = EditorPrefs.GetBool(Application.dataPath + HIERARCHY_OBJECT_SETTINGS_ENABLED, true);
 			if (!enabledOption)
 			{
 				return;

@@ -18,7 +18,7 @@ namespace Toolnity
 		
 		private static void AutoSaveOnPlay(PlayModeStateChange state)
 		{
-			var enabledOption = EditorPrefs.GetBool(AUTO_SAVE_SETTINGS_ENABLED, true);
+			var enabledOption = EditorPrefs.GetBool(Application.dataPath + AUTO_SAVE_SETTINGS_ENABLED, true);
 			if (!enabledOption)
 			{
 				return;
