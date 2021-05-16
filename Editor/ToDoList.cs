@@ -14,6 +14,11 @@ namespace Toolnity
         public List<string> parameters2 = new List<string>();
         public bool configurationEnabled;
         public bool showCompletedTasks;
+        public bool showFilters;
+        public bool filter1Enabled;
+        public bool filter2Enabled;
+        public int filterIndexParameter1;
+        public int filterIndexParameter2;
 
         public ToDoList()
         {
@@ -37,13 +42,13 @@ namespace Toolnity
     {
         public string description;
         public int parameter2Id;
-        public int paramerer1Id;
+        public int parameter1Id;
 
         public ToDoElement()
         {
             description = "";
             parameter2Id = 0;
-            paramerer1Id = 0;
+            parameter1Id = 0;
         }
     }
 }

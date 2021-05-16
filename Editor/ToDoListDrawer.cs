@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Color = UnityEngine.Color;
 
 namespace Toolnity
 {
@@ -10,18 +11,18 @@ namespace Toolnity
     {
         private const float DEFAULT_VERTICAL_OFFSET = 15;
         private const float MIDDLE_VERTICAL_OFFSET = 10;
-        private const float UP_DOWN_BUTTON_WIDTH = 50;
-        private const float DELETE_BUTTON_WIDTH = 25;
-        private const float DESCRIPTION_SCREEN_WIDTH_REDUCTION = 120;
-        private const float LEFT_RIGHT_OPTIONS_OFFSET = 70;
+        private const float TASKS_BUTTON_WIDTH = 70;
+        private const float SIDES_WIDTH_SPACE = 10;
         private const float OPTIONS_HORIZONTAL_OFFSET = 20;
-        private const float TASK_VERTICAL_OFFSET = 2;
+        private const float TASK_VERTICAL_OFFSET = 4;
         private const float NEW_TASK_HEIGHT = 35;
+        private const float SPACE_WIDTH_PERCENTAGE = 0.1f;
 
         private GUIStyle titleCenteredLabel;
         private GUIStyle fieldCentered;
         private GUIStyle centeredDropdown;
         private GUIStyle textAreaCentered;
+        private GUIStyle buttonDeleteParameter;
         private bool createCommonVars;
 
         #region MAIN
@@ -57,42 +58,108 @@ namespace Toolnity
             EditorGUILayout.LabelField(title, titleCenteredLabel);
             EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
 
+            if (!taskCompleted)
+            {
+                DrawFilter();
+            }
+            
             for (var i = 0; i < list.Count; i++)
             {
-                var rectangleColorIndex = list[i].paramerer1Id % rectangleColor.Length;
+                if (toDoList.showFilters)
+                {
+                    if (toDoList.filter1Enabled)
+                    {
+                        if (list[i].parameter1Id != toDoList.filterIndexParameter1)
+                        {
+                            continue;
+                        }
+                    }
+                    if (toDoList.filter2Enabled)
+                    {
+                        if (list[i].parameter2Id != toDoList.filterIndexParameter2)
+                        {
+                            continue;
+                        }
+                    }
+                }
 
-                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
-                GUILayout.Label(" ");
+                var rectangleColorIndex = list[i].parameter1Id % rectangleColor.Length;
+                EditorGUILayout.BeginVertical(rectangleColor[rectangleColorIndex]);
+                // Blank Line
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
                 EditorGUILayout.EndHorizontal();
                 
-                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
+                // Main - START
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(SIDES_WIDTH_SPACE);
+                
+                // Main - Up & Down
                 DrawUpDownButtons(i, list.Count);
+                
+                // Main - Description
                 GUILayout.FlexibleSpace();
                 list[i].description = DrawDescription(list[i].description);
                 GUILayout.FlexibleSpace();
-                if (DrawDeleteButton(i))
+                
+                // Main - Delete & Complete
+                if (DrawDeleteCompleteAndRecoverButtons(i, taskCompleted))
                 {
                     return;
                 }
-                EditorGUILayout.Space();
+                
+                // Main - END
+                GUILayout.Space(SIDES_WIDTH_SPACE);
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
-                GUILayout.Space(LEFT_RIGHT_OPTIONS_OFFSET);
-                list[i].paramerer1Id = DrawDropdown(list[i].paramerer1Id, toDoList.parameters1.ToArray());
+                // Blank Line
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
+                EditorGUILayout.EndHorizontal();
+                
+                // Parameters
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
+                list[i].parameter1Id = DrawDropdown(list[i].parameter1Id, toDoList.parameters1.ToArray());
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
                 list[i].parameter2Id = DrawDropdown(list[i].parameter2Id, toDoList.parameters2.ToArray());
-                GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
-                DrawCompleteButton(i, taskCompleted);
-                GUILayout.Space(LEFT_RIGHT_OPTIONS_OFFSET);
+                GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal(rectangleColor[rectangleColorIndex]);
-                GUILayout.Label(" ");
+                // Blank Line
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
                 EditorGUILayout.EndHorizontal();
+                
+                EditorGUILayout.EndVertical();
                 
                 EditorGUILayout.Space(TASK_VERTICAL_OFFSET);
             }
+        }
+        
+        private void DrawFilter()
+        {
+            var toDoList = (ToDoList)target;
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            toDoList.showFilters = GUILayout.Toggle(toDoList.showFilters, " FILTERS");
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            if (toDoList.showFilters)
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
+                toDoList.filter1Enabled = GUILayout.Toggle(toDoList.filter1Enabled, "");
+                toDoList.filterIndexParameter1 = DrawDropdown(toDoList.filterIndexParameter1, toDoList.parameters1.ToArray());
+                GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
+                toDoList.filter2Enabled = GUILayout.Toggle(toDoList.filter2Enabled, "");
+                toDoList.filterIndexParameter2 = DrawDropdown(toDoList.filterIndexParameter2, toDoList.parameters2.ToArray());
+                GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
         }
 
         private static Texture2D MakeTex(int width, int height, Color col)
@@ -111,7 +178,6 @@ namespace Toolnity
             return result;
         }
 
-
         private void DrawUpDownButtons(int i, int listLength)
         {
             EditorGUILayout.BeginVertical();
@@ -120,7 +186,7 @@ namespace Toolnity
             {
                 GUI.enabled = false;
             }
-            if (GUILayout.Button("Up", GUILayout.Width(UP_DOWN_BUTTON_WIDTH)))
+            if (GUILayout.Button("Up", GUILayout.Width(TASKS_BUTTON_WIDTH)))
             {
                 SwitchElementsInList(i, i - 1);
             }
@@ -130,7 +196,7 @@ namespace Toolnity
             {
                 GUI.enabled = false;
             }
-            if (GUILayout.Button("Down", GUILayout.Width(UP_DOWN_BUTTON_WIDTH)))
+            if (GUILayout.Button("Down", GUILayout.Width(TASKS_BUTTON_WIDTH)))
             {
                 SwitchElementsInList(i, i + 1);
             }
@@ -142,49 +208,46 @@ namespace Toolnity
 
         private string DrawDescription(string description)
         {
-            description = GUILayout.TextArea(
-                description,
-                textAreaCentered);
-            GUILayout.FlexibleSpace();
+            textAreaCentered.fixedWidth = Screen.width * 0.5f;
 
-            return description;
+            return GUILayout.TextArea(description, textAreaCentered);
         }
 
-        private bool DrawDeleteButton(int i)
+        private bool DrawDeleteCompleteAndRecoverButtons(int i, bool taskCompleted)
         {
             EditorGUILayout.BeginVertical();
-            if (GUILayout.Button("X", GUILayout.Width(DELETE_BUTTON_WIDTH)))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("DELETE", GUILayout.Width(TASKS_BUTTON_WIDTH)))
             {
                 var toDoList = (ToDoList)target;
                 toDoList.tasks.RemoveAt(i);
                 return true;
             }
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndVertical();
 
-            return false;
-        }
-
-        private void DrawCompleteButton(int i, bool taskCompleted)
-        {
             if (taskCompleted)
             {
-                if (GUILayout.Button("Recover"))
+                if (GUILayout.Button("Recover", GUILayout.Width(TASKS_BUTTON_WIDTH)))
                 {
                     var toDoList = (ToDoList)target;
                     toDoList.tasks.Add(toDoList.completedTasks[i]);
                     toDoList.completedTasks.RemoveAt(i);
+                    return true;
                 }
             }
             else
             {
-                if (GUILayout.Button("Complete"))
+                if (GUILayout.Button("Complete", GUILayout.Width(TASKS_BUTTON_WIDTH)))
                 {
                     var toDoList = (ToDoList)target;
                     toDoList.completedTasks.Add(toDoList.tasks[i]);
                     toDoList.tasks.RemoveAt(i);
+                    return true;
                 }
             }
+            
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndVertical();
+            return false;
         }
 
         private void DrawNewTaskButton()
@@ -216,7 +279,7 @@ namespace Toolnity
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             toDoList.showCompletedTasks = GUILayout.Toggle(toDoList.showCompletedTasks,
-                " SHOW COMPLETED TASKS");
+                " COMPLETED TASKS");
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
@@ -258,11 +321,13 @@ namespace Toolnity
 
         private void DrawConfigList(string title, IList<string> list, bool changeColors = false)
         {
+            var itemToRemove = -1;
             EditorGUILayout.BeginVertical();
             GUILayout.Label(title, titleCenteredLabel);
             GUILayout.Space(DEFAULT_VERTICAL_OFFSET);
             for (var i = 0; i < list.Count; i++)
             {
+                EditorGUILayout.BeginHorizontal();
                 if (changeColors)
                 {
                     var rectangleColorIndex = i % rectangleColor.Length;
@@ -275,18 +340,24 @@ namespace Toolnity
                 {
                     list[i] = GUILayout.TextField(list[i], fieldCentered);
                 }
+                if (GUILayout.Button("-", buttonDeleteParameter))
+                {
+                    itemToRemove = i;
+                }
+                EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("-"))
-            {
-                list.RemoveAt(list.Count - 1);
-            }
             if (GUILayout.Button("+"))
             {
                 list.Add("");
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
+
+            if (itemToRemove > -1)
+            {
+                list.RemoveAt(itemToRemove);
+            }
         }
         #endregion
 
@@ -300,7 +371,8 @@ namespace Toolnity
 
             fieldCentered = new GUIStyle(GUI.skin.GetStyle("TextField"))
             {
-                alignment = TextAnchor.MiddleCenter
+                alignment = TextAnchor.MiddleCenter,
+                stretchWidth = true
             };
 
             centeredDropdown = new GUIStyle(GUI.skin.GetStyle("Popup"))
@@ -312,10 +384,14 @@ namespace Toolnity
             {
                 alignment = TextAnchor.MiddleCenter,
                 fontStyle = FontStyle.Bold,
-                fixedHeight = 50,
-                fixedWidth = Screen.width - DESCRIPTION_SCREEN_WIDTH_REDUCTION
+                fixedHeight = 50
             };
-                
+
+            buttonDeleteParameter = new GUIStyle(GUI.skin.GetStyle("Button"))
+            {
+                fixedWidth = 20
+            };
+            
             CreateRectangleColors();
 
             createCommonVars = false;
