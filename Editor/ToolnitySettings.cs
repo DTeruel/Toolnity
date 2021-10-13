@@ -42,13 +42,17 @@ namespace Toolnity
                     ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
                     
                     EditorGUILayout.BeginHorizontal();
-                    var sceneObjectSelector = ShowToggleOption("Scene Object Selector", SceneObjectSelector.SCENE_OBJECT_SELECTOR_ENABLED);
-                    if (sceneObjectSelector)
-                    {
-                        GUILayout.Space(20f);
-                        GUILayout.Label("(Left Ctrl + Left Shift + Left Mouse Click)");
-                        GUILayout.FlexibleSpace();
-                    }
+                    ShowToggleOption("Create GO Shortcut", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
+                    GUILayout.Space(20f);
+                    GUILayout.Label("(Double Click in an empty space in Hierarchy Window to create a new Game Object)");
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.BeginHorizontal();
+                    ShowToggleOption("Scene Object Selector", SceneObjectSelector.SCENE_OBJECT_SELECTOR_ENABLED);
+                    GUILayout.Space(20f);
+                    GUILayout.Label("(Left Ctrl + Left Shift + Left Mouse Click)");
+                    GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                     
                     ShowToggleOption("Scene Selector", SceneSelector.SCENE_SELECTOR_ENABLED);
