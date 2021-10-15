@@ -1,13 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using Toolnity;
 using UnityEditor;
 using UnityEngine;
 
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class ToDoListSelector : EditorWindow
+	public static class ToDoListSelector
 	{
 		public const string TODO_LIST_ENABLED = "Toolnity/To Do List/Enabled";
 
@@ -20,12 +19,10 @@ namespace Toolnity
 
 		static ToDoListSelector()
 		{
-			SceneView.duringSceneGui += OnSceneGUI;
-
 			UpdateToDoLists();
 		}
 
-		private static void OnSceneGUI(SceneView sceneView)
+		public static void DrawGUI()
 		{
 			var enabledOption = EditorPrefs.GetBool(Application.dataPath + TODO_LIST_ENABLED, true);
 			if (!enabledOption)
@@ -39,12 +36,6 @@ namespace Toolnity
 				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
 				popupMiddleAlignment.fontSize = 12;
 			}
-			
-			Handles.BeginGUI();
-			GUILayout.BeginVertical();
-			GUILayout.FlexibleSpace();
-			GUILayout.BeginHorizontal();
-			GUILayout.FlexibleSpace();
 			
 			if (GUILayout.Button(buttonText))
 			{
@@ -67,12 +58,6 @@ namespace Toolnity
 			{
 				buttonText = "T";
 			}
-
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-			GUILayout.Space(25);
-			GUILayout.EndVertical();
-			Handles.EndGUI();
 		}
 
 		public static void UpdateToDoLists()

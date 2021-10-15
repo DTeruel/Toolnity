@@ -7,12 +7,18 @@ namespace Toolnity
 {
     internal static class ToolnitySettingsRegister
     {
-        private const string ToolnitySettingsName = "Project/ToolnitySettings"; 
-        
+        private const string ToolnitySettingsName = "Project/ToolnitySettings";
+        public const string MENU_POSITION = "Toolnity/Menu Position";
+        public const int MENU_POSITION_TOP = 0;
+
+        private static readonly List<string> MenuPositionList = new List<string> {"Top", "Bottom"};
+        public static int MenuPositionSelection;
+
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
         public static void OpenProjectSettings()
         {
             SettingsService.OpenProjectSettings(ToolnitySettingsName);
+            MenuPositionSelection = EditorPrefs.GetInt(Application.dataPath + MENU_POSITION, 0);
         }
         
         [SettingsProvider]
@@ -23,6 +29,18 @@ namespace Toolnity
                 label = "Toolnity", guiHandler = (searchContext) =>
                 {
                     EditorGUILayout.Space();
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Menu Position");
+                    GUILayout.Space(60f);
+                    var newSelection = EditorGUILayout.Popup(MenuPositionSelection, MenuPositionList.ToArray());
+                    if (newSelection != MenuPositionSelection)
+                    {
+                        MenuPositionSelection = newSelection;
+                        EditorPrefs.SetInt(Application.dataPath + MENU_POSITION, MenuPositionSelection);
+                    }
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+                    
                     EditorGUILayout.BeginHorizontal();
                     var loadSceneOnPlay = ShowToggleOption("Load Scene On Play", LoadSceneOnPlay.LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
                     if (loadSceneOnPlay)
@@ -57,6 +75,7 @@ namespace Toolnity
                     
                     ShowToggleOption("Scene Selector", SceneSelector.SCENE_SELECTOR_ENABLED);
                     ShowToggleOption("ToDo List", ToDoListSelector.TODO_LIST_ENABLED);
+                    ShowToggleOption("Lights De/Activator", LightsActivator.LIGHTS_ACTIVATOR_ENABLED);
                 },
 
                 keywords = new HashSet<string>(new[]

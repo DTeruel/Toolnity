@@ -23,7 +23,6 @@ namespace Toolnity
 
 		static SceneSelector()
 		{
-			SceneView.duringSceneGui += OnSceneGUI;
 			UpdateScenes();
 		}
 
@@ -33,11 +32,9 @@ namespace Toolnity
 			EditorPrefs.SetBool(Application.dataPath + SCENE_SELECTOR_JUST_SCENES_IN_BUILD, justScenesInBuild);
 
 			UpdateScenes();
-			
-			Debug.Log("[Toolnity] Search just scenes in build settings : " + justScenesInBuild);
 		}
 
-		private static void OnSceneGUI(SceneView sceneView)
+		public static void DrawGUI()
 		{
 			var enabledOption = EditorPrefs.GetBool(Application.dataPath + SCENE_SELECTOR_ENABLED, true);
 			if (!enabledOption)
@@ -45,17 +42,7 @@ namespace Toolnity
 				return;
 			}
 
-			if (popupMiddleAlignment == null)
-			{
-				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
-				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
-				popupMiddleAlignment.fontSize = 12;
-			}
-
-			Handles.BeginGUI();
-			GUILayout.BeginVertical();
-			GUILayout.BeginHorizontal();
-			GUILayout.FlexibleSpace();
+			CheckStyles();
 			
 			if (GUILayout.Button(buttonText))
 			{
@@ -67,29 +54,40 @@ namespace Toolnity
 			{
 				buttonText = "<";
 
+				GUILayout.BeginVertical();
 				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
 					AutoSave();
 					OpenScene(PathsList[newSelection]);
 				}
-
-				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "");
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Space(40);
+				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "  Just Scenes on Build");
 				if (justScenesInBuild != newJustScenesInBuild)
 				{
 					ToggleJustScenesInBuild();
 				}
+				GUILayout.Space(40);
+				GUILayout.EndHorizontal();
+				
+				GUILayout.EndVertical();
 			}
 			else
 			{
 				buttonText = "S";
 			}
+		}
 
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-			GUILayout.FlexibleSpace();
-			GUILayout.EndVertical();
-			Handles.EndGUI();
+		private static void CheckStyles()
+		{
+			if (popupMiddleAlignment == null)
+			{
+				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
+				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
+				popupMiddleAlignment.fontSize = 12;
+			}
 		}
 
 		private static void AutoSave()
@@ -117,7 +115,7 @@ namespace Toolnity
 		{
 			NamesList.Clear();
 			PathsList.Clear();
-			NamesList.Add("- Open Scene - ");
+			NamesList.Add("- Select Scene - ");
 			PathsList.Add(" ");
 			
 			if (justScenesInBuild)
