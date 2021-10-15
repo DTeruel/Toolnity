@@ -66,14 +66,13 @@ namespace Toolnity
 
 		private static void OnSceneGUI()
 		{
-			if (!Event.current.shift || Event.current.keyCode != KeyCode.G) return;
-
-			PluginData.SelectedObjects = Selection.gameObjects;
-			if (PluginData.SelectedObjects.Length == 0)
+			if (!ToolnitySettingsRegister.BasicShortcutsEnabled || !Event.current.shift || Event.current.keyCode != KeyCode.T)
 			{
 				return;
 			}
-			else
+
+			PluginData.SelectedObjects = Selection.gameObjects;
+			if (PluginData.SelectedObjects.Length > 0)
 			{
 				Vector3 mousePosition = Event.current.mousePosition;
 				mousePosition.y = SceneView.currentDrawingSceneView.camera.pixelHeight - mousePosition.y;

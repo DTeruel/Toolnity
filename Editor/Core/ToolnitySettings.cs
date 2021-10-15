@@ -9,6 +9,7 @@ namespace Toolnity
     {
         private const string ToolnitySettingsName = "Project/ToolnitySettings";
         public const string MENU_POSITION = "Toolnity/Menu Position";
+        public const string SHORTCUTS_ENABLED = "Toolnity/Basic Shortcuts/Enabled";
         
         private static readonly List<string> MenuPositionList = new List<string> {"Top", "Bottom", "Left", "Right"};
         public const int MENU_POSITION_TOP = 0;
@@ -17,6 +18,7 @@ namespace Toolnity
         //public const int MENU_POSITION_RIGHT = 3;
 
         public static int MenuPositionSelection;
+        public static bool BasicShortcutsEnabled;
 
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
         public static void OpenProjectSettings()
@@ -33,17 +35,6 @@ namespace Toolnity
                 label = "Toolnity", guiHandler = (searchContext) =>
                 {
                     EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    GUILayout.Label("Menu Position");
-                    GUILayout.Space(60f);
-                    var newSelection = EditorGUILayout.Popup(MenuPositionSelection, MenuPositionList.ToArray());
-                    if (newSelection != MenuPositionSelection)
-                    {
-                        MenuPositionSelection = newSelection;
-                        EditorPrefs.SetInt(Application.dataPath + MENU_POSITION, MenuPositionSelection);
-                    }
-                    GUILayout.FlexibleSpace();
-                    EditorGUILayout.EndHorizontal();
                     
                     EditorGUILayout.BeginHorizontal();
                     var loadSceneOnPlay = ShowToggleOption("Load Scene On Play", LoadSceneOnPlay.LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
@@ -59,9 +50,13 @@ namespace Toolnity
                         GUILayout.FlexibleSpace();
                     }
                     EditorGUILayout.EndHorizontal();
-
-                    ShowToggleOption("AutoSave On Play", AutoSave.AUTO_SAVE_SETTINGS_ENABLED);
-                    ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
+                    GUILayout.Space(20f);
+                    GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Game Object)");
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
                     
                     EditorGUILayout.BeginHorizontal();
                     ShowToggleOption("Create GO Shortcut", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
@@ -70,6 +65,9 @@ namespace Toolnity
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
 
+                    ShowToggleOption("AutoSave On Play", AutoSave.AUTO_SAVE_SETTINGS_ENABLED);
+                    ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
+
                     EditorGUILayout.BeginHorizontal();
                     ShowToggleOption("Scene Object Selector", SceneObjectSelector.SCENE_OBJECT_SELECTOR_ENABLED);
                     GUILayout.Space(20f);
@@ -77,9 +75,25 @@ namespace Toolnity
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                     
+                    
+                    GUILayout.Label("");
+                    GUILayout.Label("SCENE VIEW MENU");
+
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Position");
+                    GUILayout.Space(60f);
+                    var newSelection = EditorGUILayout.Popup(MenuPositionSelection, MenuPositionList.ToArray());
+                    if (newSelection != MenuPositionSelection)
+                    {
+                        MenuPositionSelection = newSelection;
+                        EditorPrefs.SetInt(Application.dataPath + MENU_POSITION, MenuPositionSelection);
+                    }
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+                    
                     ShowToggleOption("Scene Selector", SceneSelector.SCENE_SELECTOR_ENABLED);
                     ShowToggleOption("ToDo List", ToDoListSelector.TODO_LIST_ENABLED);
-                    ShowToggleOption("Lights De/Activator", LightsActivator.LIGHTS_ACTIVATOR_ENABLED);
+                    ShowToggleOption("Lights Actions", LightsActivator.LIGHTS_ACTIVATOR_ENABLED);
                 },
 
                 keywords = new HashSet<string>(new[]

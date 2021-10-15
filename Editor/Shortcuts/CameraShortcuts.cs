@@ -13,6 +13,11 @@ namespace Toolnity
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Top-Bottom _F1", priority = -10)]
 		private static void SwitchTopBottomCamera()
 		{
+			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
+			{
+				return;
+			}
+			
 			if (bottomFirst)
 			{
 				ApplyCameraPosition(Quaternion.Euler(-90, 0, 0));
@@ -28,6 +33,11 @@ namespace Toolnity
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Left-Right _F2", priority = -10)]
 		private static void SwitchLeftRightCamera()
 		{
+			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
+			{
+				return;
+			}
+
 			if (rightFirst)
 			{
 				ApplyCameraPosition(Quaternion.Euler(0, -90, 0));
@@ -43,6 +53,11 @@ namespace Toolnity
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Front-Back _F3", priority = -10)]
 		private static void SwitchFrontBackCamera()
 		{
+			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
+			{
+				return;
+			}
+
 			if (backFirst)
 			{
 				ApplyCameraPosition(Quaternion.Euler(0, 180, 0));
@@ -64,6 +79,11 @@ namespace Toolnity
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Perspective-Orthographic _F4", priority = -10)]
 		private static void PerspectiveOrthographicCamera()
 		{
+			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
+			{
+				return;
+			}
+
 			SceneView.lastActiveSceneView.orthographic = !SceneView.lastActiveSceneView.orthographic;
 			SceneView.lastActiveSceneView.Repaint();
 		}
