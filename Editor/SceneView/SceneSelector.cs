@@ -43,11 +43,25 @@ namespace Toolnity
 			}
 			
 			GUILayout.BeginHorizontal();
+			GUILayout.BeginVertical();
+			if (showSceneLauncher && 
+			    ToolnitySettingsRegister.MenuPositionSelection != ToolnitySettingsRegister.MENU_POSITION_TOP &&
+			    ToolnitySettingsRegister.MenuPositionSelection != ToolnitySettingsRegister.MENU_POSITION_BOTTOM)
+			{
+				GUILayout.Space(10);
+			}
 			if (GUILayout.Button(buttonText, GUILayout.Width(25)))
 			{
 				showSceneLauncher = !showSceneLauncher;
 				UpdateScenes();
 			}
+			if (showSceneLauncher && 
+			    ToolnitySettingsRegister.MenuPositionSelection != ToolnitySettingsRegister.MENU_POSITION_TOP &&
+			    ToolnitySettingsRegister.MenuPositionSelection != ToolnitySettingsRegister.MENU_POSITION_BOTTOM)
+			{
+				GUILayout.Space(10);
+			}
+			GUILayout.EndVertical();
 			
 			if (showSceneLauncher)
 			{
