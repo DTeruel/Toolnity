@@ -5,13 +5,13 @@ using UnityEditor;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class MoveGameObjectInScene : Editor
+	public class TeleportGameObject : Editor
 	{
-		private const string COPY_COORDINATE_X_OPTION_NAME = "Tools/Toolnity/Move GameObject/Copy X";
-		private const string COPY_COORDINATE_Y_OPTION_NAME = "Tools/Toolnity/Move GameObject/Copy Y";
-		private const string COPY_COORDINATE_Z_OPTION_NAME = "Tools/Toolnity/Move GameObject/Copy Z";
+		private const string COPY_COORDINATE_X_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy X";
+		private const string COPY_COORDINATE_Y_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy Y";
+		private const string COPY_COORDINATE_Z_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy Z";
 
-		private const string UNDO_APPLY_MOVE_GAMEOBJECT_HERE = "Move GameObject Here";
+		private const string UNDO_APPLY_MOVE_GAMEOBJECT_HERE = "Teleport GameObject Here";
 
 		private class ObjectMovement
 		{
@@ -24,7 +24,7 @@ namespace Toolnity
 
 		private static readonly ObjectMovement PluginData = new ObjectMovement();
 
-		static MoveGameObjectInScene()
+		static TeleportGameObject()
 		{
 			EditorApplication.delayCall += DelayCall;
 			SceneView.duringSceneGui += sceneView => OnSceneGUI();
@@ -92,11 +92,11 @@ namespace Toolnity
 					PluginData.Position = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(PluginData.Position);
 				}
 
-				MoveObjects();
+				TeleportObjects();
 			}
 		}
 
-		private static void MoveObjects()
+		private static void TeleportObjects()
 		{
 			for (var i = 0; i < PluginData.SelectedObjects.Length; i++)
 			{
