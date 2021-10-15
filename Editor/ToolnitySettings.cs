@@ -14,7 +14,7 @@ namespace Toolnity
         public const int MENU_POSITION_TOP = 0;
         public const int MENU_POSITION_BOTTOM = 1;
         public const int MENU_POSITION_LEFT = 2;
-        public const int MENU_POSITION_RIGHT = 3;
+        //public const int MENU_POSITION_RIGHT = 3;
 
         public static int MenuPositionSelection;
 

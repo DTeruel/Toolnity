@@ -19,6 +19,7 @@ namespace Toolnity
 				"Activate Baked Lights", 
 				"Deactivate Baked Lights", 
 				"Bake Lights",
+				"Turn On All Lights + Bake Light + Turn Off Baked Lights",
 				"Turn On Baked Lights + Bake Light + Turn Off Baked Lights",
 				"Cancel Bake",
 				"Clear Bake Data"
@@ -30,9 +31,10 @@ namespace Toolnity
 		private const int ActivateBakedLights = 5;
 		private const int DeactivateBakedLights = 6;
 		private const int BakeScene = 7;
-		private const int TurnOnLightsBakeSceneAndTurnOffLights = 8;
-		private const int CancelBake = 9;
-		private const int ClearBakeData = 10;
+		private const int TurnOnAllLightsBakeSceneAndTurnOffBakedLights = 8;
+		private const int TurnOnBakedLightsBakeSceneAndTurnOffBakedLights = 9;
+		private const int CancelBake = 10;
+		private const int ClearBakeData = 11;
 
 		private static bool showLightsActivator;
 		private static GUIStyle popupMiddleAlignment;
@@ -49,7 +51,7 @@ namespace Toolnity
 			if (turnOffBakedLightsAfterBake)
 			{
 				turnOffBakedLightsAfterBake = false;
-				ActivateLights(false, true, false);
+				ActivateLights(false, true);
 			}
 		}
 
@@ -103,10 +105,16 @@ namespace Toolnity
 			{
 				Lightmapping.BakeAsync();
 			}
-			else if (option == TurnOnLightsBakeSceneAndTurnOffLights)
+			else if (option == TurnOnAllLightsBakeSceneAndTurnOffBakedLights)
 			{
 				turnOffBakedLightsAfterBake = true;
-				ActivateLights(true, true, false);
+				ActivateLights(true);
+				Lightmapping.BakeAsync();
+			}
+			else if (option == TurnOnBakedLightsBakeSceneAndTurnOffBakedLights)
+			{
+				turnOffBakedLightsAfterBake = true;
+				ActivateLights(true, true);
 				Lightmapping.BakeAsync();
 			}
 			else if (option == ClearBakeData)
@@ -128,7 +136,7 @@ namespace Toolnity
 			}
 		}
 
-		private static void ActivateLights(bool enableComponent, bool justBaked, bool justNotBaked)
+		private static void ActivateLights(bool enableComponent, bool justBaked = false, bool justNotBaked = false)
 		{
 			var allLightComponents = Object.FindObjectsOfType<Light>();
 			for (var i = 0; i < allLightComponents.Length; i++)
