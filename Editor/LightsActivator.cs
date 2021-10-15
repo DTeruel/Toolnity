@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Toolnity
 {
+	[InitializeOnLoad]
 	public static class LightsActivator
 	{
 		public const string LIGHTS_ACTIVATOR_ENABLED = "Toolnity/LightsActivator/Enabled";
@@ -13,17 +14,44 @@ namespace Toolnity
 				"- Select Action -", 
 				"Activate All Lights", 
 				"Deactivate All Lights", 
+				"Activate Not Baked Lights", 
+				"Deactivate Not Baked Lights", 
 				"Activate Baked Lights", 
-				"Deactivate Baked Lights"
+				"Deactivate Baked Lights", 
+				"Bake Lights",
+				"Turn On Baked Lights + Bake Light + Turn Off Baked Lights",
+				"Cancel Bake",
+				"Clear Bake Data"
 		};
 		private const int ActivateAllLights = 1;
-		private const int DeactivateAllLights = 2;
-		private const int ActivateBakedLights = 3;
-		private const int DeactivateBakedLights = 4;
+		//private const int DeactivateAllLights = 2;
+		private const int ActivateNotBakedLights = 3;
+		private const int DeactivateNotBakedLights = 4;
+		private const int ActivateBakedLights = 5;
+		private const int DeactivateBakedLights = 6;
+		private const int BakeScene = 7;
+		private const int TurnOnLightsBakeSceneAndTurnOffLights = 8;
+		private const int CancelBake = 9;
+		private const int ClearBakeData = 10;
 
 		private static bool showLightsActivator;
 		private static GUIStyle popupMiddleAlignment;
 		private static string buttonText;
+		private static bool turnOffBakedLightsAfterBake;
+
+		static LightsActivator()
+		{
+			Lightmapping.bakeCompleted += LightmappingOnBakeCompleted;
+		}
+
+		private static void LightmappingOnBakeCompleted()
+		{
+			if (turnOffBakedLightsAfterBake)
+			{
+				turnOffBakedLightsAfterBake = false;
+				ActivateLights(false, true, false);
+			}
+		}
 
 		public static void DrawGUI()
 		{
@@ -68,17 +96,44 @@ namespace Toolnity
 
 		private static void ApplyAction(int option)
 		{
-			var enableComponent = option == ActivateAllLights || option == ActivateBakedLights;
-			var justBaked = option == ActivateBakedLights || option == DeactivateBakedLights;
-			ActivateLights(enableComponent, justBaked);
+			turnOffBakedLightsAfterBake = false;
+			
+			if (option == BakeScene)
+			{
+				Lightmapping.BakeAsync();
+			}
+			else if (option == TurnOnLightsBakeSceneAndTurnOffLights)
+			{
+				turnOffBakedLightsAfterBake = true;
+				ActivateLights(true, true, false);
+				Lightmapping.BakeAsync();
+			}
+			else if (option == ClearBakeData)
+			{
+				Lightmapping.Clear();
+				Lightmapping.ClearDiskCache();
+				Lightmapping.ClearLightingDataAsset();
+			}
+			else if (option == CancelBake)
+			{
+				Lightmapping.Cancel();
+			}
+			else
+			{
+				var enableComponent = option == ActivateAllLights || option == ActivateBakedLights || option == ActivateNotBakedLights;
+				var justBaked = option == ActivateBakedLights || option == DeactivateBakedLights;
+				var justNotBaked = option == ActivateNotBakedLights || option == DeactivateNotBakedLights;
+				ActivateLights(enableComponent, justBaked, justNotBaked);
+			}
 		}
 
-		private static void ActivateLights(bool enableComponent, bool justBaked)
+		private static void ActivateLights(bool enableComponent, bool justBaked, bool justNotBaked)
 		{
 			var allLightComponents = Object.FindObjectsOfType<Light>();
 			for (var i = 0; i < allLightComponents.Length; i++)
 			{
-				if (justBaked && allLightComponents[i].lightmapBakeType != LightmapBakeType.Baked && allLightComponents[i].type != LightType.Area)
+				var bakedLight = allLightComponents[i].lightmapBakeType == LightmapBakeType.Baked || allLightComponents[i].type == LightType.Area;
+				if ((justBaked && !bakedLight) || (justNotBaked && bakedLight))
 				{
 					continue;
 				}
