@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Toolnity
 {
+    [InitializeOnLoad]
     internal static class ToolnitySettingsRegister
     {
         private const string ToolnitySettingsName = "Project/ToolnitySettings";
@@ -20,11 +21,15 @@ namespace Toolnity
         public static int MenuPositionSelection;
         public static bool BasicShortcutsEnabled;
 
+        static ToolnitySettingsRegister()
+        {
+            MenuPositionSelection = EditorPrefs.GetInt(Application.dataPath + MENU_POSITION, 0);
+        }
+        
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
         public static void OpenProjectSettings()
         {
             SettingsService.OpenProjectSettings(ToolnitySettingsName);
-            MenuPositionSelection = EditorPrefs.GetInt(Application.dataPath + MENU_POSITION, 0);
         }
         
         [SettingsProvider]
@@ -35,7 +40,9 @@ namespace Toolnity
                 label = "Toolnity", guiHandler = (searchContext) =>
                 {
                     EditorGUILayout.Space();
-                    
+
+                    ShowToggleOption("AutoSave On Play", AutoSave.AUTO_SAVE_SETTINGS_ENABLED);
+        
                     EditorGUILayout.BeginHorizontal();
                     var loadSceneOnPlay = ShowToggleOption("Load Scene On Play", LoadSceneOnPlay.LOAD_SCENE_ON_PLAY_SETTINGS_ENABLED, false);
                     if (loadSceneOnPlay)
@@ -54,19 +61,9 @@ namespace Toolnity
                     EditorGUILayout.BeginHorizontal();
                     BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
                     GUILayout.Space(20f);
-                    GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Game Object)");
+                    GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
-                    
-                    EditorGUILayout.BeginHorizontal();
-                    ShowToggleOption("Create GO Shortcut", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
-                    GUILayout.Space(20f);
-                    GUILayout.Label("(Double Click in an empty space in Hierarchy Window to create a new Game Object)");
-                    GUILayout.FlexibleSpace();
-                    EditorGUILayout.EndHorizontal();
-
-                    ShowToggleOption("AutoSave On Play", AutoSave.AUTO_SAVE_SETTINGS_ENABLED);
-                    ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
 
                     EditorGUILayout.BeginHorizontal();
                     ShowToggleOption("Scene Object Selector", SceneObjectSelector.SCENE_OBJECT_SELECTOR_ENABLED);
@@ -75,6 +72,14 @@ namespace Toolnity
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                     
+                    EditorGUILayout.BeginHorizontal();
+                    ShowToggleOption("Hierarchy GO Creator", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
+                    GUILayout.Space(20f);
+                    GUILayout.Label("(Double Click in an empty space in Hierarchy Window to create a new Game Object)");
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+                    
+                    ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
                     
                     GUILayout.Label("");
                     GUILayout.Label("SCENE VIEW MENU");
