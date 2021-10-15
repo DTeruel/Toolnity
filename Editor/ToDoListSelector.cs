@@ -29,13 +29,6 @@ namespace Toolnity
 			{
 				return;
 			}
-
-			if (popupMiddleAlignment == null)
-			{
-				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
-				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
-				popupMiddleAlignment.fontSize = 12;
-			}
 			
 			if (GUILayout.Button(buttonText))
 			{
@@ -47,6 +40,7 @@ namespace Toolnity
 			{
 				buttonText = "<";
 
+				CheckStyles();
 				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
@@ -57,6 +51,16 @@ namespace Toolnity
 			else
 			{
 				buttonText = "T";
+			}
+		}
+
+		private static void CheckStyles()
+		{
+			if (popupMiddleAlignment == null)
+			{
+				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
+				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
+				popupMiddleAlignment.fontSize = 12;
 			}
 		}
 

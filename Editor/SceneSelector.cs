@@ -41,8 +41,6 @@ namespace Toolnity
 			{
 				return;
 			}
-
-			CheckStyles();
 			
 			if (GUILayout.Button(buttonText))
 			{
@@ -55,11 +53,13 @@ namespace Toolnity
 				buttonText = "<";
 
 				GUILayout.BeginVertical();
+				CheckStyles();
 				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
 					AutoSave();
 					OpenScene(PathsList[newSelection]);
+					showSceneLauncher = false;
 				}
 				
 				GUILayout.BeginHorizontal();
