@@ -9,9 +9,13 @@ namespace Toolnity
     {
         private const string ToolnitySettingsName = "Project/ToolnitySettings";
         public const string MENU_POSITION = "Toolnity/Menu Position";
+        
+        private static readonly List<string> MenuPositionList = new List<string> {"Top", "Bottom", "Left", "Right"};
         public const int MENU_POSITION_TOP = 0;
+        public const int MENU_POSITION_BOTTOM = 1;
+        public const int MENU_POSITION_LEFT = 2;
+        public const int MENU_POSITION_RIGHT = 3;
 
-        private static readonly List<string> MenuPositionList = new List<string> {"Top", "Bottom"};
         public static int MenuPositionSelection;
 
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]

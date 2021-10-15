@@ -61,27 +61,28 @@ namespace Toolnity
 				return;
 			}
 			
-			if (GUILayout.Button(buttonText))
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button(buttonText, GUILayout.Width(25)))
 			{
 				showLightsActivator = !showLightsActivator;
 			}
 			
 			if (showLightsActivator)
 			{
-				buttonText = "<";
+				buttonText = "X";
 				
 				CheckStyles();
 				var newSelection = EditorGUILayout.Popup(0, OptionsSelectionList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
 					ApplyAction(newSelection);
-					showLightsActivator = false;
 				}
 			}
 			else
 			{
 				buttonText = "L";
 			}
+			GUILayout.EndHorizontal();
 		}
 
 		private static void CheckStyles()

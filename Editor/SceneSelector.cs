@@ -42,7 +42,8 @@ namespace Toolnity
 				return;
 			}
 			
-			if (GUILayout.Button(buttonText))
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button(buttonText, GUILayout.Width(25)))
 			{
 				showSceneLauncher = !showSceneLauncher;
 				UpdateScenes();
@@ -50,7 +51,7 @@ namespace Toolnity
 			
 			if (showSceneLauncher)
 			{
-				buttonText = "<";
+				buttonText = "X";
 
 				GUILayout.BeginVertical();
 				CheckStyles();
@@ -59,7 +60,6 @@ namespace Toolnity
 				{
 					AutoSave();
 					OpenScene(PathsList[newSelection]);
-					showSceneLauncher = false;
 				}
 				
 				GUILayout.BeginHorizontal();
@@ -78,6 +78,7 @@ namespace Toolnity
 			{
 				buttonText = "S";
 			}
+			GUILayout.EndHorizontal();
 		}
 
 		private static void CheckStyles()

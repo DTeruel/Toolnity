@@ -30,7 +30,8 @@ namespace Toolnity
 				return;
 			}
 			
-			if (GUILayout.Button(buttonText))
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button(buttonText, GUILayout.Width(25)))
 			{
 				showSceneLauncher = !showSceneLauncher;
 				UpdateToDoLists();
@@ -38,20 +39,20 @@ namespace Toolnity
 			
 			if (showSceneLauncher)
 			{
-				buttonText = "<";
+				buttonText = "X";
 
 				CheckStyles();
 				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
 					Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]) };
-					showSceneLauncher = false;
 				}
 			}
 			else
 			{
 				buttonText = "T";
 			}
+			GUILayout.EndHorizontal();
 		}
 
 		private static void CheckStyles()

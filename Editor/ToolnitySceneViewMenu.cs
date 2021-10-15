@@ -14,6 +14,21 @@ namespace Toolnity
         private static void OnSceneGUI(SceneView sceneView)
         {
             Handles.BeginGUI();
+
+            if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_TOP
+                || ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_BOTTOM)
+            {
+                DrawTopBottomDirection();
+            }
+            else
+            {
+                DrawLeftRightDirection();
+            }
+            Handles.EndGUI();
+        }
+
+        private static void DrawTopBottomDirection()
+        {
             if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_TOP)
             {
                 GUILayout.Space(-15);
@@ -22,18 +37,17 @@ namespace Toolnity
             {
                 GUILayout.FlexibleSpace();
             }
+                
             GUILayout.BeginVertical();
-            
+
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            
-            ToDoListSelector.DrawGUI();
-            SceneSelector.DrawGUI();
-            LightsActivator.DrawGUI();
+
+            DrawAllButtons();
 
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            
+
             if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_TOP)
             {
                 GUILayout.FlexibleSpace();
@@ -43,8 +57,44 @@ namespace Toolnity
                 GUILayout.Space(25);
             }
             GUILayout.EndVertical();
+        }
+
+        private static void DrawLeftRightDirection()
+        {
+            GUILayout.BeginHorizontal();
+            if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_LEFT)
+            {
+                GUILayout.Space(10);
+            }
+            else
+            {
+                GUILayout.FlexibleSpace();
+            }
             
-            Handles.EndGUI();
+            GUILayout.BeginVertical();
+            GUILayout.FlexibleSpace();
+            
+            DrawAllButtons();
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndVertical();
+
+            if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_LEFT)
+            {
+                GUILayout.FlexibleSpace();
+            }
+            else
+            {
+                GUILayout.Space(10);
+            }
+            GUILayout.EndHorizontal();
+        }
+
+        private static void DrawAllButtons()
+        {
+            ToDoListSelector.DrawGUI();
+            SceneSelector.DrawGUI();
+            LightsActivator.DrawGUI();
         }
     }
 }
