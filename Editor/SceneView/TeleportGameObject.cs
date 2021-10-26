@@ -5,7 +5,7 @@ using UnityEditor;
 namespace Toolnity
 {
 	[InitializeOnLoad]
-	public class TeleportGameObject : Editor
+	public static class TeleportGameObject
 	{
 		private const string COPY_COORDINATE_X_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy X";
 		private const string COPY_COORDINATE_Y_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy Y";
