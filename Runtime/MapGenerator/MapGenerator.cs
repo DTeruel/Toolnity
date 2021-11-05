@@ -105,13 +105,13 @@ namespace Toolnity
 
             if (!colorFound)
             {
-                Debug.Log("[Map Generator] Color not found: " + pixelColorV3);
+                Debug.LogWarning("[Map Generator] Color not found: " + pixelColorV3);
                 
-                for (var i = 0; i < mapConfig.TokensConfig.AllTokens.Length; i++)
-                {
-                    var token = mapConfig.TokensConfig.AllTokens[i];
-                    Debug.Log("[Map Generator] Color available: " + token.ColorToMatchV3);
-                }
+                // for (var i = 0; i < mapConfig.TokensConfig.AllTokens.Length; i++)
+                // {
+                //     var token = mapConfig.TokensConfig.AllTokens[i];
+                //     Debug.Log("[Map Generator] Color available: " + token.ColorToMatchV3);
+                // }
             }
         }
         
@@ -139,6 +139,11 @@ namespace Toolnity
         private void SpawnObject(string tokenDescription, GameObject prefabToSpawn, Vector2 position)
         {
             //Debug.Log("[Map Generator] Creating Object '" + prefabToSpawn.name + "'...");
+            if (prefabToSpawn == null)
+            {
+                Debug.LogError("[Map Generator] Invalid Prefab assigned. Please, check your Scriptable Object MapTokenConfig.");
+                return;
+            }
             var newObject = Instantiate(prefabToSpawn, position, Quaternion.identity, rootGameObjects[tokenDescription].transform);
             #if UNITY_EDITOR
                 Undo.RegisterCreatedObjectUndo(newObject, "Create object");
