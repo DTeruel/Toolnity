@@ -24,6 +24,8 @@ namespace Toolnity
         static ToolnitySettingsRegister()
         {
             MenuPositionSelection = EditorPrefs.GetInt(Application.dataPath + MENU_POSITION, 0);
+            BasicShortcutsEnabled = EditorPrefs.GetBool(Application.dataPath + SHORTCUTS_ENABLED, true);
+
         }
         
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
@@ -60,6 +62,7 @@ namespace Toolnity
                     
                     EditorGUILayout.BeginHorizontal();
                     BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
+
                     GUILayout.Space(20f);
                     GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
                     GUILayout.FlexibleSpace();
