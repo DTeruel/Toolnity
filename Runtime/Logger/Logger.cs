@@ -49,11 +49,11 @@ public static class Logger
 
     private static void ShowCategoriesFiltered()
     {
-        var categoriesFiltered = "";
+        var categoriesFiltered = string.Empty;
         for (var i = 0; i < CategoriesFiltered.Count; i++)
         {
             var category = CategoriesFiltered[i];
-            if (categoriesFiltered == "")
+            if (categoriesFiltered == string.Empty)
             {
                 categoriesFiltered = "'" + category + "'";
             }
@@ -63,43 +63,58 @@ public static class Logger
             }
         }
         
-        if (categoriesFiltered == "")
+        if (categoriesFiltered == string.Empty)
         {
             categoriesFiltered = "<NONE>";
         }
         Log("[Logger] Categories filtered: " + categoriesFiltered);
     }
 
-    public static void Log(string message, string category = "")
+    public static void Log(string message)
     {
-        if (!IsCategoryAllowed(category))
-        {
-            return;
-        }
-        Debug.Log(GetFinalMessage(message, category));
+        Log(string.Empty, message);
     }
-    
-    public static void LogWarning(string message, string category = "")
+
+    public static void Log(string category, string message)
     {
         if (!IsCategoryAllowed(category))
         {
             return;
         }
-        Debug.LogWarning(GetFinalMessage(message, category));
+        Debug.Log(GetFinalMessage(category, message));
     }
-    
-    public static void LogError(string message, string category = "")
+
+    public static void LogWarning(string message)
+    {
+        LogWarning(string.Empty, message);
+    }
+
+    public static void LogWarning(string category, string message)
     {
         if (!IsCategoryAllowed(category))
         {
             return;
         }
-        Debug.LogError(GetFinalMessage(message, category));
+        Debug.LogWarning(GetFinalMessage(category, message));
+    }
+
+    public static void LogError(string message)
+    {
+        LogError(string.Empty, message);
+    }
+
+    public static void LogError(string category, string message)
+    {
+        if (!IsCategoryAllowed(category))
+        {
+            return;
+        }
+        Debug.LogError(GetFinalMessage(category, message));
     }
 
     private static bool IsCategoryAllowed(string category)
     {
-        if (category == "")
+        if (category == string.Empty)
         {
             return true;
         }
@@ -107,9 +122,9 @@ public static class Logger
         return !CategoriesFiltered.Contains(category);
     }
 
-    private static string GetFinalMessage(string message, string category = "")
+    private static string GetFinalMessage(string category, string message)
     {
-        if (category != "")
+        if (category != string.Empty)
         {
             return "[" + category + "] " + message;
         }
