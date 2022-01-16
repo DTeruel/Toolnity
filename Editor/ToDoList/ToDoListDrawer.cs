@@ -56,12 +56,13 @@ namespace Toolnity
             
             EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
             EditorGUILayout.LabelField(title, titleCenteredLabel);
-            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
-
+            
             if (!taskCompleted)
             {
                 DrawFilter();
             }
+            
+            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
             
             for (var i = 0; i < list.Count; i++)
             {
@@ -140,7 +141,8 @@ namespace Toolnity
         private void DrawFilter()
         {
             var toDoList = (ToDoList)target;
-
+            EditorGUILayout.Space(MIDDLE_VERTICAL_OFFSET);
+            
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             toDoList.showFilters = GUILayout.Toggle(toDoList.showFilters, " FILTERS");
@@ -149,17 +151,23 @@ namespace Toolnity
 
             if (toDoList.showFilters)
             {
+                EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
                 toDoList.filter1Enabled = GUILayout.Toggle(toDoList.filter1Enabled, "");
                 toDoList.filterIndexParameter1 = DrawDropdown(toDoList.filterIndexParameter1, toDoList.parameters1.ToArray());
+                
                 GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
                 toDoList.filter2Enabled = GUILayout.Toggle(toDoList.filter2Enabled, "");
                 toDoList.filterIndexParameter2 = DrawDropdown(toDoList.filterIndexParameter2, toDoList.parameters2.ToArray());
+                
+                GUILayout.Space(OPTIONS_HORIZONTAL_OFFSET);
+                toDoList.showCompletedTasks = GUILayout.Toggle(toDoList.showCompletedTasks,
+                    " COMPLETED TASKS");
+                
                 GUILayout.Space(Screen.width * SPACE_WIDTH_PERCENTAGE);
                 EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
         }
 
         private static Texture2D MakeTex(int width, int height, Color col)
@@ -274,18 +282,10 @@ namespace Toolnity
         {
             var toDoList = (ToDoList)target;
 
-            EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            toDoList.showCompletedTasks = GUILayout.Toggle(toDoList.showCompletedTasks,
-                " COMPLETED TASKS");
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-
-            if (toDoList.showCompletedTasks && toDoList.completedTasks.Count > 0)
+            if (toDoList.showFilters && toDoList.showCompletedTasks && toDoList.completedTasks.Count > 0)
             {
-                DrawTasks("COMPLETED", toDoList.completedTasks, true);
+                EditorGUILayout.Space(DEFAULT_VERTICAL_OFFSET);
+                DrawTasks("COMPLETED TASKS", toDoList.completedTasks, true);
             }
         }
         #endregion
