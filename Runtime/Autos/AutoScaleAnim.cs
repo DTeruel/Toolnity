@@ -8,13 +8,17 @@ namespace Toolnity
 		[SerializeField] private float duration = 1;
 		[SerializeField] private bool loop;
 		[SerializeField] private bool canBeInterrupted = true;
+		[SerializeField] private bool resetOnEnable = true;
 
 		private float timer;
 		private float lerpValue;
 
 		private void OnEnable()
 		{
-			Reset();
+			if (resetOnEnable)
+			{
+				Reset();
+			}
 		}
 
 		protected override void InitInternal()
