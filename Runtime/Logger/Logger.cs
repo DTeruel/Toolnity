@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public static class Logger
 {
     private static readonly List<string> CategoriesFiltered = new List<string>();
@@ -8,16 +12,37 @@ public static class Logger
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnBeforeSceneLoad()
     {
-        var loggerSettings = Resources.FindObjectsOfTypeAll<LoggerCategoriesFilter>();
-        for (var i = 0; i < loggerSettings.Length; i++)
+        CategoriesFiltered.Clear();
+        
+        #if UNITY_EDITOR
+        var assets = AssetDatabase.FindAssets("t:LoggerCategoriesFilter");
+        foreach (var guid in assets)
         {
-            for (var j = 0; j < loggerSettings[i].categoriesFiltered.Length; j++)
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var loggerCategoriesFilter = AssetDatabase.LoadAssetAtPath<LoggerCategoriesFilter>(path);
+            LoadAssetCategory(loggerCategoriesFilter);
+        }
+        #endif
+        
+        var loggerCategoriesFilters = Resources.FindObjectsOfTypeAll<LoggerCategoriesFilter>();
+        for (var i = 0; i < loggerCategoriesFilters.Length; i++)
+        {
+            LoadAssetCategory(loggerCategoriesFilters[i]);
+        }
+
+        ShowCategoriesFiltered();
+    }
+
+    private static void LoadAssetCategory(LoggerCategoriesFilter loggerCategoriesFilter)
+    {
+        for (var i = 0; i < loggerCategoriesFilter.categoriesFiltered.Length; i++)
+        {
+            var category = loggerCategoriesFilter.categoriesFiltered[i];
+            if (!CategoriesFiltered.Contains(category))
             {
-                CategoriesFiltered.Add(loggerSettings[i].categoriesFiltered[j]);
+                CategoriesFiltered.Add(category);
             }
         }
-        
-        ShowCategoriesFiltered();
     }
 
     public static void ShowCategory(string category)
