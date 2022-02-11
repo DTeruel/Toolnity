@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 public static class Logger
 {
     private static readonly List<string> CategoriesFiltered = new List<string>();
@@ -13,21 +9,30 @@ public static class Logger
     private static void OnBeforeSceneLoad()
     {
         CategoriesFiltered.Clear();
-        
-        #if UNITY_EDITOR
-        var assets = AssetDatabase.FindAssets("t:LoggerCategoriesFilter");
-        foreach (var guid in assets)
-        {
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            var loggerCategoriesFilter = AssetDatabase.LoadAssetAtPath<LoggerCategoriesFilter>(path);
-            LoadAssetCategory(loggerCategoriesFilter);
-        }
-        #endif
-        
+
+        bool anyFileFound = false;
         var loggerCategoriesFilters = Resources.FindObjectsOfTypeAll<LoggerCategoriesFilter>();
-        for (var i = 0; i < loggerCategoriesFilters.Length; i++)
+        if (loggerCategoriesFilters.Length > 0)
         {
-            LoadAssetCategory(loggerCategoriesFilters[i]);
+            anyFileFound = true;
+            for (var i = 0; i < loggerCategoriesFilters.Length; i++)
+            {
+                Log("[Logger] File found: " + loggerCategoriesFilters[i].name);
+                LoadAssetCategory(loggerCategoriesFilters[i]);
+            }
+        }
+        
+        var file = Resources.Load<LoggerCategoriesFilter>("Logger Categories Filter");
+        if (file)
+        {
+            anyFileFound = true;
+            Log("[Logger] File found: " + file.name);
+            LoadAssetCategory(file);
+        }
+        
+        if(!anyFileFound)
+        {
+            Log("[Logger] No 'Logger Categories Filter' file found in the Resources folder.");
         }
 
         ShowCategoriesFiltered();
