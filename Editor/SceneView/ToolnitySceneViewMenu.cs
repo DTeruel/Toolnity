@@ -15,7 +15,6 @@ namespace Toolnity
         private static void OnSceneGUI(SceneView sceneView)
         {
             Handles.BeginGUI();
-
             if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_TOP
                 || ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_BOTTOM)
             {
@@ -32,7 +31,7 @@ namespace Toolnity
         {
             if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_TOP)
             {
-                GUILayout.Space(-15);
+                GUILayout.Space(-15 + ToolnitySettingsRegister.MenuOffset);
             }
             else
             {
@@ -55,7 +54,7 @@ namespace Toolnity
             }
             else
             {
-                GUILayout.Space(25);
+                GUILayout.Space(25 + ToolnitySettingsRegister.MenuOffset);
             }
             GUILayout.EndVertical();
         }
@@ -65,7 +64,7 @@ namespace Toolnity
             GUILayout.BeginHorizontal();
             if (ToolnitySettingsRegister.MenuPositionSelection == ToolnitySettingsRegister.MENU_POSITION_LEFT)
             {
-                GUILayout.Space(10);
+                GUILayout.Space(10 + ToolnitySettingsRegister.MenuOffset);
             }
             else
             {
@@ -86,7 +85,7 @@ namespace Toolnity
             }
             else
             {
-                GUILayout.Space(10);
+                GUILayout.Space(10 + ToolnitySettingsRegister.MenuOffset);
             }
             GUILayout.EndHorizontal();
         }

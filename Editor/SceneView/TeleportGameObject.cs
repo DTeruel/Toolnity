@@ -11,7 +11,7 @@ namespace Toolnity
 		private const string COPY_COORDINATE_Y_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy Y";
 		private const string COPY_COORDINATE_Z_OPTION_NAME = "Tools/Toolnity/Teleport GameObject/Copy Z";
 
-		private const string UNDO_APPLY_MOVE_GAMEOBJECT_HERE = "Teleport GameObject Here";
+		private const string UNDO_APPLY_MOVE_GAME_OBJECT_HERE = "Teleport GameObject Here";
 
 		private class ObjectMovement
 		{
@@ -114,7 +114,7 @@ namespace Toolnity
 					objectPosition.z = PluginData.Position.z;
 				}
 
-				Undo.RecordObject(PluginData.SelectedObjects[i].transform, UNDO_APPLY_MOVE_GAMEOBJECT_HERE);
+				Undo.RecordObject(PluginData.SelectedObjects[i].transform, UNDO_APPLY_MOVE_GAME_OBJECT_HERE);
 				PluginData.SelectedObjects[i].transform.position = objectPosition;
 			}
 

@@ -36,8 +36,8 @@ namespace Toolnity
 
 		public static void DrawGUI()
 		{
-			var enabledOption = EditorPrefs.GetBool(Application.dataPath + SCENE_SELECTOR_ENABLED, true);
-			if (!enabledOption)
+			var optionEnabled = EditorPrefs.GetBool(Application.dataPath + SCENE_SELECTOR_ENABLED, true);
+			if (!optionEnabled)
 			{
 				return;
 			}
@@ -78,6 +78,8 @@ namespace Toolnity
 				
 				GUILayout.BeginHorizontal();
 				GUILayout.Space(40);
+				
+				justScenesInBuild = EditorPrefs.GetBool(Application.dataPath + SCENE_SELECTOR_JUST_SCENES_IN_BUILD, false);
 				var newJustScenesInBuild = GUILayout.Toggle(justScenesInBuild, "  Just Scenes on Build");
 				if (justScenesInBuild != newJustScenesInBuild)
 				{
