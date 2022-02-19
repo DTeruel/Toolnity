@@ -45,7 +45,15 @@ namespace Toolnity
 				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
 				if (newSelection > 0)
 				{
-					Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]) };
+					if (newSelection == NamesList.Count - 1)
+					{
+						CreateNewTodoList();
+					}
+					else
+					{
+						var asset = AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]);
+						Selection.activeObject = asset;
+					}
 				}
 			}
 			else
@@ -53,6 +61,14 @@ namespace Toolnity
 				buttonText = "T";
 			}
 			GUILayout.EndHorizontal();
+		}
+
+		private static void CreateNewTodoList()
+		{  
+			var asset = ScriptableObject.CreateInstance<ToDoList>();
+			AssetDatabase.CreateAsset(asset, "Assets/[ToDo] List " + Random.Range(0, 1000).ToString("000") + ".asset");
+			AssetDatabase.SaveAssets();
+			Selection.activeObject = asset;
 		}
 
 		private static void CheckStyles()
@@ -79,6 +95,8 @@ namespace Toolnity
 			{
 				NamesList[0] = " - No ToDo Lists Found -";
 			}
+			
+			NamesList.Add(" - Create New ToDo List -");
 		}
 		
 		private static void GetToDoListsFromProject()
