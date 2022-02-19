@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Toolnity
 {
-    [CreateAssetMenu(fileName = "[ToDo] Tasks", menuName = "Toolnity/ToDo List")]
+    [CreateAssetMenu(fileName = "[ToDo] List", menuName = "Toolnity/ToDo List")]
     public class ToDoList : ScriptableObject
     {
         public List<ToDoElement> tasks = new List<ToDoElement>();

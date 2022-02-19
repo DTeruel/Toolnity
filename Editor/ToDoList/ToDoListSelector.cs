@@ -10,57 +10,34 @@ namespace Toolnity
 	{
 		public const string TODO_LIST_ENABLED = "Toolnity/To Do List/Enabled";
 
-		private static bool showSceneLauncher;
-		private static readonly List<string> NamesList = new List<string>();
-		private static readonly List<string> PathsList = new List<string>();
-		private static string buttonText;
+		public static readonly List<string> NamesList = new ();
 
-		private static GUIStyle popupMiddleAlignment;
+		private static readonly List<string> PathsList = new ();
 
 		static ToDoListSelector()
 		{
 			UpdateToDoLists();
 		}
 
-		public static void DrawGUI()
+		public static void SelectItem(string selection)
 		{
-			var enabledOption = EditorPrefs.GetBool(Application.dataPath + TODO_LIST_ENABLED, true);
-			if (!enabledOption)
+			for (var i = 0; i < NamesList.Count; i++)
 			{
-				return;
-			}
-			
-			GUILayout.BeginHorizontal();
-			if (GUILayout.Button(buttonText, GUILayout.Width(25)))
-			{
-				showSceneLauncher = !showSceneLauncher;
-				UpdateToDoLists();
-			}
-			
-			if (showSceneLauncher)
-			{
-				buttonText = "X";
-
-				CheckStyles();
-				var newSelection = EditorGUILayout.Popup(0, NamesList.ToArray(), popupMiddleAlignment);
-				if (newSelection > 0)
+				var option = NamesList[i];
+				if (selection == option)
 				{
-					if (newSelection == NamesList.Count - 1)
+					if (i == 0)
 					{
 						CreateNewTodoList();
 					}
 					else
 					{
-						var asset = AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[newSelection]);
+						var asset = AssetDatabase.LoadAssetAtPath<ToDoList>(PathsList[i]);
 						Selection.activeObject = asset;
 					}
+					return;
 				}
 			}
-			else
-			{
-				buttonText = "T";
-			}
-			GUILayout.EndHorizontal();
 		}
 
 		private static void CreateNewTodoList()
@@ -71,32 +48,14 @@ namespace Toolnity
 			Selection.activeObject = asset;
 		}
 
-		private static void CheckStyles()
+		private static void UpdateToDoLists()
 		{
-			if (popupMiddleAlignment == null)
-			{
-				popupMiddleAlignment = GUI.skin.GetStyle("Popup");
-				popupMiddleAlignment.alignment = TextAnchor.MiddleCenter;
-				popupMiddleAlignment.fontSize = 12;
-			}
-		}
-
-		public static void UpdateToDoLists()
-		{
-			NamesList.Clear();
-			NamesList.Add(" - Select ToDo List -");
-			
 			PathsList.Clear();
 			PathsList.Add("");
 			
-			GetToDoListsFromProject();
-
-			if (NamesList.Count == 1)
-			{
-				NamesList[0] = " - No ToDo Lists Found -";
-			}
-			
+			NamesList.Clear();
 			NamesList.Add(" - Create New ToDo List -");
+			GetToDoListsFromProject();
 		}
 		
 		private static void GetToDoListsFromProject()

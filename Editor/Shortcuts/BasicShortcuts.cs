@@ -8,7 +8,7 @@ namespace Toolnity
 {
 	public static class BasicShortcuts
 	{
-		[MenuItem("Tools/Toolnity/Shortcuts/Game Play | Stop _F5", priority = 10)]
+		[MenuItem("Tools/Toolnity/Shortcuts/Game Play-Stop _F5", priority = 10)]
 		private static void PlayStop()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
@@ -25,7 +25,7 @@ namespace Toolnity
 			EditorApplication.EnterPlaymode();
 		}
 
-		[MenuItem("Tools/Toolnity/Shortcuts/Game Pause | Resume _F6", priority = 10)]
+		[MenuItem("Tools/Toolnity/Shortcuts/Game Pause-Resume _F6", priority = 10)]
 		private static void PauseResume()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
@@ -47,8 +47,8 @@ namespace Toolnity
 			EditorApplication.Step();
 		}
 
-		[MenuItem("Tools/Toolnity/Shortcuts/Project Save All _F12", priority = 100)]
-		private static void SaveAll()
+		[MenuItem("Tools/Toolnity/Shortcuts/Save All _F12", priority = 100)]
+		public static void SaveAll()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
 			{

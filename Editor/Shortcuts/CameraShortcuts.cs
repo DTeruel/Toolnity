@@ -11,7 +11,7 @@ namespace Toolnity
 		private static bool backFirst;
 
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Top-Bottom _F1", priority = -10)]
-		private static void SwitchTopBottomCamera()
+		public static void SwitchTopBottomCamera()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
 			{
@@ -31,7 +31,7 @@ namespace Toolnity
 		}
 
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Left-Right _F2", priority = -10)]
-		private static void SwitchLeftRightCamera()
+		public static void SwitchLeftRightCamera()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
 			{
@@ -51,7 +51,7 @@ namespace Toolnity
 		}
 
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Front-Back _F3", priority = -10)]
-		private static void SwitchFrontBackCamera()
+		public static void SwitchFrontBackCamera()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
 			{
@@ -77,7 +77,7 @@ namespace Toolnity
 		}
 
 		[MenuItem("Tools/Toolnity/Shortcuts/Camera Perspective-Orthographic _F4", priority = -10)]
-		private static void PerspectiveOrthographicCamera()
+		public static void PerspectiveOrthographicCamera()
 		{
 			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
 			{
