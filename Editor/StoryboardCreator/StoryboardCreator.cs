@@ -48,9 +48,9 @@ namespace Toolnity
 			
 			takeScreenshot = false;
 			
-			if (screens.Length == 0)
+			if (screens == null || screens.Length == 0)
 			{
-				Debug.Log("[Storyboard Creator] No cameras to take screenshots.");
+				Debug.Log("[Storyboard Creator] No cameras or screens to take screenshots.");
 				return;
 			}
 			

@@ -1,103 +1,182 @@
-# Toolnity
+#Toolnity
 
+--------------------------------
+
+##Information
 **Toolnity** is a bunch of Editor Tools and Gameplay Utilities for Unity.
 
-![Tools](Screenshots/Tools.png)
+* You can find the most of the utilities in the Unity Menus:
 
+![Tools](.readme/Tools.png)
+
+* And you can add the Toolnity toolbar in your Scene view using the overlays
+
+![Toolbar](.readme/SceneToolbar.png)
+![Scene Overlay](.readme/SceneOverlay.png)
+--------------------------------
+
+## How to install it?
 The repository is ready to be used directly in Unity without the need to download it. You can add it to your project using the Repo-URL in the Project Manager.
 
-![PackageManager](Screenshots/PackageManager.png)
+![PackageManager](.readme/PackageManager.png)
 
 The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
 
 --------------------------------
+
 ## Editor Tools
+You can enable and disable the most of the editor tools in your project settings:
 
-  #### Auto Save
-   * Save the Scene and the Project everytime you run the game
+![Project Settings](.readme/ProjectSettings.png) 
 
-   * You can disable this option in "Tools/Toolnity/Auto Save"
+Remember to check the Context Menu in your Project Window to create Toolnity objects:
 
-  #### Save Project
-   * F12: Shortcut to save all your Scenes opened and Project
+![Project Context Menu](.readme/ProjectContextMenu.png)
 
-  #### Scene Selector
-   * Adds small button in the Scene View to open easily any scene on your project
-   
-![SceneSelector](Screenshots/SceneSelector.png)
+###These are the tools available in the Editor:
+* ###Auto Save
+    Save the Scene and the Project everytime you run the game
 
-  #### Hierarchy Colorizer
-   * Add color to any game object in the Hierarchy View
-   
-![HierarchyColorizer](Screenshots/HierarchyColorizer.png)
+* ### Scene Auto Loader
+    Open and run an specific Scene everytime you press Play
 
-  #### Hierarchy Object Active
-   * Enable and Disable objects easily direct from the Hierarchy View
-   
-![HierarchyObjectActive](Screenshots/HierarchyObjectActive.png)
+* ### Editor Shortcuts
+  * F5: Play/Stop
+  * F6: Pause/Resume
+  * F7: Next Step
+  * F12: Shortcut to save all your Scenes opened and Project
+  * Double click in the Hierarchy Window to create a new GameObject
+  
+* ### Camera Shorcuts
+  * F1: Toggle Camera in Top/Bottom View
+  * F2: Toggle Camera in Left/Right View
+  * F3: Toggle Camera in Front/Back View
+  * F4: Toggle Camera in Perspective/Orthographic View
 
-  #### Camera Shorcuts
-   * F1: Toggle Camera in Top/Bottom View
-   * F2: Toggle Camera in Left/Right View
-   * F3: Toggle Camera in Front/Back View
-   * F4: Toggle Camera in Perspective/Orthographic View
+* ### Hierarchy Object Active
+  * Enable and Disable objects easily direct from the Hierarchy View
 
-  #### Game View Resolution
+    ![Object Active](.readme/HierarchyObjectActive.png)
+
+* ### Hierarchy Colorizer
+  * Add color to any game object in the Hierarchy View to organize your scene
+
+    ![Hierarchy Colorizer](.readme/HierarchyColorizer.png)
+
+* ### Game Object Selector
+  * Multiple GameObject selector in your Scene View using LeftCtrl+LeftShift+LeftMouseClick
+
+    ![Object Selector](.readme/ObjectSelector.png)
+  
+* ### Scene Selector
+  * Quick access to open any scene on your project
+
+* ### ToDo List
+  * Utility to track your tasks
+
+    ![ToDo List](.readme/ToDoList.png)
+
+* ### Lightning Utilities
+  * Different utilities related with the lightning on your scene
+
+    ![Lightning](.readme/Lightning.png)
+  
+* ### Interesting Game Objects
+  * InterestingGameObject component is an script that you can add to any game object and with Shift+N or using the Toolbar you can access to them quickly
+
+* ### Teleport Game Object
+  * Teleport the selected game object to the mouse position in the Scene View, when you press LeftShit+T
+
+* ### Find Missing Scripts
+  * Utility to find missing scripts in all the game objects selected
+
+* ### Favorites
+  * Window to have bookmarks of any object in your project
+
+  ![Favorites](.readme/Favorites.png)
+
+* ### Replace Tool
+  * Tool to replace all objects selected by a Prefab
+
+  ![Replace Tool](.readme/ReplaceTool.png)
+
+* ### Transform Randomizer
+  * Tool to randomize scales and rotations for easy prop placing
+
+  ![Transform Randomizer](.readme/TransformRandomizer.png)
+
+
+* ### Game View Resolution
    * Add different mobile resolutions and aspect rations to your Game View
    
-![GameViewResolutions](Screenshots/GameViewResolutions.png)
+  ![Game View Resolutions](.readme/GameViewResolutions.png)
 
-  #### Play Game
-   * F5: Play / Stop
-   * F6: Pause / Resume
-   * F7: Next Frame 
+* ### Story Board Creator
+  * Tool to easily export screenshots to create In-game Story Boards
 
-  #### Scene Auto Loader
-   * Option to run from an specific Scene everytime you press Play
+  ![Story Board Creator](.readme/StoryBoardCreator.png)
+
+* ### Map Generator
+  * Tool to generate a level from an image map and a collection of prefabs
+
+  ![Map Editor Config](.readme/MapEditorConfig.png)
+  ![Map Editor Result](.readme/MapEditorResult.png)
+
 
 --------------------------------
 ## Gameplay Utilities
+Collection of scripts to being used in your projects
+ 
+#### Logger
+* Replacement for the Debug.LogXXX of Unity. You have Categories utility to filter the logs anytime by script or Scriptable Object
 
-  #### Autos
-   * Scripts to perform easy actions (Bounce Object, Color Changer, Scale Anim, ...)
+#### Game Events
+* GameEvent: Scriptable object to raise custom events
+* GameEventListener: Script to assign Unity Events as callbacks when the previous events are raised
 
-  #### Game Events
-   * GameEvent: Scriptable object to raise custom events
-   * GameEventListener: Script to assign Unity Events as callbacks when the previous events are raised
+#### Autos
+* Scripts to perform easy actions (Bounce Object, Color Changer, Scale Anim, ...)
 
-  #### Any Button Event
-   * Trigger Unity Events when any button/key is pressed
+#### Singleton
+* Make Singleton any of your classes
 
-  #### Don't Destroy
-   * Mark this object as a Don't Destroy Object automatically
+#### Runtime Set
+* Component to store int type of object during runtime
 
-  #### Event Sequencer
-   * Trigger Unity Events in sequence with Delay Timers
+#### Game Objects Register & Container
+* Basic Example of Runtime Set for GameObject types
 
-  #### Fader
-   * Create simple Fade transitions
+#### Don't Destroy
+* Mark this object as a Don't Destroy Object automatically
 
-  #### Input Event Launcher
-   * Trigger UnityEvents when an specific button/key is pressed
+#### Event Sequencer
+* Trigger Unity Events in sequence with delay timers
 
-  #### Load Scene
-   * Script to load an specific scene on a call
+#### Fader
+* Create simple Fade transitions
 
-  #### Quit Game
-   * Exit the game when press Esc
+#### Input Event Launcher
+* Trigger UnityEvents when an specific button/key is pressed
 
-  #### Scene Change Event
-   * Trigger Unity Events when an Scene has been loaded
+#### Load Scene
+* Script to load an specific scene on a call
 
-  #### Singleton
-   * Set as Singleton any of your classes
+#### Quit Game
+* Exit the game when press Esc
 
+#### Any Button Event
+* Trigger Unity Events when any button/key is pressed
+
+#### Scene Change Event
+* Trigger Unity Events when an Scene has been loaded
 
 --------------------------------
-## Support
-This is an Open Source project that I'm developing in my spare time. You can use it as you want or contact with me for any feedback or suggestion.
-You can contribute supporting me as a Sponsor in GitHub to keep working on more and better Tools and Features for Unity.
 
+## Support
+This is an Open Source project that I'm developing in my spare time.
+You can use it as you want or contact with me for any feedback, suggestion or just hey Hi!
+
+If you want to contribute, you can do it with Pull Requests or supporting me as a Sponsor in GitHub to keep working on that:
 [https://github.com/sponsors/DTeruel](https://github.com/sponsors/DTeruel)
 
-Thank you!
+#Thank you!
