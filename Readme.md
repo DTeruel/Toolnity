@@ -32,7 +32,7 @@ Remember to check the Context Menu in your Project Window to create Toolnity obj
 
 ![Project Context Menu](.readme/ProjectContextMenu.png)
 
-###These are the tools available in the Editor:
+### These are the tools available in the Editor:
 
 #### Auto Save
 * Save the Scene and the Project everytime you run the game
