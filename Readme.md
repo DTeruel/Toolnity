@@ -38,7 +38,7 @@ Remember to check the Context Menu in your Project Window to create Toolnity obj
 * Save the Scene and the Project everytime you run the game
 
 #### Scene Auto Loader
-*Open and run an specific Scene everytime you press Play
+* Open and run an specific Scene everytime you press Play
 
 #### Editor Shortcuts
 * F5: Play/Stop
