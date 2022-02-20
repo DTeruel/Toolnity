@@ -1,8 +1,6 @@
 
 # Toolnity
 
---------------------------------
-
 ## Information
 **Toolnity** is a bunch of Editor Tools and Gameplay Utilities for Unity.
 
@@ -34,13 +32,13 @@ Remember to check the Context Menu in your Project Window to create Toolnity obj
 
 ![Project Context Menu](.readme/ProjectContextMenu.png)
 
-###These are the tools available in the Editor:
+### These are the tools available in the Editor:
 
 #### Auto Save
 * Save the Scene and the Project everytime you run the game
 
 #### Scene Auto Loader
-*Open and run an specific Scene everytime you press Play
+* Open and run an specific Scene everytime you press Play
 
 #### Editor Shortcuts
 * F5: Play/Stop
