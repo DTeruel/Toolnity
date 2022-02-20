@@ -1,8 +1,9 @@
-#Toolnity
+
+# Toolnity
 
 --------------------------------
 
-##Information
+## Information
 **Toolnity** is a bunch of Editor Tools and Gameplay Utilities for Unity.
 
 * You can find the most of the utilities in the Unity Menus:
@@ -34,90 +35,91 @@ Remember to check the Context Menu in your Project Window to create Toolnity obj
 ![Project Context Menu](.readme/ProjectContextMenu.png)
 
 ###These are the tools available in the Editor:
-* ###Auto Save
-    Save the Scene and the Project everytime you run the game
 
-* ### Scene Auto Loader
-    Open and run an specific Scene everytime you press Play
+#### Auto Save
+* Save the Scene and the Project everytime you run the game
 
-* ### Editor Shortcuts
-  * F5: Play/Stop
-  * F6: Pause/Resume
-  * F7: Next Step
-  * F12: Shortcut to save all your Scenes opened and Project
-  * Double click in the Hierarchy Window to create a new GameObject
+#### Scene Auto Loader
+*Open and run an specific Scene everytime you press Play
+
+#### Editor Shortcuts
+* F5: Play/Stop
+* F6: Pause/Resume
+* F7: Next Step
+* F12: Shortcut to save all your Scenes opened and Project
+* Double click in the Hierarchy Window to create a new GameObject
   
-* ### Camera Shorcuts
-  * F1: Toggle Camera in Top/Bottom View
-  * F2: Toggle Camera in Left/Right View
-  * F3: Toggle Camera in Front/Back View
-  * F4: Toggle Camera in Perspective/Orthographic View
+#### Camera Shortcuts
+* F1: Toggle Camera in Top/Bottom View
+* F2: Toggle Camera in Left/Right View
+* F3: Toggle Camera in Front/Back View
+* F4: Toggle Camera in Perspective/Orthographic View
+  
+#### Hierarchy Object Active
+* Enable and Disable objects easily direct from the Hierarchy View
 
-* ### Hierarchy Object Active
-  * Enable and Disable objects easily direct from the Hierarchy View
+  ![Object Active](.readme/HierarchyObjectActive.png)
 
-    ![Object Active](.readme/HierarchyObjectActive.png)
+#### Hierarchy Colorizer
+* Add color to any game object in the Hierarchy View to organize your scene
 
-* ### Hierarchy Colorizer
-  * Add color to any game object in the Hierarchy View to organize your scene
+  ![Hierarchy Colorizer](.readme/HierarchyColorizer.png)
 
-    ![Hierarchy Colorizer](.readme/HierarchyColorizer.png)
-
-* ### Game Object Selector
-  * Multiple GameObject selector in your Scene View using LeftCtrl+LeftShift+LeftMouseClick
+#### Game Object Selector
+* Multiple GameObject selector in your Scene View using LeftCtrl+LeftShift+LeftMouseClick
 
     ![Object Selector](.readme/ObjectSelector.png)
   
-* ### Scene Selector
-  * Quick access to open any scene on your project
+#### Scene Selector
+* Quick access to open any scene on your project
 
-* ### ToDo List
-  * Utility to track your tasks
+#### ToDo List
+* Utility to track your tasks
 
     ![ToDo List](.readme/ToDoList.png)
 
-* ### Lightning Utilities
-  * Different utilities related with the lightning on your scene
+#### Lightning Utilities
+* Different utilities related with the lightning on your scene
 
     ![Lightning](.readme/Lightning.png)
   
-* ### Interesting Game Objects
-  * InterestingGameObject component is an script that you can add to any game object and with Shift+N or using the Toolbar you can access to them quickly
+#### Interesting Game Objects
+* InterestingGameObject component is an script that you can add to any game object and with Shift+N or using the Toolbar you can access to them quickly
 
-* ### Teleport Game Object
-  * Teleport the selected game object to the mouse position in the Scene View, when you press LeftShit+T
+#### Teleport Game Object
+* Teleport the selected game object to the mouse position in the Scene View, when you press LeftShit+T
 
-* ### Find Missing Scripts
-  * Utility to find missing scripts in all the game objects selected
+#### Find Missing Scripts
+* Utility to find missing scripts in all the game objects selected
 
-* ### Favorites
-  * Window to have bookmarks of any object in your project
+#### Favorites
+* Window to have bookmarks of any object in your project
 
   ![Favorites](.readme/Favorites.png)
 
-* ### Replace Tool
-  * Tool to replace all objects selected by a Prefab
+#### Replace Tool
+* Tool to replace all objects selected by a Prefab
 
   ![Replace Tool](.readme/ReplaceTool.png)
 
-* ### Transform Randomizer
-  * Tool to randomize scales and rotations for easy prop placing
+#### Transform Randomizer
+* Tool to randomize scales and rotations for easy prop placing
 
   ![Transform Randomizer](.readme/TransformRandomizer.png)
 
 
-* ### Game View Resolution
-   * Add different mobile resolutions and aspect rations to your Game View
+#### Game View Resolution
+* Add different mobile resolutions and aspect rations to your Game View
    
   ![Game View Resolutions](.readme/GameViewResolutions.png)
 
-* ### Story Board Creator
-  * Tool to easily export screenshots to create In-game Story Boards
+#### Story Board Creator
+* Tool to easily export screenshots to create In-game Story Boards
 
   ![Story Board Creator](.readme/StoryBoardCreator.png)
 
-* ### Map Generator
-  * Tool to generate a level from an image map and a collection of prefabs
+#### Map Generator
+* Tool to generate a level from an image map and a collection of prefabs
 
   ![Map Editor Config](.readme/MapEditorConfig.png)
   ![Map Editor Result](.readme/MapEditorResult.png)
