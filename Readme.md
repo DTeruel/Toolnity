@@ -1,8 +1,6 @@
 
 # Toolnity
 
---------------------------------
-
 ## Information
 **Toolnity** is a bunch of Editor Tools and Gameplay Utilities for Unity.
 
