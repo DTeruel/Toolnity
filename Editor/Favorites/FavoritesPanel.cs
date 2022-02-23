@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 // Original code from https://github.com/nicoplv/smart-favorites
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -19,11 +20,11 @@ namespace Toolnity
 
         private Object lastObjectSelected ;
         private double lastObjectSelectedAt;
-        private const double LastObjectSelectedTickOpen = 0.5f;
-        private const double LastObjectSelectedTickPing = 2f;
+        private const double LAST_OBJECT_SELECTED_TICK_OPEN = 0.5f;
+        private const double LAST_OBJECT_SELECTED_TICK_PING = 2f;
+        private const double UPDATE_TICK = 0.15f;
 
         private double nextUpdate;
-        private const double UpdateTick = 0.15f;
 
         private static readonly Color SelectNoPro = new Color(0.55f, 0.55f, 0.55f); 
         private static readonly Color SelectPro = new Color(0.3f, 0.3f, 0.3f);
@@ -39,6 +40,7 @@ namespace Toolnity
         private GUIContent plusButtonGuiStyle;
         private GUIContent minusButtonGuiStyle;
 
+        private static int currentListIndex;
         private bool editNameList;
 
         #endregion
@@ -51,6 +53,11 @@ namespace Toolnity
             favoritesPanelEditorWindow = GetWindow<FavoritesPanel>("Favorites");
             favoritesPanelEditorWindow.titleContent = new GUIContent("Favorites", EditorGUIUtility.IconContent("d_Favorite").image);
             favoritesPanelEditorWindow.Show();
+        }
+
+        private void OnFocus()
+        {
+            currentListIndex = FavoritesAsset.CurrentListIndex;
         }
 
         [MenuItem("Assets/Add or Remove to Favorites %&F", false, priority = -10)]
@@ -222,11 +229,11 @@ namespace Toolnity
                         Selection.activeObject = currentObject;
                         if (lastObjectSelected == currentObject)
                         {
-                            if (lastObjectSelectedAt + LastObjectSelectedTickOpen > EditorApplication.timeSinceStartup)
+                            if (lastObjectSelectedAt + LAST_OBJECT_SELECTED_TICK_OPEN > EditorApplication.timeSinceStartup)
                             {
                                 AssetDatabase.OpenAsset(currentObject);
                             }
-                            else if (lastObjectSelectedAt + LastObjectSelectedTickPing > EditorApplication.timeSinceStartup)
+                            else if (lastObjectSelectedAt + LAST_OBJECT_SELECTED_TICK_PING > EditorApplication.timeSinceStartup)
                             {
                                 EditorGUIUtility.PingObject(currentObject);
                             }
@@ -283,7 +290,7 @@ namespace Toolnity
         {
             if (EditorApplication.timeSinceStartup > nextUpdate)
             {
-                nextUpdate = EditorApplication.timeSinceStartup + UpdateTick;
+                nextUpdate = EditorApplication.timeSinceStartup + UPDATE_TICK;
                 Repaint();
             }
         }
@@ -326,7 +333,12 @@ namespace Toolnity
             }
             else
             {
-                FavoritesAsset.CurrentListIndex = EditorGUILayout.Popup(FavoritesAsset.CurrentListIndex, FavoritesAsset.NameList(), toolbarPopupGuiStyle);
+                    var newCurrentListIndex = EditorGUILayout.Popup(currentListIndex, FavoritesAsset.NameList(), toolbarPopupGuiStyle);
+                    if(currentListIndex != newCurrentListIndex)
+                    {
+                        currentListIndex = newCurrentListIndex;
+                        FavoritesAsset.CurrentListIndex = newCurrentListIndex;
+                    } 
             }
 
             if (editNameList && ((Event.current.type == EventType.MouseUp && Event.current.button == 0) || Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Return))

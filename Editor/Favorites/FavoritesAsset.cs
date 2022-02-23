@@ -1,14 +1,26 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Toolnity
 {
     public class FavoritesAsset : ScriptableObject
     {
-        public int CurrentListIndex;
+        private const string FAVORITES_CURRENT_LIST_INDEX = "Toolnity/Favorites/CurrentListIndex";
+        public static int CurrentListIndex
+        {
+            get => EditorPrefs.GetInt(Application.dataPath + FAVORITES_CURRENT_LIST_INDEX, 0);
+            set
+            {
+                currentListIndex = value;
+                EditorPrefs.SetInt(Application.dataPath + FAVORITES_CURRENT_LIST_INDEX, value);
+            }
+        }
+
         public List<FavoritesList> FavoriteLists = new List<FavoritesList>();
         public FavoritesList CurrentList
         {
@@ -19,8 +31,15 @@ namespace Toolnity
                     AddList();
                 }
                 
-                return FavoriteLists[CurrentListIndex];
+                return FavoriteLists[currentListIndex];
             }
+        }
+
+        private static int currentListIndex;
+        
+        private void Awake()
+        {
+            currentListIndex = CurrentListIndex;
         }
 
         public void AddList()
