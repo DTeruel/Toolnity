@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 // Original code from https://github.com/nicoplv/smart-favorites
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -303,8 +302,10 @@ namespace Toolnity
             }
             
             guiStyleDefined = true;
-            toolbarPopupGuiStyle = new GUIStyle(EditorStyles.toolbarPopup);
-            toolbarPopupGuiStyle.alignment = TextAnchor.MiddleCenter;
+            toolbarPopupGuiStyle = new GUIStyle(EditorStyles.toolbarPopup)
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
             reorderableListLabelGuiStyle = new GUIStyle(EditorStyles.label);
             reorderableListLabelGuiStyle.focused.textColor = reorderableListLabelGuiStyle.normal.textColor;
             editButtonGuiStyle = new GUIContent(EditorGUIUtility.IconContent("editicon.sml").image);
@@ -380,10 +381,7 @@ namespace Toolnity
 
                 case EventType.DragPerform when mouseOnWindow:
                     DragAndDrop.AcceptDrag();
-
                     AddToFavoriteDrop(DragAndDrop.objectReferences);
-
-                    DragAndDrop.PrepareStartDrag();
                     Event.current.Use();
                     break;
             }
