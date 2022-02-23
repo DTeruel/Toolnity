@@ -120,7 +120,7 @@ public class Logger
         return newLogger;
     }
     
-    private Logger(string fullName)
+    public Logger(string fullName)
     {
         categoryName = fullName;
     }
