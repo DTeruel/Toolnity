@@ -12,6 +12,7 @@ namespace Toolnity
             OnPlayToolbar.ID,
             SceneSelectorToolbar.ID,
             ToDoListSelectorToolbar.ID,
+            CustomButtonsToolbar.ID,
             CameraShortcutsToolbar.ID,
             LightingToolbar.ID,
             InterestingGameObjectToolbar.ID,
