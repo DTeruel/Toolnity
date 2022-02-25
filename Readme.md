@@ -8,18 +8,23 @@
 
 ![Tools](.readme/Tools.png)
 
-* And you can add the Toolnity toolbar in your Scene view using the overlays
+* You can add the **Toolnity Toolbar** and **Toolnity Static CustomButtons Toolbar** in your Scene view using the overlays
 
 ![Toolbar](.readme/SceneToolbar.png)
 ![Scene Overlay](.readme/SceneOverlay.png)
 --------------------------------
 
 ## How to install it?
-The repository is ready to be used directly in Unity without the need to download it. You can add it to your project using the Repo-URL in the Project Manager.
+The repository is ready to be used directly in Unity without the need to download it. 
+You can add it to your project using the git URL in the Package Manager.
 
 ![PackageManager](.readme/PackageManager.png)
 
-The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)
+You can use also OpenUPM to link **Toolnity** by version (**recommended**).
+
+![ScopedRegistries](.readme/ScopedRegistries.png)
+
+ *The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)* 
 
 --------------------------------
 
@@ -28,7 +33,7 @@ You can enable and disable the most of the editor tools in your project settings
 
 ![Project Settings](.readme/ProjectSettings.png) 
 
-Remember to check the Context Menu in your Project Window to create Toolnity objects:
+Remember to check the Context Menu in your Project Window to create **Toolnity** objects:
 
 ![Project Context Menu](.readme/ProjectContextMenu.png)
 
@@ -76,10 +81,19 @@ Remember to check the Context Menu in your Project Window to create Toolnity obj
 
     ![ToDo List](.readme/ToDoList.png)
 
+#### CustomButton Attribute
+* Use `[CustomButton]` attribute in a method to have a shortcut in the **Toolnity Toolbar**
+
+  ![Custom Button](.readme/CustomButtons.png)
+
+* Use `[CustomButton]` attribute in an static method to have a button in the **Toolnity Static CustomButtons Toolbar**
+
+  ![Static Custom Button](.readme/StaticCustomButtons.png)
+
 #### Lightning Utilities
 * Different utilities related with the lightning on your scene
 
-    ![Lightning](.readme/Lightning.png)
+  ![Lightning](.readme/Lightning.png)
   
 #### Interesting Game Objects
 * InterestingGameObject component is an script that you can add to any game object and with Shift+N or using the Toolbar you can access to them quickly
