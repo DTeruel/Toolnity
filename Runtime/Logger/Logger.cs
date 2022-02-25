@@ -1,183 +1,79 @@
-using System.Collections.Generic;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Logger
+namespace Toolnity
 {
-    #region CATEGORIES FILTERS
-    private static readonly List<string> CategoriesFiltered = new ();
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void OnBeforeSceneLoad()
+    public partial class Logger
     {
-        CategoriesFiltered.Clear();
+        private readonly string logName;
+        private LogLevel logLevel;
 
-        bool anyFileFound = false;
-        var loggerCategoriesFilters = Resources.FindObjectsOfTypeAll<LoggerCategoriesFilter>();
-        if (loggerCategoriesFilters.Length > 0)
+        public static Logger Create<T>()
         {
-            anyFileFound = true;
-            for (var i = 0; i < loggerCategoriesFilters.Length; i++)
+            var newLogger = new Logger(typeof(T).FullName);
+            return newLogger;
+        }
+
+        public Logger(string fullName)
+        {
+            logName = fullName;
+
+            logLevel = LogLevel.Inherit;
+            if (LogsFiltered.ContainsKey(logName))
             {
-                UnityEngine.Debug.Log("[Logger] File found: " + loggerCategoriesFilters[i].name);
-                LoadAssetCategory(loggerCategoriesFilters[i]);
+                logLevel = LogsFiltered[logName];
             }
-        }
-        
-        var file = Resources.Load<LoggerCategoriesFilter>("Logger Categories Filter");
-        if (file)
-        {
-            anyFileFound = true;
-            UnityEngine.Debug.Log("[Logger] File found: " + file.name);
-            LoadAssetCategory(file);
-        }
-        
-        if(!anyFileFound)
-        {
-            UnityEngine.Debug.Log("[Logger] No 'Logger Categories Filter' file found in the Resources folder.");
-        }
-
-        ShowCategoriesFiltered();
-    }
-
-    private static void LoadAssetCategory(LoggerCategoriesFilter loggerCategoriesFilter)
-    {
-        for (var i = 0; i < loggerCategoriesFilter.categoriesFiltered.Length; i++)
-        {
-            var category = loggerCategoriesFilter.categoriesFiltered[i];
-            if (!CategoriesFiltered.Contains(category))
+            
+            if (logLevel != LogLevel.Off && 
+                (logLevel != LogLevel.Inherit || (logLevel == LogLevel.Inherit && defaultDefaultLogLevel != DefaultLogLevel.Off)))
             {
-                CategoriesFiltered.Add(category);
-            }
-        }
-    }
-
-    private static void ShowCategory(string category)
-    {
-        var anyRemoved = false;
-        for (var i = CategoriesFiltered.Count - 1; i >= 0; i--)
-        {
-            if (CategoriesFiltered[i].Equals(category))
-            {
-                anyRemoved = true;
-                CategoriesFiltered.RemoveAt(i);
+                UnityEngine.Debug.Log("[Logger] New Logger: " + logName + " (Log Level: " + logLevel + ")");
             }
         }
 
-        if (anyRemoved)
+        public void Debug(string message, Object obj = null)
         {
-            ShowCategoriesFiltered();
-        }
-    }
-
-    private static void HideCategory(string category)
-    {
-        if (!CategoriesFiltered.Contains(category))
-        {
-            CategoriesFiltered.Add(category);
-            ShowCategoriesFiltered();
-        }
-    }
-
-    private static void ShowCategoriesFiltered()
-    {
-        var categoriesFiltered = string.Empty;
-        for (var i = 0; i < CategoriesFiltered.Count; i++)
-        {
-            var category = CategoriesFiltered[i];
-            if (categoriesFiltered == string.Empty)
+            if (!IsLogLevelAllowed(DefaultLogLevel.Debug))
             {
-                categoriesFiltered = "'" + category + "'";
+                return;
             }
-            else
+            UnityEngine.Debug.Log(GetFinalMessage(logName, message), obj);
+        }
+
+        public void Info(string message, Object obj = null)
+        {
+            if (!IsLogLevelAllowed(DefaultLogLevel.Info))
             {
-                categoriesFiltered += ", '" + category + "'";
+                return;
             }
-        }
-        
-        if (categoriesFiltered == string.Empty)
-        {
-            categoriesFiltered = "<NONE>";
-        }
-        UnityEngine.Debug.Log("[Logger] Categories filtered: " + categoriesFiltered);
-    }
-    
-    private static bool IsCategoryAllowed(string category)
-    {
-        if (category == string.Empty)
-        {
-            return true;
+            UnityEngine.Debug.Log(GetFinalMessage(logName, message), obj);
         }
 
-        return !CategoriesFiltered.Contains(category);
-    }
-    #endregion
-
-    private readonly string categoryName;
-    
-    public static Logger Create<T>()
-    {
-        var newLogger = new Logger(typeof(T).FullName);
-        return newLogger;
-    }
-    
-    public Logger(string fullName)
-    {
-        categoryName = fullName;
-    }
-
-    public void ShowLogs()
-    {
-        ShowCategory(categoryName);
-    }
-
-    public void HideLogs()
-    {
-        HideCategory(categoryName);
-    }
-    
-    public void Info(string message)
-    {
-        if (!IsCategoryAllowed(categoryName))
+        public void Warning(string message, Object obj = null)
         {
-            return;
+            if (!IsLogLevelAllowed(DefaultLogLevel.Warning))
+            {
+                return;
+            }
+            UnityEngine.Debug.LogWarning(GetFinalMessage(logName, message), obj);
         }
-        UnityEngine.Debug.Log(GetFinalMessage(categoryName, message));
-    }
-    
-    public void Debug(string message)
-    {
-        if (!IsCategoryAllowed(categoryName))
-        {
-            return;
-        }
-        UnityEngine.Debug.Log(GetFinalMessage(categoryName, message));
-    }
 
-    public void Warning(string message)
-    {
-        if (!IsCategoryAllowed(categoryName))
+        public void Error(string message, Object obj = null)
         {
-            return;
+            if (!IsLogLevelAllowed(DefaultLogLevel.Error))
+            {
+                return;
+            }
+            UnityEngine.Debug.LogError(GetFinalMessage(logName, message), obj);
         }
-        UnityEngine.Debug.LogWarning(GetFinalMessage(categoryName, message));
-    }
 
-    public void Error(string message)
-    {
-        if (!IsCategoryAllowed(categoryName))
+        private static string GetFinalMessage(string name, string message)
         {
-            return;
+            if (name != string.Empty)
+            {
+                return "[" + name + "] " + message;
+            }
+
+            return message;
         }
-        UnityEngine.Debug.LogError(GetFinalMessage(categoryName, message));
-    }
-    
-    private static string GetFinalMessage(string category, string message)
-    {
-        if (category != string.Empty)
-        {
-            return "[" + category + "] " + message;
-        }
-        
-        return message;
     }
 }
