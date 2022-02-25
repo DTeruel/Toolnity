@@ -16,11 +16,12 @@
 
 ## How to install it?
 The repository is ready to be used directly in Unity without the need to download it. 
-You can add it to your project using the git URL in the Package Manager.
+
+* You can add it to your project using the git URL in the Package Manager.
 
 ![PackageManager](.readme/PackageManager.png)
 
-You can use also OpenUPM to link **Toolnity** by version (**recommended**).
+* You can use also OpenUPM to link **Toolnity** by version (**recommended**).
 
 ![ScopedRegistries](.readme/ScopedRegistries.png)
 
