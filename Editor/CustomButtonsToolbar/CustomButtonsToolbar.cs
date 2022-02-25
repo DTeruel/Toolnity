@@ -12,7 +12,9 @@ namespace Toolnity
 	public class CustomButtonsToolbar : EditorToolbarDropdown
 	{
 		public const string ID = "Toolnity/CustomButtonsToolbar";
+		
 		private static string dropChoice;
+		private static GenericMenu menu;
 
 		public CustomButtonsToolbar()
 		{
@@ -23,12 +25,17 @@ namespace Toolnity
 			clicked += ShowDropdown;
 		}
 
-		private static void ShowDropdown()
+		private static void GenerateCustomButtons()
 		{
-			var menu = new GenericMenu();
+			menu = new GenericMenu();
 			AddNonStaticCustomButtonsInScene(menu);
 			menu.AddSeparator(string.Empty);
 			AddStaticCustomButtonsInProject(menu);
+		}
+
+		private static void ShowDropdown()
+		{
+			GenerateCustomButtons();
 			menu.ShowAsContext();
 		}
 	

@@ -4,9 +4,11 @@ using UnityEditor.Overlays;
 
 namespace Toolnity
 {
-    [Overlay(typeof(SceneView), "Toolnity", "Toolnity", true)]
+    [Overlay(typeof(SceneView), ID, ID, true)]
     public class ToolnityToolbar : ToolbarOverlay
     {
+        private const string ID = "Toolnity Toolbar";
+        
         public ToolnityToolbar() : base (
             SaveAllShortcutToolbar.ID,
             OnPlayToolbar.ID,
