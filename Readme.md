@@ -11,6 +11,7 @@
 * You can add the **Toolnity Toolbar** and **Toolnity Static CustomButtons Toolbar** in your Scene view using the overlays
 
 ![Toolbar](.readme/SceneToolbar.png)
+
 ![Scene Overlay](.readme/SceneOverlay.png)
 --------------------------------
 
@@ -115,10 +116,10 @@ Remember to check the Context Menu in your Project Window to create **Toolnity**
 
   ![Replace Tool](.readme/ReplaceTool.png)
 
-#### Transform Randomizer
-* Tool to randomize scales and rotations for easy prop placing
+#### Prop Placement Tool
+* Tool for easy prop placement (set position in the ground and randomize scales and rotations) 
 
-  ![Transform Randomizer](.readme/TransformRandomizer.png)
+  ![Prop Placement Tool](.readme/PropPlacementTool.png)
 
 
 #### Game View Resolution
@@ -135,6 +136,7 @@ Remember to check the Context Menu in your Project Window to create **Toolnity**
 * Tool to generate a level from an image map and a collection of prefabs
 
   ![Map Editor Config](.readme/MapEditorConfig.png)
+
   ![Map Editor Result](.readme/MapEditorResult.png)
 
 

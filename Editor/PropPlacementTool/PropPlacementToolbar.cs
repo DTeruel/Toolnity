@@ -6,14 +6,14 @@ using UnityEngine;
 namespace Toolnity
 {
 	[EditorToolbarElement(ID, typeof(SceneView))]
-	public class TransformRandomizerToolbar : EditorToolbarButton
+	public class PropPlacementToolbar : EditorToolbarButton
 	{
-		public const string ID = "Toolnity/Transform Randomizer";
+		public const string ID = "Toolnity/Prop Placement Tool";
 
-		public TransformRandomizerToolbar()
+		public PropPlacementToolbar()
 		{
-			text = "Transform Randomizer";
-			tooltip = "Transform Randomizer";
+			text = "Prop Placement Tool";
+			tooltip = "Prop Placement Tool";
 			icon = EditorGUIUtility.IconContent("d_TransformTool").image as Texture2D;
 			
 			clicked += OnClick;
@@ -21,7 +21,7 @@ namespace Toolnity
 
 		private static void OnClick()
 		{
-			TransformRandomizer.ShowWindow();
+			PropPlacementTool.ShowWindow();
 		}
 	}
 }

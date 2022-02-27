@@ -22,7 +22,7 @@ namespace Toolnity
             FindMissingScriptsToolbar.ID,
             FavoritesToolbar.ID,
             ReplaceToolToolbar.ID,
-            TransformRandomizerToolbar.ID,
+            PropPlacementToolbar.ID,
             GameViewResolutionsToolbar.ID,
             SettingsToolbar.ID
             )
