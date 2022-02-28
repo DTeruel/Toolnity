@@ -210,7 +210,6 @@ namespace Toolnity
             GUILayout.Space(20f);
             GUILayout.Label("OBJECTS SELECTED: " + objectToReplaceCount, EditorStyles.boldLabel);
             
-            //GUI.enabled = false;
             GUILayout.BeginHorizontal();
             GUILayout.Space(10f);
             selectObjectScrollPosition = EditorGUILayout.BeginScrollView(selectObjectScrollPosition);
@@ -224,7 +223,6 @@ namespace Toolnity
             EditorGUILayout.EndScrollView();
             GUILayout.Space(10f);
             GUILayout.EndHorizontal();
-            //GUI.enabled = true;
         }
 
         private static void DrawExecuteButton()
