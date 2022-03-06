@@ -13,7 +13,11 @@ namespace Toolnity
         private const string FAVORITES_CURRENT_LIST_INDEX = "Toolnity/Favorites/CurrentListIndex";
         public static int CurrentListIndex
         {
-            get => EditorPrefs.GetInt(Application.dataPath + FAVORITES_CURRENT_LIST_INDEX, 0);
+            get
+            {
+                currentListIndex = EditorPrefs.GetInt(Application.dataPath + FAVORITES_CURRENT_LIST_INDEX, 0);
+                return currentListIndex;
+            }
             set
             {
                 currentListIndex = value;
