@@ -17,6 +17,8 @@ namespace Toolnity
         private static float positionRaycastLength = 100f;
         private static float positionOffsetEndY;
         private static bool positionOffsetRelativeToScale = true;
+        private static bool positionCheckCollidersLayer;
+        private static string positionCollidersLayer = "Default";
 
         private static bool rotationModify = true;
         private static readonly bool[] RotationAxis = {true, true, true}; 
@@ -109,6 +111,18 @@ namespace Toolnity
             GUILayout.BeginHorizontal();
             GUILayout.Space(10f);
             positionOffsetRelativeToScale = EditorGUILayout.Toggle("Offset Relative to Scale: ", positionOffsetRelativeToScale);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+                
+            // Filter Ground by Layer
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10f);
+            positionCheckCollidersLayer = EditorGUILayout.Toggle("Check Colliders Layer: ", positionCheckCollidersLayer);
+            if (positionCheckCollidersLayer)
+            {
+                GUILayout.Space(5f);
+                positionCollidersLayer = EditorGUILayout.TextField(positionCollidersLayer, GUILayout.Width(100f));
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -257,58 +271,6 @@ namespace Toolnity
                 SetPosition(i); // Important do that after the scale modification
             }
         }
-
-        private static void SetPosition(int i)
-        {
-            if (!positionModify)
-            {
-                return;
-            }
-
-            var rayInitialPos = transformsToModify[i].localPosition;
-            rayInitialPos.y = positionRaycastInitialY;
-            var results = new RaycastHit[10];
-            var numResults = Physics.RaycastNonAlloc(rayInitialPos, Vector3.down, results, positionRaycastLength);
-            if (numResults == 0)
-            {
-                return;
-            }
-            
-            var firstResult = true; 
-            var endPos = rayInitialPos;
-            for (var j = 0; j < numResults; j++)
-            {
-                if (results[j].transform.gameObject == transformsToModify[i].gameObject)
-                {
-                    continue;
-                }
-                
-                if (firstResult)
-                {
-                    endPos.y = results[j].point.y;
-                    
-                    firstResult = false;
-                    continue;
-                }
-                
-                if (endPos.y < results[j].point.y)
-                {
-                    endPos.y = results[j].point.y;
-                }
-            }
-
-            if (positionOffsetRelativeToScale)
-            {
-                endPos.y += positionOffsetEndY * transformsToModify[i].localScale.y;
-            }
-            else
-            {
-                endPos.y += positionOffsetEndY;
-            }
-            Undo.RegisterCompleteObjectUndo(transformsToModify[i], "Saving game object state");
-            transformsToModify[i].localPosition = endPos;
-        }
-
         private static void RandomizeRotation(int i)
         {
             if (!rotationModify || (!RotationAxis[0] && !RotationAxis[1] && !RotationAxis[2]))
@@ -379,6 +341,76 @@ namespace Toolnity
             transformsToModify[i].localScale = scale;
         }
 
+        private static void SetPosition(int i)
+        {
+            if (!positionModify)
+            {
+                return;
+            }
+
+            var rayInitialPos = transformsToModify[i].localPosition;
+            rayInitialPos.y = positionRaycastInitialY;
+            var results = new RaycastHit[10];
+            int numResults;
+            if (positionCheckCollidersLayer)
+            {
+                var layerMaskInt = LayerMask.GetMask(positionCollidersLayer);
+                numResults = Physics.RaycastNonAlloc(rayInitialPos, Vector3.down, results, positionRaycastLength, layerMaskInt);
+            }
+            else
+            {
+                numResults = Physics.RaycastNonAlloc(rayInitialPos, Vector3.down, results, positionRaycastLength);
+            }
+            Debug.Log("numResults " + numResults);
+            if (numResults == 0)
+            {
+                return;
+            }
+            if (numResults == 1)
+            {
+                if (results[0].transform.gameObject == transformsToModify[i].gameObject)
+                {
+                    return;
+                }
+            }
+            
+            
+            var firstResult = true; 
+            var endPos = rayInitialPos;
+            for (var j = 0; j < numResults; j++)
+            {
+                if (results[j].transform.gameObject == transformsToModify[i].gameObject)
+                {
+                    continue;
+                }
+                
+                Debug.Log("Colliding with " + results[j].transform.name);
+                
+                if (firstResult)
+                {
+                    endPos.y = results[j].point.y;
+                    
+                    firstResult = false;
+                    continue;
+                }
+                
+                if (endPos.y < results[j].point.y)
+                {
+                    endPos.y = results[j].point.y;
+                }
+            }
+
+            if (positionOffsetRelativeToScale)
+            {
+                endPos.y += positionOffsetEndY * transformsToModify[i].localScale.y;
+            }
+            else
+            {
+                endPos.y += positionOffsetEndY;
+            }
+            Undo.RegisterCompleteObjectUndo(transformsToModify[i], "Saving game object state");
+            transformsToModify[i].localPosition = endPos;
+        }
 
         private void OnSelectionChange()
         {
