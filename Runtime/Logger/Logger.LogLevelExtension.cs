@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Windows;
+using Object = System.Object;
 
 namespace Toolnity
 {
@@ -37,35 +40,58 @@ namespace Toolnity
         {
             defaultDefaultLogLevel = DefaultLogLevel.All;
             LogsFiltered.Clear();
-
-            var anyFileFound = false;
-            var loggerLogLevels = Resources.FindObjectsOfTypeAll<LogLevels>();
-            if (loggerLogLevels.Length > 0)
+            
+            var loggerAsset = SearchLoggerAsset(Application.dataPath);
+            if (loggerAsset)
             {
-                anyFileFound = true;
-                for (var i = 0; i < loggerLogLevels.Length; i++)
-                {
-                    UnityEngine.Debug.Log("[Logger] File found: " + loggerLogLevels[i].name, loggerLogLevels[i]);
-                    LoadLogLevelAsset(loggerLogLevels[i]);
-                    defaultDefaultLogLevel = loggerLogLevels[i].defaultLogLevel;
-                }
+                UnityEngine.Debug.Log("[Logger] File found: " + loggerAsset.name, loggerAsset);
+                LoadLogLevelAsset(loggerAsset);
+                defaultDefaultLogLevel = loggerAsset.defaultLogLevel;
             }
-
-            var file = Resources.Load<LogLevels>("Logger Log Levels");
-            if (file)
+            else
             {
-                anyFileFound = true;
-                UnityEngine.Debug.Log("[Logger] File found: " + file.name, file);
-                LoadLogLevelAsset(file);
-                defaultDefaultLogLevel = file.defaultLogLevel;
-            }
-
-            if (!anyFileFound)
-            {
-                UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folder.");
+                UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folders.");
             }
 
             SetDefaultLogLevel(defaultDefaultLogLevel);
+        }
+        private static LogLevels SearchLoggerAsset(string path)
+        {
+            var directories = System.IO.Directory.GetDirectories(path);
+            foreach(var directory in directories)
+            {
+                var result = SearchLoggerAsset(directory);
+                if (result)
+                {
+                    return result;
+                }
+            }
+
+            var files = System.IO.Directory.GetFiles(path);
+            foreach(var file in files)
+            {
+                var fullPath = Path.GetFullPath(file);
+                if (!fullPath.Contains("Resources"))
+                {
+                    continue;
+                }
+
+                var splitPath = fullPath.Split("Resources\\");
+                var pathRelativeToResources = splitPath[splitPath.Length - 1];
+                var splitPathWithoutExtension = pathRelativeToResources.Split(".asset");
+                if (splitPathWithoutExtension.Length < 1)
+                {
+                    continue;
+                }
+                
+                var loadedFile = Resources.Load<LogLevels>(splitPathWithoutExtension[0]);
+                if (loadedFile)
+                {
+                    return loadedFile;
+                }
+            }
+
+            return null;
         }
 
         public static void SetDefaultLogLevel(DefaultLogLevel value)
