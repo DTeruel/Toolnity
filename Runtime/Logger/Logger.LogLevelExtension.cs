@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Windows;
-using Object = System.Object;
 
 namespace Toolnity
 {
@@ -35,24 +33,25 @@ namespace Toolnity
         private static DefaultLogLevel defaultDefaultLogLevel = DefaultLogLevel.All;
         private static readonly Dictionary<string, LogLevel> LogsFiltered = new();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void OnBeforeSceneLoad()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void OnAfterSceneLoad()
         {
             defaultDefaultLogLevel = DefaultLogLevel.All;
             LogsFiltered.Clear();
-            
-            var loggerAsset = SearchLoggerAsset(Application.dataPath);
-            if (loggerAsset)
+
+            var allLogLevelsAssets = Resources.LoadAll<LogLevels>("");
+            if (allLogLevelsAssets.Length > 0)
             {
-                UnityEngine.Debug.Log("[Logger] File found: " + loggerAsset.name, loggerAsset);
-                LoadLogLevelAsset(loggerAsset);
-                defaultDefaultLogLevel = loggerAsset.defaultLogLevel;
+                var logLevelsAsset = allLogLevelsAssets[0];
+                UnityEngine.Debug.Log("[Logger] File found: " + logLevelsAsset.name, logLevelsAsset);
+                LoadLogLevelAsset(logLevelsAsset);
+                defaultDefaultLogLevel = logLevelsAsset.defaultLogLevel;
             }
             else
             {
                 UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folders.");
             }
-
+            
             SetDefaultLogLevel(defaultDefaultLogLevel);
         }
         private static LogLevels SearchLoggerAsset(string path)
