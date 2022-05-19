@@ -36,6 +36,7 @@ namespace Toolnity
 			startColor.a = 0;
 			endColor = fullColor;
 			duration = fadeOutDuration;
+			UpdateColor();
 		}
 
 		public void FadeIn()
@@ -47,6 +48,7 @@ namespace Toolnity
 			endColor = fullColor;
 			endColor.a = 0;
 			duration = fadeInDuration;
+			UpdateColor();
 		}
 
 		private void Update()
@@ -55,7 +57,11 @@ namespace Toolnity
 			{
 				return;
 			}
-
+			UpdateColor();
+		}
+		
+		private void UpdateColor()
+		{
 			lerpValue += Time.deltaTime / duration;
 
 			if (lerpValue > 1)
