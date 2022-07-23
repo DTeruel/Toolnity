@@ -16,17 +16,31 @@ namespace Toolnity
         public Logger(string fullName)
         {
             logName = fullName;
-
             logLevel = LogLevel.Inherit;
-            if (LogsFiltered.ContainsKey(logName))
-            {
-                logLevel = LogsFiltered[logName];
-            }
+            CheckLoggerIfIsInLogLevelsAsset();
             
             if (logLevel != LogLevel.Off && 
-                (logLevel != LogLevel.Inherit || (logLevel == LogLevel.Inherit && defaultDefaultLogLevel != DefaultLogLevel.Off)))
+                (logLevel != LogLevel.Inherit || (logLevel == LogLevel.Inherit && LogLevelsAsset.defaultLogLevel != DefaultLogLevel.Off)))
             {
                 UnityEngine.Debug.Log("[Logger] New Logger: " + logName + " (Log Level: " + logLevel + ")");
+            }
+        }
+
+        private void CheckLoggerIfIsInLogLevelsAsset()
+        {
+            var alreadyInAsset = false;
+            for (var i = 0; i < LogLevelsAsset.logsConfig.Count; i++)
+            {
+                if (LogLevelsAsset.logsConfig[i].name == logName)
+                {
+                    alreadyInAsset = true;
+                    logLevel = LogLevelsAsset.logsConfig[i].logLevel;
+                    break;
+                }
+            }
+            if (!alreadyInAsset)
+            {
+                LogLevelsAsset.logsConfig.Add(new LogConfig(logName, logLevel));
             }
         }
 

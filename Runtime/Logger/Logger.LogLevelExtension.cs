@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace Toolnity
@@ -30,33 +31,60 @@ namespace Toolnity
             Off = 6
         }
 
-        private static DefaultLogLevel defaultDefaultLogLevel = DefaultLogLevel.All;
-        private static readonly Dictionary<string, LogLevel> LogsFiltered = new();
+        private static LogLevelsConfig LogLevelsAsset
+        {
+            get
+            {
+                if (logLevelsAsset == null)
+                {
+                    GetOrCreateLogLevelsAsset();
+                }
+                return logLevelsAsset;
+            }
+        }
+        private static LogLevelsConfig logLevelsAsset;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad | RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void OnAfterSceneLoad()
         {
-            defaultDefaultLogLevel = DefaultLogLevel.All;
-            LogsFiltered.Clear();
+            GetOrCreateLogLevelsAsset();
+        }
 
-            var allLogLevelsAssets = Resources.LoadAll<LogLevels>("");
+        private static void GetOrCreateLogLevelsAsset()
+        {
+            var allLogLevelsAssets = Resources.LoadAll<LogLevelsConfig>("");
             if (allLogLevelsAssets.Length > 0)
             {
-                var logLevelsAsset = allLogLevelsAssets[0];
+                logLevelsAsset = allLogLevelsAssets[0];
                 UnityEngine.Debug.Log("[Logger] File found: " + logLevelsAsset.name, logLevelsAsset);
-                LoadLogLevelAsset(logLevelsAsset);
-                defaultDefaultLogLevel = logLevelsAsset.defaultLogLevel;
             }
             else
             {
-                UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folders.");
+                CreateAssetFile();
             }
-            
-            SetDefaultLogLevel(defaultDefaultLogLevel);
         }
-        private static LogLevels SearchLoggerAsset(string path)
+
+        private static void CreateAssetFile()
+        { 
+            UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
+            
+            logLevelsAsset = ScriptableObject.CreateInstance<LogLevelsConfig>();
+            const string pathFolder = "Assets/Resources/";
+            const string assetName = "Logger Log Level.asset";
+            if (!Directory.Exists("Assets/Resources"))
+            {
+                Directory.CreateDirectory("Assets/Resources");
+            }
+            AssetDatabase.CreateAsset(logLevelsAsset, pathFolder + assetName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            
+            UnityEngine.Debug.Log("[Logger] File found: " + logLevelsAsset.name, logLevelsAsset);
+        }
+
+        private static LogLevelsConfig SearchLoggerAsset(string path)
         {
-            var directories = System.IO.Directory.GetDirectories(path);
+            var directories = Directory.GetDirectories(path);
             foreach(var directory in directories)
             {
                 var result = SearchLoggerAsset(directory);
@@ -66,7 +94,7 @@ namespace Toolnity
                 }
             }
 
-            var files = System.IO.Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
             foreach(var file in files)
             {
                 var fullPath = Path.GetFullPath(file);
@@ -83,7 +111,7 @@ namespace Toolnity
                     continue;
                 }
                 
-                var loadedFile = Resources.Load<LogLevels>(splitPathWithoutExtension[0]);
+                var loadedFile = Resources.Load<LogLevelsConfig>(splitPathWithoutExtension[0]);
                 if (loadedFile)
                 {
                     return loadedFile;
@@ -95,20 +123,8 @@ namespace Toolnity
 
         public static void SetDefaultLogLevel(DefaultLogLevel value)
         {
-            defaultDefaultLogLevel = value;
-            UnityEngine.Debug.Log("[Logger] Default Log Level set as: " + defaultDefaultLogLevel);
-        }
-
-        private static void LoadLogLevelAsset(LogLevels logLevels)
-        {
-            for (var i = 0; i < logLevels.logLevels.Length; i++)
-            {
-                var logLevel = logLevels.logLevels[i];
-                if (!LogsFiltered.ContainsKey(logLevel.name))
-                {
-                    LogsFiltered.Add(logLevel.name, logLevel.logLevel);
-                }
-            }
+            logLevelsAsset.defaultLogLevel = value;
+            UnityEngine.Debug.Log("[Logger] Default Log Level set as: " + logLevelsAsset.defaultLogLevel);
         }
 
         public void SetLogLevel(LogLevel value)
@@ -124,7 +140,7 @@ namespace Toolnity
             switch (logLevel)
             {
                 case LogLevel.Inherit:
-                    allowed = defaultDefaultLogLevel <= logLevelToCheck;
+                    allowed = logLevelsAsset.defaultLogLevel <= logLevelToCheck;
                     break;
                 case LogLevel.All:
                     allowed = true;
