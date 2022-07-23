@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,6 +6,10 @@ namespace Toolnity
 {
     public abstract class RuntimeSet<T> : ScriptableObject
     {
+        public Action ItemAdded;
+        public Action ItemRemoved;
+        public Action ItemsChanged;
+        
         public List<T> items = new List<T>();
 
         public void OnEnable()
@@ -25,6 +30,10 @@ namespace Toolnity
             }
 
             items.Add(item);
+            
+            ItemAdded?.Invoke();
+            ItemsChanged?.Invoke();
+            
             return true;
         }
 
@@ -36,6 +45,10 @@ namespace Toolnity
             }
 
             items.Remove(item);
+            
+            ItemRemoved?.Invoke();
+            ItemsChanged?.Invoke();
+            
             return true;
         }
     }
