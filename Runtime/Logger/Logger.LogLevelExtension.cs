@@ -31,20 +31,9 @@ namespace Toolnity
             Off = 6
         }
 
-        private static LogLevelsConfig LogLevelsAsset
-        {
-            get
-            {
-                if (logLevelsAsset == null)
-                {
-                    GetOrCreateLogLevelsAsset();
-                }
-                return logLevelsAsset;
-            }
-        }
         private static LogLevelsConfig logLevelsAsset;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad | RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void OnAfterSceneLoad()
         {
             GetOrCreateLogLevelsAsset();
@@ -52,20 +41,56 @@ namespace Toolnity
 
         private static void GetOrCreateLogLevelsAsset()
         {
+            if (!LoadLogLevelsAsset())
+            {
+                CreateAssetFile();
+                LoadLogLevelsAsset();
+            }
+            CheckLoggersCreatedInInitializers();
+        }
+
+        private static bool LoadLogLevelsAsset()
+        {
             var allLogLevelsAssets = Resources.LoadAll<LogLevelsConfig>("");
             if (allLogLevelsAssets.Length > 0)
             {
                 logLevelsAsset = allLogLevelsAssets[0];
                 UnityEngine.Debug.Log("[Logger] File found: " + logLevelsAsset.name, logLevelsAsset);
+
+                return true;
             }
-            else
+
+            return false;
+        }
+
+        private static void CheckLoggersCreatedInInitializers()
+        {
+            if (logLevelsAsset.logsConfig == null)
             {
-                CreateAssetFile();
+                logLevelsAsset.logsConfig = new List<LogConfig>();
             }
+            foreach(var loggerToAdd in loggersCreatedInInitializers)
+            {
+                var found = false;
+                for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+                {
+                    if (logLevelsAsset.logsConfig[i].name == loggerToAdd.Key)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    logLevelsAsset.logsConfig.Add(new LogConfig(loggerToAdd.Key, loggerToAdd.Value));
+                }
+            }
+            loggersCreatedInInitializers.Clear();
         }
 
         private static void CreateAssetFile()
         { 
+            #if UNITY_EDITOR
             UnityEngine.Debug.Log("[Logger] No 'Logger Log Levels' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
             
             logLevelsAsset = ScriptableObject.CreateInstance<LogLevelsConfig>();
@@ -78,10 +103,11 @@ namespace Toolnity
             AssetDatabase.CreateAsset(logLevelsAsset, pathFolder + assetName);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            
-            UnityEngine.Debug.Log("[Logger] File found: " + logLevelsAsset.name, logLevelsAsset);
+            #else
+            UnityEngine.Debug.LogError("[Logger] No 'Logger Log Levels' file found in the Resources folders. Create one in the editor. ");
+            #endif
         }
-
+/*
         private static LogLevelsConfig SearchLoggerAsset(string path)
         {
             var directories = Directory.GetDirectories(path);
@@ -119,7 +145,7 @@ namespace Toolnity
             }
 
             return null;
-        }
+        }*/
 
         public static void SetDefaultLogLevel(DefaultLogLevel value)
         {

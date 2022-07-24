@@ -1,46 +1,63 @@
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace Toolnity
 {
     public partial class Logger
     {
-        private readonly string logName;
+        private string logName;
         private LogLevel logLevel;
 
-        public static Logger Create<T>()
+        public static Logger Create<T>(LogLevel newLogLevel = LogLevel.Inherit)
         {
-            var newLogger = new Logger(typeof(T).FullName);
+            var newLogger = new Logger(typeof(T).FullName, newLogLevel);
             return newLogger;
         }
 
-        public Logger(string fullName)
+        public static Logger Create(string fullName, LogLevel newLogLevel = LogLevel.Inherit)
         {
-            logName = fullName;
-            logLevel = LogLevel.Inherit;
-            CheckLoggerIfIsInLogLevelsAsset();
-            
-            if (logLevel != LogLevel.Off && 
-                (logLevel != LogLevel.Inherit || (logLevel == LogLevel.Inherit && LogLevelsAsset.defaultLogLevel != DefaultLogLevel.Off)))
-            {
-                UnityEngine.Debug.Log("[Logger] New Logger: " + logName + " (Log Level: " + logLevel + ")");
-            }
+            var newLogger = new Logger(fullName, newLogLevel);
+            return newLogger;
         }
 
+        public Logger(string fullName, LogLevel newLogLevel = LogLevel.Inherit)
+        {
+            CreateLogger(fullName, newLogLevel);
+        }
+
+        private void CreateLogger(string fullName, LogLevel newLogLevel)
+        {
+            logName = fullName;
+            logLevel = newLogLevel;
+            CheckLoggerIfIsInLogLevelsAsset();
+        }
+
+        private static Dictionary<string, LogLevel> loggersCreatedInInitializers = new (); 
+        
         private void CheckLoggerIfIsInLogLevelsAsset()
         {
-            var alreadyInAsset = false;
-            for (var i = 0; i < LogLevelsAsset.logsConfig.Count; i++)
+            if (logLevelsAsset == null)
             {
-                if (LogLevelsAsset.logsConfig[i].name == logName)
+                if (!loggersCreatedInInitializers.ContainsKey(logName))
+                {
+                    loggersCreatedInInitializers.Add(logName, logLevel);
+                }
+                return;
+            }
+            
+            var alreadyInAsset = false;
+            for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+            {
+                if (logLevelsAsset.logsConfig[i].name == logName)
                 {
                     alreadyInAsset = true;
-                    logLevel = LogLevelsAsset.logsConfig[i].logLevel;
+                    logLevel = logLevelsAsset.logsConfig[i].logLevel;
                     break;
                 }
             }
             if (!alreadyInAsset)
             {
-                LogLevelsAsset.logsConfig.Add(new LogConfig(logName, logLevel));
+                logLevelsAsset.logsConfig.Add(new LogConfig(logName, logLevel));
             }
         }
 
