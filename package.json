@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "displayName": "Toolnity",
   "description": "Editor Tools and Gameplay Utilities for Unity.",
   "unity": "2021.2",
