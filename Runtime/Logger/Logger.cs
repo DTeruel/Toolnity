@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace Toolnity
@@ -6,59 +5,42 @@ namespace Toolnity
     public partial class Logger
     {
         private string logName;
-        private LogLevel logLevel;
 
-        public static Logger Create<T>(LogLevel newLogLevel = LogLevel.Inherit)
+        public static Logger Create<T>(LogLevel logLevel = LogLevel.Inherit)
         {
-            var newLogger = new Logger(typeof(T).FullName, newLogLevel);
+            var newLogger = new Logger(typeof(T).FullName, logLevel);
             return newLogger;
         }
 
-        public static Logger Create(string fullName, LogLevel newLogLevel = LogLevel.Inherit)
+        public static Logger Create(string fullName, LogLevel logLevel = LogLevel.Inherit)
         {
-            var newLogger = new Logger(fullName, newLogLevel);
+            var newLogger = new Logger(fullName, logLevel);
             return newLogger;
         }
 
-        public Logger(string fullName, LogLevel newLogLevel = LogLevel.Inherit)
+        public Logger(string fullName, LogLevel logLevel = LogLevel.Inherit)
         {
-            CreateLogger(fullName, newLogLevel);
+            CreateLogger(fullName, logLevel);
         }
 
-        private void CreateLogger(string fullName, LogLevel newLogLevel)
+        private void CreateLogger(string fullName, LogLevel logLevel)
         {
             logName = fullName;
-            logLevel = newLogLevel;
-            CheckLoggerIfIsInLogLevelsAsset();
+            CheckLoggerIfIsInLogLevelsAsset(logLevel);
         }
-
-        private static Dictionary<string, LogLevel> loggersCreatedInInitializers = new (); 
         
-        private void CheckLoggerIfIsInLogLevelsAsset()
+        private void CheckLoggerIfIsInLogLevelsAsset(LogLevel logLevel)
         {
             if (logLevelsAsset == null)
             {
-                if (!loggersCreatedInInitializers.ContainsKey(logName))
+                if (!LoggersCreatedInInitializers.ContainsKey(logName))
                 {
-                    loggersCreatedInInitializers.Add(logName, logLevel);
+                    LoggersCreatedInInitializers.Add(logName, logLevel);
                 }
                 return;
             }
-            
-            var alreadyInAsset = false;
-            for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
-            {
-                if (logLevelsAsset.logsConfig[i].name == logName)
-                {
-                    alreadyInAsset = true;
-                    logLevel = logLevelsAsset.logsConfig[i].logLevel;
-                    break;
-                }
-            }
-            if (!alreadyInAsset)
-            {
-                logLevelsAsset.logsConfig.Add(new LogConfig(logName, logLevel));
-            }
+
+            CheckOrAddLogger(logName, logLevel);
         }
 
         public void Debug(string message, Object obj = null)
@@ -105,6 +87,75 @@ namespace Toolnity
             }
 
             return message;
+        }
+
+        public void SetLogLevel(LogLevel newLogLevel)
+        {
+            var found = false;
+            for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+            {
+                if (logLevelsAsset.logsConfig[i].name == logName)
+                {
+                    found = true;
+                    logLevelsAsset.logsConfig[i].logLevel = newLogLevel;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                logLevelsAsset.logsConfig.Add(new LogConfig(logName, newLogLevel));
+            }
+            UnityEngine.Debug.Log("["+ logName+ "] Log Level set as: " + newLogLevel);
+        }
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        public LogLevel GetLogLevel()
+        {
+            for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+            {
+                if (logLevelsAsset.logsConfig[i].name == logName)
+                {
+                    return logLevelsAsset.logsConfig[i].logLevel;
+                }
+            }
+
+            logLevelsAsset.logsConfig.Add(new LogConfig(logName, LogLevel.Inherit));
+            
+            return LogLevel.Inherit;
+        }
+
+        private bool IsLogLevelAllowed(DefaultLogLevel logLevelToCheck)
+        {
+            bool allowed;
+            var logLevel = GetLogLevel();
+            
+            switch (logLevel)
+            {
+                case LogLevel.Inherit:
+                    allowed = logLevelsAsset.defaultLogLevel <= logLevelToCheck;
+                    break;
+                case LogLevel.All:
+                    allowed = true;
+                    break;
+                case LogLevel.Debug:
+                    allowed = logLevelToCheck >= DefaultLogLevel.Debug;
+                    break;
+                case LogLevel.Info:
+                    allowed = logLevelToCheck >= DefaultLogLevel.Info;
+                    break;
+                case LogLevel.Warning:
+                    allowed = logLevelToCheck >= DefaultLogLevel.Warning;
+                    break;
+                case LogLevel.Error:
+                    allowed = logLevelToCheck >= DefaultLogLevel.Error;
+                    break;
+                case LogLevel.Off:
+                default:
+                    allowed = false;
+                    break;
+            }
+
+            return allowed;
         }
     }
 }

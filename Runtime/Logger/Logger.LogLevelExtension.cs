@@ -32,6 +32,7 @@ namespace Toolnity
         }
 
         private static LogLevelsConfig logLevelsAsset;
+        private static readonly Dictionary<string, LogLevel> LoggersCreatedInInitializers = new(); 
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void OnAfterSceneLoad()
@@ -69,23 +70,28 @@ namespace Toolnity
             {
                 logLevelsAsset.logsConfig = new List<LogConfig>();
             }
-            foreach(var loggerToAdd in loggersCreatedInInitializers)
+            foreach(var loggerToAdd in LoggersCreatedInInitializers)
             {
-                var found = false;
-                for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+                CheckOrAddLogger(loggerToAdd.Key, loggerToAdd.Value);
+            }
+            LoggersCreatedInInitializers.Clear();
+        }
+
+        private static void CheckOrAddLogger(string name, LogLevel loggerLogLevel)
+        {
+            var found = false;
+            for (var i = 0; i < logLevelsAsset.logsConfig.Count; i++)
+            {
+                if (logLevelsAsset.logsConfig[i].name == name)
                 {
-                    if (logLevelsAsset.logsConfig[i].name == loggerToAdd.Key)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    logLevelsAsset.logsConfig.Add(new LogConfig(loggerToAdd.Key, loggerToAdd.Value));
+                    found = true;
+                    break;
                 }
             }
-            loggersCreatedInInitializers.Clear();
+            if (!found)
+            {
+                logLevelsAsset.logsConfig.Add(new LogConfig(name, loggerLogLevel));
+            }
         }
 
         private static void CreateAssetFile()
@@ -151,45 +157,6 @@ namespace Toolnity
         {
             logLevelsAsset.defaultLogLevel = value;
             UnityEngine.Debug.Log("[Logger] Default Log Level set as: " + logLevelsAsset.defaultLogLevel);
-        }
-
-        public void SetLogLevel(LogLevel value)
-        {
-            logLevel = value;
-            UnityEngine.Debug.Log("["+ logName+ "] Log Level set as: " + logLevel);
-        }
-
-        private bool IsLogLevelAllowed(DefaultLogLevel logLevelToCheck)
-        {
-            bool allowed;
-            
-            switch (logLevel)
-            {
-                case LogLevel.Inherit:
-                    allowed = logLevelsAsset.defaultLogLevel <= logLevelToCheck;
-                    break;
-                case LogLevel.All:
-                    allowed = true;
-                    break;
-                case LogLevel.Debug:
-                    allowed = logLevelToCheck >= DefaultLogLevel.Debug;
-                    break;
-                case LogLevel.Info:
-                    allowed = logLevelToCheck >= DefaultLogLevel.Info;
-                    break;
-                case LogLevel.Warning:
-                    allowed = logLevelToCheck >= DefaultLogLevel.Warning;
-                    break;
-                case LogLevel.Error:
-                    allowed = logLevelToCheck >= DefaultLogLevel.Error;
-                    break;
-                case LogLevel.Off:
-                default:
-                    allowed = false;
-                    break;
-            }
-
-            return allowed;
         }
     }
 }
