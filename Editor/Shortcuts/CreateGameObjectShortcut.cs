@@ -18,7 +18,9 @@ namespace Toolnity
 
         private static void HierarchyWindowItemOnGUI(int instanceid, Rect selectionrect)
         {
-            if (Event.current.type != EventType.MouseDown 
+            if (Application.isPlaying
+                || Input.GetKeyDown(KeyCode.LeftControl)
+                || Event.current.type != EventType.MouseDown 
                 || Event.current.button != 0
                 || Event.current.clickCount < 2
                 || Selection.objects.Length > 0)
