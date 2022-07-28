@@ -72,7 +72,7 @@ namespace Toolnity
                     EditorGUILayout.BeginHorizontal();
                     ShowToggleOption("Hierarchy GO Creator", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
                     GUILayout.Space(20f);
-                    GUILayout.Label("(Double Click in an empty space in Hierarchy Window to create a new Game Object)");
+                    GUILayout.Label("(Left Ctrl + Double Click inside Hierarchy Window to create a new Game Object)");
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                 },
