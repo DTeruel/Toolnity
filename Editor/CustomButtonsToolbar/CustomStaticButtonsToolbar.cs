@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Overlays;
@@ -21,7 +22,7 @@ namespace Toolnity
 	public class StaticCustomButtons : VisualElement
 	{
 		public const string ID = "Toolnity/StaticCustomButtons";
-		private const string DEFAULT_ICON = "cs Script Icon";
+		private const string DefaultIcon = "cs Script Icon";
 		
 		private static StaticCustomButtons instance;
 
@@ -67,14 +68,13 @@ namespace Toolnity
 
 					for (var k = 0; k < methods.Length; k++)
 					{
-						var attribute = Attribute.GetCustomAttribute(methods[k], typeof(CustomButton)) as CustomButton;
-						if (attribute != null)
+						if (Attribute.GetCustomAttribute(methods[k], typeof(CustomButton)) is CustomButton attribute)
 						{
 							if (hierarchy.childCount > 0)
 							{
 								AddSpace();
 							}
-							var button = CreateButton(allTypes[j].Name, methods[k], attribute);
+							var button = CreateButton(allTypes[j], methods[k], attribute);
 							Add(button);
 						}
 					}
@@ -82,24 +82,21 @@ namespace Toolnity
 			}
 		}
 
-		private static EditorToolbarButton CreateButton(string className, MethodBase method, CustomButton customButton)
+		private static EditorToolbarButton CreateButton(Type currentClass, MethodBase method, CustomButton customButton)
 		{
-			var buttonText = method.Name;
-			if (!string.IsNullOrEmpty(customButton.Name))
-			{
-				buttonText = customButton.Name;
-			}
+			var buttonText = CustomButtonsMenu.GetStaticButtonName(currentClass, method, customButton);
+
 			var button = new EditorToolbarButton
 			{
 				name = buttonText,
 				text = buttonText,
-				tooltip = className + "::" + method.Name
+				tooltip = currentClass.Name + "::" + method.Name
 			};
 			
 			string iconName;
 			if (string.IsNullOrEmpty(customButton.Icon))
 			{
-				iconName = DEFAULT_ICON;
+				iconName = DefaultIcon;
 			}
 			else
 			{
@@ -123,13 +120,14 @@ namespace Toolnity
 			
 			if (!iconSet)
 			{
-				button.icon = EditorGUIUtility.IconContent(DEFAULT_ICON).image as Texture2D;
+				button.icon = EditorGUIUtility.IconContent(DefaultIcon).image as Texture2D;
 			}
 							
 			button.clicked += () => method.Invoke(null, null);
 
 			return button;
 		}
+
 
 		private void AddSpace()
 		{

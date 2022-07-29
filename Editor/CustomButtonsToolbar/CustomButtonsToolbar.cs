@@ -39,22 +39,22 @@ namespace Toolnity
 			menu.ShowAsContext();
 		}
 	
-		private static void AddNonStaticCustomButtonsInScene(GenericMenu menu)
+		private static void AddNonStaticCustomButtonsInScene(GenericMenu genericMenu)
 		{
 			var sceneActive = Object.FindObjectsOfType<MonoBehaviour>();
-			foreach (var mono in sceneActive) 
+			foreach (var mono in sceneActive)
 			{
-				var methods = mono.GetType().GetMethods(
+				var monoType = mono.GetType();
+				var methods = monoType.GetMethods(
 					BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 				for (var i = 0; i < methods.Length; i++) 
 				{
-					var attribute = Attribute.GetCustomAttribute(methods[i], typeof(CustomButton)) as CustomButton;
-					if (attribute != null)
+					if (Attribute.GetCustomAttribute(methods[i], typeof(CustomButton)) is CustomButton customButton)
 					{
 						var method = methods[i];
-						
-						menu.AddItem(
-							new GUIContent("[" + mono.name + "] " + mono.GetType().FullName + "::" + method.Name), 
+						var buttonName = CustomButtonsMenu.GetNonStaticButtonName(monoType, method, customButton, mono);
+						genericMenu.AddItem(
+							new GUIContent(buttonName), 
 							false,
 							() =>
 							{
@@ -65,7 +65,7 @@ namespace Toolnity
 			}
 		}
 
-		private static void AddStaticCustomButtonsInProject(GenericMenu menu)
+		private static void AddStaticCustomButtonsInProject(GenericMenu genericMenu)
 		{
 			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 			for (var i = 0; i < allAssemblies.Length; i++)
@@ -78,13 +78,12 @@ namespace Toolnity
 
 					for (var k = 0; k < methods.Length; k++)
 					{
-						var attribute = Attribute.GetCustomAttribute(methods[k], typeof(CustomButton)) as CustomButton;
-						if (attribute != null)
+						if (Attribute.GetCustomAttribute(methods[k], typeof(CustomButton)) is CustomButton customButton)
 						{
 							var method = methods[k];
-						
-							menu.AddItem(
-								new GUIContent(allTypes[j].Name + "::" + method.Name), 
+							var buttonName = CustomButtonsMenu.GetStaticButtonName(allTypes[j], method, customButton);
+							genericMenu.AddItem(
+								new GUIContent(buttonName), 
 								false,
 								() =>
 								{

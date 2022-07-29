@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -73,6 +74,28 @@ namespace Toolnity
                     ShowToggleOption("Hierarchy GO Creator", CreateGameObjectShortcut.CREATE_GAME_OBJECT_SETTINGS_ENABLED);
                     GUILayout.Space(20f);
                     GUILayout.Label("(Left Ctrl + Double Click inside Hierarchy Window to create a new Game Object)");
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    var customButtonsEnabled = ShowToggleOption("Custom Buttons Menu", CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_ENABLED);
+                    GUILayout.Space(20f);
+                    if (customButtonsEnabled)
+                    {
+                        var index = EditorPrefs.GetInt(Application.dataPath + CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_POSITION, 0);
+                        var newIndex = EditorGUILayout.Popup(
+                            index, 
+                            Enum.GetNames(typeof(CustomButtonsMenu.CustomButtonPositionNames)));
+
+                        if (newIndex != index)
+                        {
+                            EditorPrefs.SetInt(Application.dataPath + CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_POSITION, newIndex);
+                        }
+                    }
+                    else
+                    {
+                        GUILayout.Label("(Show Custom Buttons Menu in runtime)");
+                    }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                 },
