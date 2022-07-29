@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -12,8 +13,6 @@ namespace Toolnity
     {
         private const string StaticFolderName = "- Statics -";
         
-        public const string CUSTOM_BUTTONS_SETTINGS_ENABLED = "Toolnity/Custom Buttons/Enabled";
-        public const string CUSTOM_BUTTONS_SETTINGS_POSITION = "Toolnity/Custom Buttons/Position";
         public enum CustomButtonPositionNames
         {
             TopRight = 0,
@@ -54,8 +53,22 @@ namespace Toolnity
         [SerializeField] private Button folderTemplateButton;
         [SerializeField] private Button functionTemplateButton;
 
+        private static CustomButtonsMenuConfig config;
         private readonly CustomButtonFolder mainFolder = new ();
         private CustomButtonFolder currentFolder;
+
+        public static CustomButtonsMenuConfig Config
+        {
+            get
+            {
+                if (config == null)
+                {
+                    LoadOrCreateConfig();
+                }
+
+                return config;
+            }
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void AutoLoader()
@@ -63,9 +76,7 @@ namespace Toolnity
             Debug.Log("AutoLoader");
             
             var customButtonsInstance = FindObjectOfType<CustomButtonsMenu>();
-            
-            // TODO: Save it in a Scriptable Object
-            var enabledOption = EditorPrefs.GetBool(Application.dataPath + CUSTOM_BUTTONS_SETTINGS_ENABLED, true);
+            var enabledOption = Config.enabled;
             if (!enabledOption)
             {
                 if (customButtonsInstance != null)
@@ -81,6 +92,33 @@ namespace Toolnity
             }
 
             InstantiatePrefab();
+        }
+
+        private static void LoadOrCreateConfig()
+        {
+            var allAssets = Resources.LoadAll<CustomButtonsMenuConfig>("");
+            if (allAssets.Length > 0)
+            {
+                config = allAssets[0];
+                return;
+            }
+
+            #if UNITY_EDITOR
+            Debug.Log("[CustomButtonsMenu] No 'Custom Buttons Menu Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
+            
+            config = ScriptableObject.CreateInstance<CustomButtonsMenuConfig>();
+            const string pathFolder = "Assets/Resources/";
+            const string assetName = "Custom Buttons Menu Config.asset";
+            if (!Directory.Exists("Assets/Resources"))
+            {
+                Directory.CreateDirectory("Assets/Resources");
+            }
+            AssetDatabase.CreateAsset(config, pathFolder + assetName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            #else
+            Debug.LogError("[CustomButtonsMenu] No 'Custom Buttons Menu Config' file found in the Resources folders. Create one in the editor. ");
+            #endif
         }
 
         private static void InstantiatePrefab()
@@ -129,9 +167,7 @@ namespace Toolnity
             var anchorsMin = mainPanel.anchorMin;
             var anchorsMax = mainPanel.anchorMax;
             
-            // TODO: Save it in a Scriptable Object
-            var index = EditorPrefs.GetInt(Application.dataPath + CUSTOM_BUTTONS_SETTINGS_POSITION, 0);
-            switch ((CustomButtonPositionNames)index)
+            switch (config.position)
             {
                 case CustomButtonPositionNames.TopRight:
                     pivot.x = 1;

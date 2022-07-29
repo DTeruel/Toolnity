@@ -9,30 +9,28 @@ namespace Toolnity
     [InitializeOnLoad]
     internal static class ToolnitySettingsRegister
     {
-        private const string TOOLNITY_SETTINGS_NAME = "Project/ToolnitySettings";
-        private const string MENU_POSITION = "Toolnity/Menu Position";
-        private const string MENU_OFFSET = "Toolnity/Menu Offset";
-        private const string SHORTCUTS_ENABLED = "Toolnity/Basic Shortcuts/Enabled";
+        private const string ToolnitySettingsName = "Project/ToolnitySettings";
+        private const string ShortcutsEnabled = "Toolnity/Basic Shortcuts/Enabled";
 
         public static bool BasicShortcutsEnabled;
 
         static ToolnitySettingsRegister()
         {
-            BasicShortcutsEnabled = EditorPrefs.GetBool(Application.dataPath + SHORTCUTS_ENABLED, true);
+            BasicShortcutsEnabled = EditorPrefs.GetBool(Application.dataPath + ShortcutsEnabled, true);
         }
         
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
         public static void OpenProjectSettings()
         {
-            SettingsService.OpenProjectSettings(TOOLNITY_SETTINGS_NAME);
+            SettingsService.OpenProjectSettings(ToolnitySettingsName);
         }
         
         [SettingsProvider]
         public static SettingsProvider CreateToolnitySettingsProvider()
         {
-            var provider = new SettingsProvider(TOOLNITY_SETTINGS_NAME, SettingsScope.Project)
+            var provider = new SettingsProvider(ToolnitySettingsName, SettingsScope.Project)
             {
-                label = "Toolnity", guiHandler = (searchContext) =>
+                label = "Toolnity", guiHandler = (_) =>
                 {
                     EditorGUILayout.Space();
 
@@ -56,7 +54,7 @@ namespace Toolnity
                     ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
 
                     EditorGUILayout.BeginHorizontal();
-                    BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
+                    BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", ShortcutsEnabled);
 
                     GUILayout.Space(20f);
                     GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
@@ -78,18 +76,19 @@ namespace Toolnity
                     EditorGUILayout.EndHorizontal();
                     
                     EditorGUILayout.BeginHorizontal();
-                    var customButtonsEnabled = ShowToggleOption("Custom Buttons Menu", CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_ENABLED);
+                    
+                    CustomButtonsMenu.Config.enabled = EditorGUILayout.Toggle("Custom Buttons Menu", CustomButtonsMenu.Config.enabled);
                     GUILayout.Space(20f);
-                    if (customButtonsEnabled)
+                    if (CustomButtonsMenu.Config.enabled)
                     {
-                        var index = EditorPrefs.GetInt(Application.dataPath + CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_POSITION, 0);
+                        var index = CustomButtonsMenu.Config.position.GetHashCode();
                         var newIndex = EditorGUILayout.Popup(
                             index, 
                             Enum.GetNames(typeof(CustomButtonsMenu.CustomButtonPositionNames)));
 
                         if (newIndex != index)
                         {
-                            EditorPrefs.SetInt(Application.dataPath + CustomButtonsMenu.CUSTOM_BUTTONS_SETTINGS_POSITION, newIndex);
+                            CustomButtonsMenu.Config.position = (CustomButtonsMenu.CustomButtonPositionNames)newIndex;
                         }
                     }
                     else
