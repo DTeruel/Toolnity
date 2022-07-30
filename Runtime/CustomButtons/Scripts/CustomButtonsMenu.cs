@@ -87,8 +87,6 @@ namespace Toolnity
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void AutoLoader()
         {
-            Debug.Log("AutoLoader");
-            
             var customButtonsInstance = FindObjectOfType<CustomButtonsMenu>();
             var enabledOption = Config.enabled;
             if (!enabledOption)
@@ -137,7 +135,6 @@ namespace Toolnity
 
         private static void InstantiatePrefab()
         {
-            Debug.Log("Instantiating CustomButtonsMenu prefab");
             var customButtonsInstance = Resources.Load<CustomButtonsMenu>(nameof(CustomButtonsMenu));
             Instantiate(customButtonsInstance.gameObject);
         }
@@ -151,7 +148,6 @@ namespace Toolnity
 
         private void CheckEventSystem()
         {
-            Debug.Log("CheckEventSystem");
             if (EventSystem.current != null)
             {
                 return;
@@ -168,7 +164,6 @@ namespace Toolnity
 
         private void InitMenu()
         {
-            Debug.Log("InitMenu");
             InitMenuPosition();
             InitMainButtons();
             InitMainFolder();
@@ -398,7 +393,6 @@ namespace Toolnity
 
         private void OpenMenu()
         {
-            Debug.Log("OpenMenu");
             menuButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(true);
             functionsPanel.gameObject.SetActive(true);
@@ -408,8 +402,6 @@ namespace Toolnity
 
         private void OpenFolder(CustomButtonFolder folder)
         {
-            Debug.Log("OpenFolder: " + folder.Name);
-            
             DisableAllButtons();
             
             currentFolder = folder;
@@ -439,7 +431,6 @@ namespace Toolnity
 
         private void OnBackPressed()
         {
-            Debug.Log("OnBackPressed");
             if (currentFolder.ParentFolder == null)
             {
                 CloseMenu();
@@ -452,7 +443,6 @@ namespace Toolnity
 
         private void CloseMenu()
         {
-            Debug.Log("CloseMenu");
             menuButton.gameObject.SetActive(true);
             backButton.gameObject.SetActive(false);
             functionsPanel.gameObject.SetActive(false);
@@ -513,7 +503,6 @@ namespace Toolnity
 
         private void AddCustomButtonsFromGameObjectInternal(GameObject monoGameObject)
         {
-            Debug.Log("Adding functions from " + monoGameObject.name);
             var allMonoBehaviours = monoGameObject.GetComponentsInChildren<MonoBehaviour>(true);
             foreach (var mono in allMonoBehaviours)
             {
@@ -546,8 +535,6 @@ namespace Toolnity
 
         private void RemoveCustomButtonsFromGameObjectInternal(GameObject mono)
         {
-            Debug.Log("Removing functions from " + mono.name);
-
             SearchFunctionByGameObjectAndDestroy(mainFolder, mono);
             RemoveEmptyFolders(mainFolder);
             RemoveNullButtonReferences();
@@ -567,7 +554,6 @@ namespace Toolnity
                 {
                     continue;
                 }
-                Debug.Log("Destroying function button: " + folder.Functions[i].ButtonInstance.name);
                 DestroyImmediate(folder.Functions[i].ButtonInstance.gameObject);
                 folder.Functions.RemoveAt(i);
             }
@@ -586,7 +572,6 @@ namespace Toolnity
                     continue;
                 }
                 
-                Debug.Log("Destroying folder button: " + folder.Subfolders[i].ButtonInstance.name);
                 DestroyImmediate(folder.Subfolders[i].ButtonInstance.gameObject);
                 folder.Subfolders.RemoveAt(i);
             }
