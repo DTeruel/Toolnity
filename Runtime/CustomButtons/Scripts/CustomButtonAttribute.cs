@@ -7,6 +7,7 @@ namespace Toolnity
 	{
 		public string Name = "";
 		public string NameFunction = "";
+		public bool NameFunctionCalledJustOnce = true;
 		public string Icon = "";
 		public bool ShowInRuntime = true;
 		public bool UseClassNameAsPath = true;

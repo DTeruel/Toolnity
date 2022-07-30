@@ -24,12 +24,27 @@ namespace Toolnity
         private class CustomButtonInstance
         {
             public Button ButtonInstance;
-            public GameObject GameObject;
+            public MonoBehaviour Mono;
             
-            public CustomButtonInstance(Button buttonInstance, GameObject monoBehaviourGameObject)
+            private readonly MethodInfo methodName;
+            
+            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodName)
             {
                 ButtonInstance = buttonInstance;
-                GameObject = monoBehaviourGameObject;
+                Mono = mono;
+                this.methodName = methodName;
+            }
+
+            public void UpdateName()
+            {
+                if (methodName == null)
+                {
+                    return;
+                }
+                
+                var buttonText = ButtonInstance.GetComponentInChildren<Text>();
+                var nameFunction = methodName.Invoke(Mono, null);
+                buttonText.text = nameFunction.ToString();
             }
         }
 
@@ -280,25 +295,21 @@ namespace Toolnity
                             }
                             
                             var method = methods[k];
-                            var pathAndFunctionName = GetStaticButtonName(allTypes[j], method, customButton);
-                            CreateSubfoldersAndAddFunction(staticFolder, pathAndFunctionName, method);
+                            var pathAndFunctionName = GetStaticButtonName(allTypes[j], method, customButton, out var methodName);
+                            CreateSubfoldersAndAddFunction(staticFolder, pathAndFunctionName, method, methodName);
                         }
                     }
                 }
             }
         }
         
-        private void CreateSubfoldersAndAddFunction(
-            CustomButtonFolder folder, 
-            string pathAndFunctionName, 
-            MethodBase method, 
-            MonoBehaviour monoBehaviour = null)
+        private void CreateSubfoldersAndAddFunction(CustomButtonFolder folder, string pathAndFunctionName, MethodBase method, MethodInfo methodName, MonoBehaviour monoBehaviour = null)
         {
             var subfolders = pathAndFunctionName.Split("/");
             var finalFolder = GetOrCreateSubfolders(subfolders, folder);
             var buttonName = subfolders[subfolders.Length - 1];
             
-            AddFunction(finalFolder, buttonName, method, monoBehaviour);
+            AddFunction(finalFolder, buttonName, method, monoBehaviour, methodName);
         }
         
         private CustomButtonFolder GetOrCreateSubfolders(string[] subfolders, CustomButtonFolder finalFolder)
@@ -327,11 +338,7 @@ namespace Toolnity
             return finalFolder;
         }
 
-        private void AddFunction(
-            CustomButtonFolder folder, 
-            string buttonName, 
-            MethodBase method, 
-            MonoBehaviour monoBehaviour)
+        private void AddFunction(CustomButtonFolder folder, string buttonName, MethodBase method, MonoBehaviour monoBehaviour, MethodInfo methodName)
         {
             var buttonInstance = Instantiate(functionTemplateButton, functionsContent);
             var buttonText = buttonInstance.GetComponentInChildren<Text>();
@@ -342,12 +349,7 @@ namespace Toolnity
                 method.Invoke(monoBehaviour, null);
             });
 
-            GameObject monoGameObject = null;
-            if (monoBehaviour != null)
-            {
-                monoGameObject = monoBehaviour.gameObject;
-            }
-            folder.Functions.Add(new CustomButtonInstance(buttonInstance, monoGameObject));
+            folder.Functions.Add(new CustomButtonInstance(buttonInstance, monoBehaviour, methodName));
             
             functionButtons.Add(buttonInstance.transform);
             ReorderButtons();
@@ -422,6 +424,7 @@ namespace Toolnity
             }
             for (var i = 0; i < folder.Functions.Count; i++)
             {
+                folder.Functions[i].UpdateName();
                 folder.Functions[i].ButtonInstance.gameObject.SetActive(true);
                 numButtons++;
             }
@@ -450,7 +453,13 @@ namespace Toolnity
         
         public static string GetStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton)
         {
+            return GetStaticButtonName(currentClass, method, customButton, out _);
+        }
+
+        private static string GetStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, out MethodInfo methodName)
+        {
             var buttonName = "";
+            methodName = null;
             if (!string.IsNullOrEmpty(customButton.NameFunction))
             {
                 var methods = currentClass.GetMethods(
@@ -460,6 +469,10 @@ namespace Toolnity
                 {
                     if (methods[i].Name == customButton.NameFunction && methods[i].ReturnType == typeof(string))
                     {
+                        if (!customButton.NameFunctionCalledJustOnce)
+                        {
+                            methodName = methods[i];
+                        }
                         var nameFunction = methods[i].Invoke(null, null);
                         buttonName = nameFunction.ToString();
                     }
@@ -514,9 +527,8 @@ namespace Toolnity
                     if (Attribute.GetCustomAttribute(methods[i], typeof(CustomButton)) is CustomButton customButton)
                     {
                         var method = methods[i];
-                        var pathAndFunctionName = GetNonStaticButtonName(monoType, method, customButton, mono);
-                        
-                        Instance.CreateSubfoldersAndAddFunction(Instance.mainFolder, pathAndFunctionName, method, mono);
+                        var pathAndFunctionName = GetNonStaticButtonName(monoType, method, customButton, mono, out var methodName);
+                        CreateSubfoldersAndAddFunction(mainFolder, pathAndFunctionName, method, methodName, mono);
                     }
                 }
             }
@@ -541,7 +553,7 @@ namespace Toolnity
             CloseMenu();
         }
 
-        private void SearchFunctionByGameObjectAndDestroy(CustomButtonFolder folder, GameObject mono)
+        private static void SearchFunctionByGameObjectAndDestroy(CustomButtonFolder folder, GameObject mono)
         {
             for (var i = 0; i < folder.Subfolders.Count ; i++)
             {
@@ -550,7 +562,7 @@ namespace Toolnity
             
             for (var i = folder.Functions.Count - 1; i >= 0 ; i--)
             {
-                if (folder.Functions[i].GameObject != mono)
+                if (folder.Functions[i].Mono.gameObject != mono)
                 {
                     continue;
                 }
@@ -559,7 +571,7 @@ namespace Toolnity
             }
         }
 
-        private void RemoveEmptyFolders(CustomButtonFolder folder)
+        private static void RemoveEmptyFolders(CustomButtonFolder folder)
         {
             for (var i = 0; i < folder.Subfolders.Count; i++)
             {
@@ -598,7 +610,13 @@ namespace Toolnity
 
         public static string GetNonStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, MonoBehaviour mono)
         {
+            return GetNonStaticButtonName(currentClass, method, customButton, mono, out _);
+        }
+
+        private static string GetNonStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, MonoBehaviour mono, out MethodInfo methodName)
+        {
             var buttonName = "";
+            methodName = null;
             if (!string.IsNullOrEmpty(customButton.NameFunction))
             {
                 var methods = currentClass.GetMethods(
@@ -608,6 +626,10 @@ namespace Toolnity
                 {
                     if (methods[i].Name == customButton.NameFunction && methods[i].ReturnType == typeof(string))
                     {
+                        if (!customButton.NameFunctionCalledJustOnce)
+                        {
+                            methodName = methods[i];
+                        }
                         var nameFunction = methods[i].Invoke(mono, null);
                         buttonName = nameFunction.ToString();
                     }
