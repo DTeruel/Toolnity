@@ -5,7 +5,7 @@ namespace Toolnity
 	public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		private static bool shuttingDown;
-		private static readonly object Lock = new object();
+		private static readonly object Lock = new ();
 		private static T myInstance;
 
 		public static T Instance
@@ -14,8 +14,6 @@ namespace Toolnity
 			{
 				if (shuttingDown)
 				{
-					Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
-					                 "' already destroyed. Returning null.");
 					return null;
 				}
 

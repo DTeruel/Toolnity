@@ -20,14 +20,26 @@ namespace Toolnity
             BottomRight = 2,
             BottomLeft = 3
         }
-        
+
+        private class CustomButtonInstance
+        {
+            public Button ButtonInstance;
+            public GameObject GameObject;
+            
+            public CustomButtonInstance(Button buttonInstance, GameObject monoBehaviourGameObject)
+            {
+                ButtonInstance = buttonInstance;
+                GameObject = monoBehaviourGameObject;
+            }
+        }
+
         private class CustomButtonFolder
         {
             public string Name;
             public Button ButtonInstance;
             public CustomButtonFolder ParentFolder;
             public List<CustomButtonFolder> Subfolders = new ();
-            public List<Button> Functions = new ();
+            public List<CustomButtonInstance> Functions = new ();
 
             public CustomButtonFolder() { }
 
@@ -157,7 +169,6 @@ namespace Toolnity
         private void InitMenu()
         {
             Debug.Log("InitMenu");
-            
             InitMenuPosition();
             InitMainButtons();
             InitMainFolder();
@@ -335,8 +346,13 @@ namespace Toolnity
             {
                 method.Invoke(monoBehaviour, null);
             });
-            
-            folder.Functions.Add(buttonInstance);
+
+            GameObject monoGameObject = null;
+            if (monoBehaviour != null)
+            {
+                monoGameObject = monoBehaviour.gameObject;
+            }
+            folder.Functions.Add(new CustomButtonInstance(buttonInstance, monoGameObject));
             
             functionButtons.Add(buttonInstance.transform);
             ReorderButtons();
@@ -360,7 +376,6 @@ namespace Toolnity
                 });
             
             parentFolder.Subfolders.Add(newButton);
-            
             folderButtons.Add(buttonInstance.transform);
             ReorderButtons();
             
@@ -415,7 +430,7 @@ namespace Toolnity
             }
             for (var i = 0; i < folder.Functions.Count; i++)
             {
-                folder.Functions[i].gameObject.SetActive(true);
+                folder.Functions[i].ButtonInstance.gameObject.SetActive(true);
                 numButtons++;
             }
 
@@ -486,10 +501,20 @@ namespace Toolnity
             return finalName;
         }
 
-        public static void AddCustomButtonsFromGameObject(GameObject gameObject)
+        public static void AddCustomButtonsFromGameObject(GameObject monoGameObject)
         {
-            Debug.Log("Adding functions from " + gameObject.name);
-            var allMonoBehaviours = gameObject.GetComponentsInChildren<MonoBehaviour>(true);
+            if (Instance == null)
+            {
+                return;
+            }
+            
+            Instance.AddCustomButtonsFromGameObjectInternal(monoGameObject);
+        }
+
+        private void AddCustomButtonsFromGameObjectInternal(GameObject monoGameObject)
+        {
+            Debug.Log("Adding functions from " + monoGameObject.name);
+            var allMonoBehaviours = monoGameObject.GetComponentsInChildren<MonoBehaviour>(true);
             foreach (var mono in allMonoBehaviours)
             {
                 var monoType = mono.GetType();
@@ -506,12 +531,84 @@ namespace Toolnity
                     }
                 }
             }
+            
+            CloseMenu();
         }
 
-        public static void RemoveCustomButtonsFromGameObject(GameObject gameObject)
+        public static void RemoveCustomButtonsFromGameObject(GameObject mono)
         {
-            Debug.Log("Removing functions from " + gameObject.name);
+            if (Instance == null)
+            {
+                return;
+            }
+            Instance.RemoveCustomButtonsFromGameObjectInternal(mono);
+        }
+
+        private void RemoveCustomButtonsFromGameObjectInternal(GameObject mono)
+        {
+            Debug.Log("Removing functions from " + mono.name);
+
+            SearchFunctionByGameObjectAndDestroy(mainFolder, mono);
+            RemoveEmptyFolders(mainFolder);
+            RemoveNullButtonReferences();
+            CloseMenu();
+        }
+
+        private void SearchFunctionByGameObjectAndDestroy(CustomButtonFolder folder, GameObject mono)
+        {
+            for (var i = 0; i < folder.Subfolders.Count ; i++)
+            {
+                SearchFunctionByGameObjectAndDestroy(folder.Subfolders[i], mono);
+            }
             
+            for (var i = folder.Functions.Count - 1; i >= 0 ; i--)
+            {
+                if (folder.Functions[i].GameObject != mono)
+                {
+                    continue;
+                }
+                Debug.Log("Destroying function button: " + folder.Functions[i].ButtonInstance.name);
+                DestroyImmediate(folder.Functions[i].ButtonInstance.gameObject);
+                folder.Functions.RemoveAt(i);
+            }
+        }
+
+        private void RemoveEmptyFolders(CustomButtonFolder folder)
+        {
+            for (var i = 0; i < folder.Subfolders.Count; i++)
+            {
+                RemoveEmptyFolders(folder.Subfolders[i]);
+            }
+            for (var i = folder.Subfolders.Count - 1; i >= 0; i--)
+            {
+                if(folder.Subfolders[i].Functions.Count > 0 || folder.Subfolders[i].Subfolders.Count > 0)
+                {
+                    continue;
+                }
+                
+                Debug.Log("Destroying folder button: " + folder.Subfolders[i].ButtonInstance.name);
+                DestroyImmediate(folder.Subfolders[i].ButtonInstance.gameObject);
+                folder.Subfolders.RemoveAt(i);
+            }
+        }
+
+        private void RemoveNullButtonReferences()
+        {
+            for (var i = folderButtons.Count - 1; i >= 0 ; i--)
+            {
+                if (folderButtons[i] == null)
+                {
+                    folderButtons.RemoveAt(i);
+                }
+            }
+            
+            for (var i = functionButtons.Count - 1; i >= 0 ; i--)
+            {
+                if (functionButtons[i] == null)
+                {
+                    functionButtons.RemoveAt(i);
+                }
+            }
         }
 
         public static string GetNonStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, MonoBehaviour mono)
