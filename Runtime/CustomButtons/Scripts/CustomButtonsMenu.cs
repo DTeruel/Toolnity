@@ -142,7 +142,7 @@ namespace Toolnity
             Instantiate(customButtonsInstance.gameObject);
         }
 
-        private void Awake()
+        protected override void OnSingletonAwake()
         {
             LoadOrCreateConfig();
             CheckEventSystem();
