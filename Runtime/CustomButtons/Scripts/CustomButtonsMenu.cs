@@ -56,7 +56,9 @@ namespace Toolnity
         private static CustomButtonsMenuConfig config;
         private readonly CustomButtonFolder mainFolder = new ();
         private CustomButtonFolder currentFolder;
-
+        private List<Transform> folderButtons = new();
+        private List<Transform> functionButtons = new();
+        
         public static CustomButtonsMenuConfig Config
         {
             get
@@ -335,6 +337,9 @@ namespace Toolnity
             });
             
             folder.Functions.Add(buttonInstance);
+            
+            functionButtons.Add(buttonInstance.transform);
+            ReorderButtons();
         }
 
         private CustomButtonFolder AddFolder(string buttonName, CustomButtonFolder parentFolder)
@@ -355,7 +360,10 @@ namespace Toolnity
                 });
             
             parentFolder.Subfolders.Add(newButton);
-
+            
+            folderButtons.Add(buttonInstance.transform);
+            ReorderButtons();
+            
             return newButton;
         }
 
@@ -551,6 +559,22 @@ namespace Toolnity
             finalName += buttonName;
 
             return finalName;
+        }
+        
+        private void ReorderButtons()
+        {
+            var index = 0;
+            for (var i = 0; i < folderButtons.Count; i++)
+            {
+                folderButtons[i].SetSiblingIndex(index);
+                index++;
+            }
+            
+            for (var i = 0; i < functionButtons.Count; i++)
+            {
+                functionButtons[i].SetSiblingIndex(index);
+                index++;
+            }
         }
     }
 }
