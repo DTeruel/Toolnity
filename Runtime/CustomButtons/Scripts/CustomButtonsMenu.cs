@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Toolnity
 {
-    public class CustomButtonsMenu : MonoBehaviour
+    public class CustomButtonsMenu : Singleton<CustomButtonsMenu>
     {
         private const string StaticFolderName = "- Statics -";
         
@@ -128,8 +128,9 @@ namespace Toolnity
             Instantiate(customButtonsInstance.gameObject);
         }
 
-        private void Start()
+        private void Awake()
         {
+            LoadOrCreateConfig();
             CheckEventSystem();
             InitMenu();
         }
@@ -279,13 +280,17 @@ namespace Toolnity
             }
         }
         
-        private void CreateSubfoldersAndAddFunction(CustomButtonFolder folder, string pathAndFunctionName, MethodBase method)
+        private void CreateSubfoldersAndAddFunction(
+            CustomButtonFolder folder, 
+            string pathAndFunctionName, 
+            MethodBase method, 
+            MonoBehaviour monoBehaviour = null)
         {
             var subfolders = pathAndFunctionName.Split("/");
             var finalFolder = GetOrCreateSubfolders(subfolders, folder);
             var buttonName = subfolders[subfolders.Length - 1];
             
-            AddFunction(finalFolder, buttonName, method);
+            AddFunction(finalFolder, buttonName, method, monoBehaviour);
         }
         
         private CustomButtonFolder GetOrCreateSubfolders(string[] subfolders, CustomButtonFolder finalFolder)
@@ -314,7 +319,11 @@ namespace Toolnity
             return finalFolder;
         }
 
-        private void AddFunction(CustomButtonFolder folder, string buttonName, MethodBase method)
+        private void AddFunction(
+            CustomButtonFolder folder, 
+            string buttonName, 
+            MethodBase method, 
+            MonoBehaviour monoBehaviour)
         {
             var buttonInstance = Instantiate(functionTemplateButton, functionsContent);
             var buttonText = buttonInstance.GetComponentInChildren<Text>();
@@ -322,7 +331,7 @@ namespace Toolnity
             
             buttonInstance.onClick.AddListener(() =>
             {
-                method.Invoke(null, null);
+                method.Invoke(monoBehaviour, null);
             });
             
             folder.Functions.Add(buttonInstance);
@@ -387,7 +396,7 @@ namespace Toolnity
             UpdateContentSize(numButtons);
         }
 
-        private int ShowButtons(CustomButtonFolder folder)
+        private static int ShowButtons(CustomButtonFolder folder)
         {
             var numButtons = 0;
             
@@ -459,9 +468,42 @@ namespace Toolnity
                 buttonName = method.Name;
             }
 			
-            buttonName = currentClass.Name + "/" + buttonName;
-			
-            return buttonName;
+            var finalName = "";
+            if (customButton.UseClassNameAsPath)
+            {
+                finalName = currentClass.Name + "/";
+            }
+            finalName += buttonName;
+
+            return finalName;
+        }
+
+        public static void AddCustomButtonsFromGameObject(GameObject gameObject)
+        {
+            Debug.Log("Adding functions from " + gameObject.name);
+            var allMonoBehaviours = gameObject.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var mono in allMonoBehaviours)
+            {
+                var monoType = mono.GetType();
+                var methods = monoType.GetMethods(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                for (var i = 0; i < methods.Length; i++) 
+                {
+                    if (Attribute.GetCustomAttribute(methods[i], typeof(CustomButton)) is CustomButton customButton)
+                    {
+                        var method = methods[i];
+                        var pathAndFunctionName = GetNonStaticButtonName(monoType, method, customButton, mono);
+                        
+                        Instance.CreateSubfoldersAndAddFunction(Instance.mainFolder, pathAndFunctionName, method, mono);
+                    }
+                }
+            }
+        }
+
+        public static void RemoveCustomButtonsFromGameObject(GameObject gameObject)
+        {
+            Debug.Log("Removing functions from " + gameObject.name);
+            
         }
 
         public static string GetNonStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, MonoBehaviour mono)
@@ -496,10 +538,19 @@ namespace Toolnity
             {
                 buttonName = method.Name;
             }
-			
-            buttonName = mono.name + "/" + currentClass.Name + "/" + buttonName;
 
-            return buttonName;
+            var finalName = "";
+            if (customButton.UseGameObjectNameAsPath)
+            {
+                finalName += mono.name + "/";
+            }
+            if (customButton.UseClassNameAsPath)
+            {
+                finalName += currentClass.Name + "/";
+            }
+            finalName += buttonName;
+
+            return finalName;
         }
     }
 }

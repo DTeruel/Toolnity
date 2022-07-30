@@ -55,7 +55,6 @@ namespace Toolnity
 
                     EditorGUILayout.BeginHorizontal();
                     BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", ShortcutsEnabled);
-
                     GUILayout.Space(20f);
                     GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
                     GUILayout.FlexibleSpace();
@@ -76,16 +75,15 @@ namespace Toolnity
                     EditorGUILayout.EndHorizontal();
                     
                     EditorGUILayout.BeginHorizontal();
-                    
                     CustomButtonsMenu.Config.enabled = EditorGUILayout.Toggle("Custom Buttons Menu", CustomButtonsMenu.Config.enabled);
                     GUILayout.Space(20f);
+                    
                     if (CustomButtonsMenu.Config.enabled)
                     {
                         var index = CustomButtonsMenu.Config.position.GetHashCode();
                         var newIndex = EditorGUILayout.Popup(
                             index, 
                             Enum.GetNames(typeof(CustomButtonsMenu.CustomButtonPositionNames)));
-
                         if (newIndex != index)
                         {
                             CustomButtonsMenu.Config.position = (CustomButtonsMenu.CustomButtonPositionNames)newIndex;

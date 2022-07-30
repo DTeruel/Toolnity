@@ -41,8 +41,8 @@ namespace Toolnity
 	
 		private static void AddNonStaticCustomButtonsInScene(GenericMenu genericMenu)
 		{
-			var sceneActive = Object.FindObjectsOfType<MonoBehaviour>();
-			foreach (var mono in sceneActive)
+			var allMonoBehaviours = Object.FindObjectsOfType<MonoBehaviour>();
+			foreach (var mono in allMonoBehaviours)
 			{
 				var monoType = mono.GetType();
 				var methods = monoType.GetMethods(

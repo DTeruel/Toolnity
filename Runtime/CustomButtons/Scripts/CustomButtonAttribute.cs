@@ -9,5 +9,7 @@ namespace Toolnity
 		public string NameFunction = "";
 		public string Icon = "";
 		public bool ShowInRuntime = true;
+		public bool UseClassNameAsPath = true;
+		public bool UseGameObjectNameAsPath = true;
 	}
 }
