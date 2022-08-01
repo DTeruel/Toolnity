@@ -77,9 +77,23 @@ namespace Toolnity
                     EditorGUILayout.BeginHorizontal();
                     CustomButtonsMenu.Config.enabled = EditorGUILayout.Toggle("Custom Buttons Menu", CustomButtonsMenu.Config.enabled);
                     GUILayout.Space(20f);
+                    GUILayout.Label("(Show Custom Buttons Menu in runtime)");
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
                     
                     if (CustomButtonsMenu.Config.enabled)
                     {
+                        EditorGUILayout.BeginHorizontal();
+                        GUILayout.Space(20f);
+                        GUILayout.Label("Main Button Visible:    ");
+                        CustomButtonsMenu.Config.mainButtonVisible = EditorGUILayout.Toggle("", CustomButtonsMenu.Config.mainButtonVisible);
+                        GUILayout.FlexibleSpace();
+                        EditorGUILayout.EndHorizontal();
+                            
+                        EditorGUILayout.BeginHorizontal();
+                        GUILayout.Space(20f);
+                        GUILayout.Label("Position:                  ");
+                        GUILayout.Space(20f);
                         var index = CustomButtonsMenu.Config.position.GetHashCode();
                         var newIndex = EditorGUILayout.Popup(
                             index, 
@@ -88,13 +102,9 @@ namespace Toolnity
                         {
                             CustomButtonsMenu.Config.position = (CustomButtonsMenu.CustomButtonPositionNames)newIndex;
                         }
+                        GUILayout.FlexibleSpace();
+                        EditorGUILayout.EndHorizontal();
                     }
-                    else
-                    {
-                        GUILayout.Label("(Show Custom Buttons Menu in runtime)");
-                    }
-                    GUILayout.FlexibleSpace();
-                    EditorGUILayout.EndHorizontal();
                 },
 
                 keywords = new HashSet<string>(new[]

@@ -249,10 +249,24 @@ namespace Toolnity
 
         private void InitMainButtons()
         {
+            UpdateMainButtonVisibility();
             menuButton.onClick.RemoveAllListeners();
             menuButton.onClick.AddListener(OpenMenu);
             backButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(OnBackPressed);
+        }
+
+        private void UpdateMainButtonVisibility()
+        {
+            if (config.mainButtonVisible)
+            {
+                return;
+            }
+
+            var image = menuButton.GetComponent<Image>();
+            image.color = new Color(0, 0, 0, 0);
+            var text = menuButton.GetComponentInChildren<Text>();
+            text.gameObject.SetActive(false);
         }
 
         private void DisableAllButtons()
