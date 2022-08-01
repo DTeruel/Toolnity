@@ -8,7 +8,7 @@ namespace Toolnity
 		private static readonly object Lock = new ();
 		private static T myInstance;
 
-		public static T Instance
+		protected static T Instance
 		{
 			get
 			{

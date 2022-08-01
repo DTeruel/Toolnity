@@ -9,26 +9,26 @@ namespace Toolnity
     [InitializeOnLoad]
     internal static class ToolnitySettingsRegister
     {
-        private const string ToolnitySettingsName = "Project/ToolnitySettings";
-        private const string ShortcutsEnabled = "Toolnity/Basic Shortcuts/Enabled";
+        private const string TOOLNITY_SETTINGS_NAME = "Project/ToolnitySettings";
+        private const string SHORTCUTS_ENABLED = "Toolnity/Basic Shortcuts/Enabled";
 
         public static bool BasicShortcutsEnabled;
 
         static ToolnitySettingsRegister()
         {
-            BasicShortcutsEnabled = EditorPrefs.GetBool(Application.dataPath + ShortcutsEnabled, true);
+            BasicShortcutsEnabled = EditorPrefs.GetBool(Application.dataPath + SHORTCUTS_ENABLED, true);
         }
         
         [MenuItem("Tools/Toolnity/Open Settings", priority = 2000)]
         public static void OpenProjectSettings()
         {
-            SettingsService.OpenProjectSettings(ToolnitySettingsName);
+            SettingsService.OpenProjectSettings(TOOLNITY_SETTINGS_NAME);
         }
         
         [SettingsProvider]
         public static SettingsProvider CreateToolnitySettingsProvider()
         {
-            var provider = new SettingsProvider(ToolnitySettingsName, SettingsScope.Project)
+            var provider = new SettingsProvider(TOOLNITY_SETTINGS_NAME, SettingsScope.Project)
             {
                 label = "Toolnity", guiHandler = (_) =>
                 {
@@ -54,7 +54,7 @@ namespace Toolnity
                     ShowToggleOption("Hierarchy Object Active", HierarchyObjectActive.HIERARCHY_OBJECT_SETTINGS_ENABLED);
 
                     EditorGUILayout.BeginHorizontal();
-                    BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", ShortcutsEnabled);
+                    BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
                     GUILayout.Space(20f);
                     GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
                     GUILayout.FlexibleSpace();

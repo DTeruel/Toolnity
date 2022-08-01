@@ -9,66 +9,8 @@ using UnityEngine.UI;
 
 namespace Toolnity
 {
-    public class CustomButtonsMenu : Singleton<CustomButtonsMenu>
+    public partial class CustomButtonsMenu : Singleton<CustomButtonsMenu>
     {
-        private const string StaticFolderName = "- Statics -";
-        
-        public enum CustomButtonPositionNames
-        {
-            TopRight = 0,
-            TopLeft = 1,
-            BottomRight = 2,
-            BottomLeft = 3
-        }
-
-        private class CustomButtonInstance
-        {
-            public Button ButtonInstance;
-            public MonoBehaviour Mono;
-            
-            private readonly MethodInfo methodName;
-            
-            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodName)
-            {
-                ButtonInstance = buttonInstance;
-                Mono = mono;
-                this.methodName = methodName;
-            }
-
-            public void UpdateName()
-            {
-                if (methodName == null)
-                {
-                    return;
-                }
-                
-                var buttonText = ButtonInstance.GetComponentInChildren<Text>();
-                var nameFunction = methodName.Invoke(Mono, null);
-                buttonText.text = nameFunction.ToString();
-            }
-        }
-
-        private class CustomButtonFolder
-        {
-            public string Name;
-            public Button ButtonInstance;
-            public CustomButtonFolder ParentFolder;
-            public List<CustomButtonFolder> Subfolders = new ();
-            public List<CustomButtonInstance> Functions = new ();
-
-            public CustomButtonFolder() { }
-
-            public CustomButtonFolder(
-                string name, 
-                Button buttonInstance, 
-                CustomButtonFolder parentFolder)
-            {
-                Name = name;
-                ButtonInstance = buttonInstance;
-                ParentFolder = parentFolder;
-            }
-        }
-
         [SerializeField] private EventSystem eventSystem;
         [SerializeField] private RectTransform mainPanel;
         [SerializeField] private VerticalLayoutGroup mainPanelVerticalLayoutGroup;
@@ -83,8 +25,8 @@ namespace Toolnity
         private static CustomButtonsMenuConfig config;
         private readonly CustomButtonFolder mainFolder = new ();
         private CustomButtonFolder currentFolder;
-        private List<Transform> folderButtons = new();
-        private List<Transform> functionButtons = new();
+        private readonly List<Transform> folderButtons = new();
+        private readonly List<Transform> functionButtons = new();
         
         public static CustomButtonsMenuConfig Config
         {
@@ -280,7 +222,7 @@ namespace Toolnity
 
         private void InitMainFolder()
         {
-            mainFolder.Name = "Main Menu";
+            mainFolder.Name = MAIN_FOLDER_NAME;
             currentFolder = mainFolder;
             
             InitStaticButtons();
@@ -288,7 +230,7 @@ namespace Toolnity
         
         private void InitStaticButtons()
         {
-            var staticFolder = AddFolder(StaticFolderName, mainFolder);
+            var staticFolder = AddFolder(STATIC_FOLDER_NAME, mainFolder);
             
             var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             for (var i = 0; i < allAssemblies.Length; i++)

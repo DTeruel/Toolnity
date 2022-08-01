@@ -21,7 +21,7 @@ namespace Toolnity
 	public class StaticCustomButtons : VisualElement
 	{
 		public const string ID = "Toolnity/StaticCustomButtons";
-		private const string DefaultIcon = "cs Script Icon";
+		private const string DEFAULT_ICON = "cs Script Icon";
 		
 		private static StaticCustomButtons instance;
 
@@ -95,7 +95,7 @@ namespace Toolnity
 			string iconName;
 			if (string.IsNullOrEmpty(customButton.Icon))
 			{
-				iconName = DefaultIcon;
+				iconName = DEFAULT_ICON;
 			}
 			else
 			{
@@ -119,7 +119,7 @@ namespace Toolnity
 			
 			if (!iconSet)
 			{
-				button.icon = EditorGUIUtility.IconContent(DefaultIcon).image as Texture2D;
+				button.icon = EditorGUIUtility.IconContent(DEFAULT_ICON).image as Texture2D;
 			}
 							
 			button.clicked += () => method.Invoke(null, null);
