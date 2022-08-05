@@ -125,6 +125,7 @@ namespace Toolnity
             InitMainButtons();
             InitMainFolder();
             CloseMenu();
+            CheckCustomButtonsVisibility();
         }
 
         private void InitMenuPosition()
@@ -338,6 +339,7 @@ namespace Toolnity
             parentFolder.Subfolders.Add(newButton);
             folderButtons.Add(buttonInstance.transform);
             ReorderButtons();
+            CheckCustomButtonsVisibility();
             
             return newButton;
         }
