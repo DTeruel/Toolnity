@@ -191,14 +191,14 @@ namespace Toolnity
 
         private void InitMainButtons()
         {
-            UpdateMainButtonVisibility();
+            CheckMainButtonVisibility();
             menuButton.onClick.RemoveAllListeners();
             menuButton.onClick.AddListener(OpenMenu);
             backButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(OnBackPressed);
         }
 
-        private void UpdateMainButtonVisibility()
+        private void CheckMainButtonVisibility()
         {
             if (config.mainButtonVisible)
             {
@@ -226,6 +226,12 @@ namespace Toolnity
             currentFolder = mainFolder;
             
             InitStaticButtons();
+        }
+
+        private void CheckCustomButtonsVisibility()
+        {
+            var visible = functionButtons.Count > 0;
+            mainPanel.gameObject.SetActive(visible);
         }
         
         private void InitStaticButtons()
@@ -309,6 +315,7 @@ namespace Toolnity
             
             functionButtons.Add(buttonInstance.transform);
             ReorderButtons();
+            CheckCustomButtonsVisibility();
         }
 
         private CustomButtonFolder AddFolder(string buttonName, CustomButtonFolder parentFolder)
@@ -562,6 +569,7 @@ namespace Toolnity
                     functionButtons.RemoveAt(i);
                 }
             }
+            CheckCustomButtonsVisibility();
         }
 
         public static string GetNonStaticButtonName(Type currentClass, MethodBase method, CustomButton customButton, MonoBehaviour mono)
