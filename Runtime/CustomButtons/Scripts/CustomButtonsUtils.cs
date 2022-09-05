@@ -22,6 +22,7 @@ namespace Toolnity
         {
             public readonly Button ButtonInstance;
             public readonly MonoBehaviour Mono;
+            public readonly bool StaticFunction;
 
             private readonly MethodInfo methodName;
 
@@ -29,6 +30,7 @@ namespace Toolnity
             {
                 ButtonInstance = buttonInstance;
                 Mono = mono;
+                StaticFunction = mono == null;
                 this.methodName = methodName;
             }
 

@@ -264,6 +264,8 @@ namespace Toolnity
                     }
                 }
             }
+            
+            RemoveEmptyFolders(mainFolder);
         }
         
         private void CreateSubfoldersAndAddFunction(CustomButtonFolder folder, string pathAndFunctionName, MethodBase method, MethodInfo methodName, MonoBehaviour monoBehaviour = null)
@@ -527,7 +529,9 @@ namespace Toolnity
             
             for (var i = folder.Functions.Count - 1; i >= 0 ; i--)
             {
-                if (folder.Functions[i].Mono.gameObject != mono)
+                if (folder.Functions[i].StaticFunction ||
+                    (folder.Functions[i].Mono != null &&
+                    folder.Functions[i].Mono.gameObject != mono))
                 {
                     continue;
                 }
@@ -633,6 +637,8 @@ namespace Toolnity
         
         private void ReorderButtons()
         {
+            RemoveNullButtonReferences();
+            
             var index = 0;
             for (var i = 0; i < folderButtons.Count; i++)
             {
