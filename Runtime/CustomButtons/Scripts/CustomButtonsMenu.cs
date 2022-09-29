@@ -18,6 +18,7 @@ namespace Toolnity
         [SerializeField] private RectTransform functionsContent;
         [SerializeField] private VerticalLayoutGroup functionsVerticalLayoutGroup;
         [SerializeField] private Button menuButton;
+        [SerializeField] private GameObject emptyPanel;
         [SerializeField] private Button backButton;
         [SerializeField] private Button folderTemplateButton;
         [SerializeField] private Button functionTemplateButton;
@@ -141,7 +142,7 @@ namespace Toolnity
                     anchorsMin.x = 1;
                     anchorsMax.x = 1;
                     pivot.y = 1;
-                    anchorsMin.y = 1;
+                    anchorsMin.y = 0;
                     anchorsMax.y = 1;
                     mainPanelVerticalLayoutGroup.childAlignment = TextAnchor.UpperCenter;
                     mainPanelVerticalLayoutGroup.reverseArrangement = false;
@@ -153,7 +154,7 @@ namespace Toolnity
                     anchorsMin.x = 0;
                     anchorsMax.x = 0;
                     pivot.y = 1;
-                    anchorsMin.y = 1;
+                    anchorsMin.y = 0;
                     anchorsMax.y = 1;
                     mainPanelVerticalLayoutGroup.childAlignment = TextAnchor.UpperCenter;
                     mainPanelVerticalLayoutGroup.reverseArrangement = false;
@@ -166,7 +167,7 @@ namespace Toolnity
                     anchorsMax.x = 1;
                     pivot.y = 0;
                     anchorsMin.y = 0;
-                    anchorsMax.y = 0;
+                    anchorsMax.y = 1;
                     mainPanelVerticalLayoutGroup.childAlignment = TextAnchor.LowerCenter;
                     mainPanelVerticalLayoutGroup.reverseArrangement = true;
                     functionsVerticalLayoutGroup.childAlignment = TextAnchor.LowerCenter;
@@ -178,7 +179,7 @@ namespace Toolnity
                     anchorsMax.x = 0;
                     pivot.y = 0;
                     anchorsMin.y = 0;
-                    anchorsMax.y = 0;
+                    anchorsMax.y = 1;
                     mainPanelVerticalLayoutGroup.childAlignment = TextAnchor.LowerCenter;
                     mainPanelVerticalLayoutGroup.reverseArrangement = true;
                     functionsVerticalLayoutGroup.childAlignment = TextAnchor.LowerCenter;
@@ -403,6 +404,7 @@ namespace Toolnity
         private void OpenMenu()
         {
             menuButton.gameObject.SetActive(false);
+            emptyPanel.SetActive(false);
             backButton.gameObject.SetActive(true);
             functionsPanel.gameObject.SetActive(true);
             
@@ -454,6 +456,7 @@ namespace Toolnity
         private void CloseMenu()
         {
             menuButton.gameObject.SetActive(true);
+            emptyPanel.SetActive(true);
             backButton.gameObject.SetActive(false);
             functionsPanel.gameObject.SetActive(false);
         }
