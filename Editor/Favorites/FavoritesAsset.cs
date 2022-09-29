@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -25,7 +24,7 @@ namespace Toolnity
             }
         }
 
-        public List<FavoritesList> FavoriteLists = new List<FavoritesList>();
+        public List<FavoritesList> FavoriteLists = new ();
         public FavoritesList CurrentList
         {
             get
@@ -33,6 +32,11 @@ namespace Toolnity
                 if (FavoriteLists.Count == 0)
                 {
                     AddList();
+                }
+                
+                if(currentListIndex >= FavoriteLists.Count)
+                {
+                    currentListIndex = 0;
                 }
                 
                 return FavoriteLists[currentListIndex];
