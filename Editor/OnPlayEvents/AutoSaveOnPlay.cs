@@ -39,26 +39,9 @@ namespace Toolnity
 				return;
 			}
 
-			var scenesWithChanges = false;
-			for (var i = 0; i < SceneManager.sceneCount; i++)
-			{
-				var scene = SceneManager.GetSceneAt(i);
-				if (scene.isDirty)
-				{
-					scenesWithChanges = true;
-				}
-			}
-
-			if (scenesWithChanges)
-			{
-				if (SaveCurrentModifiedScenesIfUserWantsTo())
-				{
-					Debug.Log("-------------------------------- SCENES SAVED --------------------------------");
-				}
-			}
-
-			AssetDatabase.SaveAssets();
-			Debug.Log("+++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
+			BasicShortcuts.SaveScenes();
+			BasicShortcuts.SavePrefab();
+			BasicShortcuts.SaveProject();
 		}
 	}
 }

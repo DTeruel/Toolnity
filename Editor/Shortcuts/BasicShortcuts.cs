@@ -60,6 +60,13 @@ namespace Toolnity
 				return;
 			}
 
+			SaveScenes();
+			SavePrefab();
+			SaveProject();
+		}
+
+		public static void SaveScenes()
+		{
 			var scenesWithChanges = false;
 			for (var i = 0; i < SceneManager.sceneCount; i++)
 			{
@@ -77,8 +84,34 @@ namespace Toolnity
 					Debug.Log("-------------------------------- SCENES SAVED --------------------------------");
 				}
 			}
+		}
+		
+		public static void SavePrefab()
+		{
+			var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+			if (prefabStage != null)
+			{
+				var prefabRoot = prefabStage.prefabContentsRoot;
+				var path = prefabStage.assetPath;
 
+				try
+				{
+					PrefabUtility.SaveAsPrefabAsset(prefabRoot, path);
+				}
+				catch
+				{
+					// ignored
+				}
+				prefabStage.ClearDirtiness();
+
+				Debug.Log("-------------------------------- PREFAB SAVED --------------------------------");
+			}
+		}
+		
+		public static void SaveProject()
+		{
 			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
 			Debug.Log("+++++++++++++++++++++++++ PROJECT SAVED +++++++++++++++++++++++++");
 		}
 	}
