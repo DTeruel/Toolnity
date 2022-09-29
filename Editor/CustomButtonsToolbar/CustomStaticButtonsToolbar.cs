@@ -83,12 +83,12 @@ namespace Toolnity
 
 		private static EditorToolbarButton CreateButton(Type currentClass, MethodBase method, CustomButton customButton)
 		{
-			var buttonText = CustomButtonsMenu.GetStaticButtonName(currentClass, method, customButton);
+			CustomButtonsMenu.GetStaticButtonPathAndName(currentClass, method, customButton, out var path, out var name);
 
 			var button = new EditorToolbarButton
 			{
-				name = buttonText,
-				text = buttonText,
+				name = name,
+				text = name,
 				tooltip = currentClass.Name + "::" + method.Name
 			};
 			

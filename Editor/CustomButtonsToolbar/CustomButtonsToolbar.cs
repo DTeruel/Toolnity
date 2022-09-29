@@ -52,9 +52,9 @@ namespace Toolnity
 					if (Attribute.GetCustomAttribute(methods[i], typeof(CustomButton)) is CustomButton customButton)
 					{
 						var method = methods[i];
-						var buttonName = CustomButtonsMenu.GetNonStaticButtonName(monoType, method, customButton, mono);
+						CustomButtonsMenu.GetNonStaticButtonName(monoType, method, customButton, mono, out var path, out var functionName);
 						genericMenu.AddItem(
-							new GUIContent(buttonName), 
+							new GUIContent(path + functionName), 
 							false,
 							() =>
 							{
@@ -81,9 +81,9 @@ namespace Toolnity
 						if (Attribute.GetCustomAttribute(methods[k], typeof(CustomButton)) is CustomButton customButton)
 						{
 							var method = methods[k];
-							var buttonName = CustomButtonsMenu.GetStaticButtonName(allTypes[j], method, customButton);
+							CustomButtonsMenu.GetStaticButtonPathAndName(allTypes[j], method, customButton, out var path, out var functionName);
 							genericMenu.AddItem(
-								new GUIContent(buttonName), 
+								new GUIContent(path + functionName), 
 								false,
 								() =>
 								{

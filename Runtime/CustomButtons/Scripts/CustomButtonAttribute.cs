@@ -15,6 +15,7 @@ namespace Toolnity
 		public string NameFunction = "";
 		public NameFunctionExecType NameFunctionExecType = NameFunctionExecType.OnPressed;
 		
+		public string Path = "";
 		public bool PathAddClassName = true;
 		public bool PathAddGameObjectName = true;
 		

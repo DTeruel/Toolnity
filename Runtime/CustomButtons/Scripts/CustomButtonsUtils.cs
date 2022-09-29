@@ -24,25 +24,25 @@ namespace Toolnity
             public readonly MonoBehaviour Mono;
             public readonly bool StaticFunction;
 
-            private readonly MethodInfo methodName;
+            private readonly MethodInfo methodGetName;
 
-            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodName)
+            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodGetName)
             {
                 ButtonInstance = buttonInstance;
                 Mono = mono;
                 StaticFunction = mono == null;
-                this.methodName = methodName;
+                this.methodGetName = methodGetName;
             }
 
             public void UpdateName()
             {
-                if (methodName == null)
+                if (methodGetName == null)
                 {
                     return;
                 }
 
                 var buttonText = ButtonInstance.GetComponentInChildren<Text>();
-                var nameFunction = methodName.Invoke(Mono, null);
+                var nameFunction = methodGetName.Invoke(Mono, null);
                 buttonText.text = nameFunction.ToString();
             }
         }
