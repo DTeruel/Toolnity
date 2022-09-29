@@ -12,5 +12,6 @@ namespace Toolnity
 		public bool ShowInRuntime = true;
 		public bool UseClassNameAsPath = true;
 		public bool UseGameObjectNameAsPath = true;
+		public bool CloseMenuOnPressed = false;
 	}
 }

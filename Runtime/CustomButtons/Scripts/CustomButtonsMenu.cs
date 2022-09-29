@@ -259,7 +259,7 @@ namespace Toolnity
                             
                             var method = methods[k];
                             var pathAndFunctionName = GetStaticButtonName(allTypes[j], method, customButton, out var methodName);
-                            CreateSubfoldersAndAddFunction(staticFolder, pathAndFunctionName, method, methodName);
+                            CreateSubfoldersAndAddFunction(staticFolder, pathAndFunctionName, method, methodName, customButton.CloseMenuOnPressed);
                         }
                     }
                 }
@@ -268,13 +268,18 @@ namespace Toolnity
             RemoveEmptyFolders(mainFolder);
         }
         
-        private void CreateSubfoldersAndAddFunction(CustomButtonFolder folder, string pathAndFunctionName, MethodBase method, MethodInfo methodName, MonoBehaviour monoBehaviour = null)
+        private void CreateSubfoldersAndAddFunction(CustomButtonFolder folder,
+            string pathAndFunctionName,
+            MethodBase method,
+            MethodInfo methodName, 
+            bool closeMenuOnPressed,
+            MonoBehaviour monoBehaviour = null)
         {
             var subfolders = pathAndFunctionName.Split("/");
             var finalFolder = GetOrCreateSubfolders(subfolders, folder);
             var buttonName = subfolders[subfolders.Length - 1];
             
-            AddFunction(finalFolder, buttonName, method, monoBehaviour, methodName);
+            AddFunction(finalFolder, buttonName, method, monoBehaviour, methodName, closeMenuOnPressed);
         }
         
         private CustomButtonFolder GetOrCreateSubfolders(string[] subfolders, CustomButtonFolder finalFolder)
@@ -303,7 +308,13 @@ namespace Toolnity
             return finalFolder;
         }
 
-        private void AddFunction(CustomButtonFolder folder, string buttonName, MethodBase method, MonoBehaviour monoBehaviour, MethodInfo methodName)
+        private void AddFunction(
+            CustomButtonFolder folder, 
+            string buttonName, 
+            MethodBase method, 
+            MonoBehaviour monoBehaviour, 
+            MethodInfo methodName, 
+            bool closeMenuOnPressed)
         {
             var buttonInstance = Instantiate(functionTemplateButton, functionsContent);
             var buttonText = buttonInstance.GetComponentInChildren<Text>();
@@ -312,6 +323,10 @@ namespace Toolnity
             buttonInstance.onClick.AddListener(() =>
             {
                 method.Invoke(monoBehaviour, null);
+                if (closeMenuOnPressed)
+                {
+                    CloseMenu();
+                }
             });
 
             folder.Functions.Add(new CustomButtonInstance(buttonInstance, monoBehaviour, methodName));
@@ -410,7 +425,7 @@ namespace Toolnity
                 OpenFolder(currentFolder.ParentFolder);
             }
         }
-
+        
         private void CloseMenu()
         {
             menuButton.gameObject.SetActive(true);
@@ -495,7 +510,7 @@ namespace Toolnity
                     {
                         var method = methods[i];
                         var pathAndFunctionName = GetNonStaticButtonName(monoType, method, customButton, mono, out var methodName);
-                        CreateSubfoldersAndAddFunction(mainFolder, pathAndFunctionName, method, methodName, mono);
+                        CreateSubfoldersAndAddFunction(mainFolder, pathAndFunctionName, method, methodName, customButton.CloseMenuOnPressed, mono);
                     }
                 }
             }
