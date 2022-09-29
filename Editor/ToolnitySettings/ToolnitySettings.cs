@@ -56,7 +56,7 @@ namespace Toolnity
                     EditorGUILayout.BeginHorizontal();
                     BasicShortcutsEnabled = ShowToggleOption("Basic Shortcuts", SHORTCUTS_ENABLED);
                     GUILayout.Space(20f);
-                    GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F7: Step, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
+                    GUILayout.Label("(F1-F4: Camera Views, F5: Play, F6: Pause, F12: Save all, Left Shift + T: Teleport Selected Game Object)");
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
 

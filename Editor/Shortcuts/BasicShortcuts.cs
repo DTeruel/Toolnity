@@ -36,17 +36,6 @@ namespace Toolnity
 			EditorApplication.isPaused = !EditorApplication.isPaused;
 		}
 
-		[MenuItem("Tools/Toolnity/Shortcuts/Game Next Frame _F7", priority = 10)]
-		private static void NextFrame()
-		{
-			if (!ToolnitySettingsRegister.BasicShortcutsEnabled)
-			{
-				return;
-			}
-
-			EditorApplication.Step();
-		}
-
 		[MenuItem("Tools/Toolnity/Shortcuts/Save All _F12", priority = 100)]
 		public static void SaveAll()
 		{
