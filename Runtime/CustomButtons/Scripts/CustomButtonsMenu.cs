@@ -187,6 +187,7 @@ namespace Toolnity
                     break;
             }
             mainPanel.pivot = pivot;
+            functionsContent.pivot = pivot;
             mainPanel.anchorMin = anchorsMin;
             mainPanel.anchorMax = anchorsMax;
         }
@@ -397,7 +398,7 @@ namespace Toolnity
             functionsVerticalLayoutGroup.padding.bottom;
             
             var sizeDelta = functionsContent.sizeDelta;
-            sizeDelta.y = Mathf.Max(totalSize, functionsPanel.rect.height);
+            sizeDelta.y = totalSize;
             functionsContent.sizeDelta = sizeDelta;
         }
 
