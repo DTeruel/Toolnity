@@ -5,20 +5,19 @@ using UnityEngine;
 
 namespace Toolnity
 {
-
-    class ColorPickerWindow : EditorWindow
+    internal class ColorPickerWindow : EditorWindow
     {
         public Color color = Color.green;
 
         private Action<Color> setColorAction;
 
-        public void Init(Color color, Action<Color> onSetColor)
+        public void Init(Color newColor, Action<Color> onSetColor)
         {
-            this.color = color;
+            color = newColor;
             setColorAction = onSetColor;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             var oldColor = color;
             color = EditorGUILayout.ColorField(color);

@@ -11,6 +11,7 @@ namespace Toolnity
 	public static class HierarchyColorizer
 	{
 		private const string UNDO_APPLY_COLOR_NAME = "Modify Hierarchy Color";
+		private static readonly Vector2 ColorPickerWindowSize = new (200, 25);
 
 		static HierarchyColorizer()
 		{
@@ -62,6 +63,22 @@ namespace Toolnity
 					EditorGUI.LabelField(selectionRect, objectName, DisabledGuiStyle);
 				}
 			}
+		}
+		
+		[MenuItem("GameObject/Colorizer/Colorize/Pick Color", false, -100)]
+		public static void ColorizePickColor()
+		{
+			var colorPickerWindow = (ColorPickerWindow)EditorWindow.GetWindow(typeof(ColorPickerWindow), true, "Color Picker");
+			colorPickerWindow.minSize = ColorPickerWindowSize;
+			colorPickerWindow.maxSize = ColorPickerWindowSize;
+			var startColor = GetColorFromName();
+			
+			colorPickerWindow.Init(startColor, (color) =>
+			{
+				var stringColor = ColorUtility.ToHtmlStringRGB(color);
+				AddColorToName(stringColor);
+			});
+			colorPickerWindow.ShowModalUtility();
 		}
 
 		[MenuItem("GameObject/Colorizer/Colorize/Black", false, -100)]
@@ -122,21 +139,6 @@ namespace Toolnity
 		public static void ColorizeInYellow()
 		{
 			AddColorToName("735F12");
-		}
-		
-		[MenuItem("GameObject/Colorizer/Colorize/Pick Color", false, -100)]
-		public static void ColorizePickColor()
-		{
-			var colorPickerWindow = (ColorPickerWindow) EditorWindow.GetWindow( typeof(ColorPickerWindow), true, "Color Picker" );
-			
-			var startColor = GetColorFromName();
-			
-			colorPickerWindow.Init(startColor, (color) =>
-			{
-				var stringColor = ColorUtility.ToHtmlStringRGB(color);
-				AddColorToName(stringColor);
-			});
-			colorPickerWindow.ShowModalUtility();
 		}
 
 		private static void AddColorToName(string color)
