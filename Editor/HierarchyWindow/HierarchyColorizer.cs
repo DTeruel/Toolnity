@@ -123,6 +123,21 @@ namespace Toolnity
 		{
 			AddColorToName("735F12");
 		}
+		
+		[MenuItem("GameObject/Colorizer/Colorize/Pick Color", false, -100)]
+		public static void ColorizePickColor()
+		{
+			var colorPickerWindow = (ColorPickerWindow) EditorWindow.GetWindow( typeof(ColorPickerWindow), true, "Color Picker" );
+			
+			var startColor = GetColorFromName();
+			
+			colorPickerWindow.Init(startColor, (color) =>
+			{
+				var stringColor = ColorUtility.ToHtmlStringRGB(color);
+				AddColorToName(stringColor);
+			});
+			colorPickerWindow.ShowModalUtility();
+		}
 
 		private static void AddColorToName(string color)
 		{
@@ -158,6 +173,22 @@ namespace Toolnity
 					currentObject.name = currentObject.name.Remove(0, 9);
 				}
 			}
+		}
+
+		private static Color GetColorFromName()
+		{
+			if (Selection.objects.Length > 0)
+			{
+				var currentObject = Selection.objects[0];
+				if(currentObject.name.StartsWith("[#", StringComparison.Ordinal))
+				{
+					string htmlColorString = currentObject.name.Substring(1, 7);
+					ColorUtility.TryParseHtmlString(htmlColorString, out var color);
+					return color;
+				}
+			}
+			
+			return Color.green;
 		}
 	}
 }
