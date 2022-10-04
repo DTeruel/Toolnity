@@ -133,7 +133,7 @@ namespace Toolnity
 			
 			colorPickerWindow.Init(startColor, (color) =>
 			{
-				var stringColor = FromColorToHtmlColorString(color);
+				var stringColor = ColorUtility.ToHtmlStringRGB(color);
 				AddColorToName(stringColor);
 			});
 			colorPickerWindow.ShowModalUtility();
@@ -183,23 +183,12 @@ namespace Toolnity
 				if(currentObject.name.StartsWith("[#", StringComparison.Ordinal))
 				{
 					string htmlColorString = currentObject.name.Substring(1, 7);
-					return FromHtmlColorStringToColor(htmlColorString);
+					ColorUtility.TryParseHtmlString(htmlColorString, out var color);
+					return color;
 				}
 			}
 			
 			return Color.green;
-		}
-
-		private static string FromColorToHtmlColorString(Color color)
-		{
-			return ColorUtility.ToHtmlStringRGB(color);
-		}
-		
-		private static Color FromHtmlColorStringToColor(string htmlColorString)
-		{
-			Color color;
-			ColorUtility.TryParseHtmlString(htmlColorString, out color);
-			return color;
 		}
 	}
 }
