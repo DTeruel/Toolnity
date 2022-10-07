@@ -1,0 +1,27 @@
+{
+  "name": "com.dteruel.toolnity.hierarchywindowextensions",
+  "version": "2.0.0",
+  "displayName": "Toolnity Hierarchy Window Extensions",
+  "description": "Addons for the Hierarchy Window:\n - Colorizer\n - SetActive toggle",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "Tools",
+    "Hierarchy",
+    "Extensions"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

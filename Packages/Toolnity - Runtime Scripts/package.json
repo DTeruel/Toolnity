@@ -1,0 +1,24 @@
+{
+  "name": "com.dteruel.toolnity.runtimescripts",
+  "version": "2.0.0",
+  "displayName": "Toolnity Runtime Scripts",
+  "description": "Collection of scripts for runtime.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Runtime",
+    "Scripts"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

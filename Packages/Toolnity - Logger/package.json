@@ -1,0 +1,26 @@
+{
+  "name": "com.dteruel.toolnity.logger",
+  "version": "2.0.0",
+  "displayName": "Toolnity Logger",
+  "description": "Log system.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "Log",
+    "Logger"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

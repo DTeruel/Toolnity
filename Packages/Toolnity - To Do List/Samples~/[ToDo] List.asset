@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ade534898a38754ca9c0e8ed81f2633, type: 3}
+  m_Name: '[ToDo] List'
+  m_EditorClassIdentifier: 
+  tasks:
+  - description: New design task
+    parameter2Id: 0
+    parameter1Id: 0
+  - description: New programming task with high priority
+    parameter2Id: 2
+    parameter1Id: 2
+  completedTasks:
+  - description: Art task completed
+    parameter2Id: 0
+    parameter1Id: 1
+  parameters1:
+  - Design
+  - Art
+  - Programming
+  - Audio
+  - Animation
+  - VFX
+  parameters2:
+  - Normal
+  - Very High
+  - High
+  - Low
+  - Very Low
+  configurationEnabled: 0
+  showCompletedTasks: 1
+  showFilters: 1
+  filter1Enabled: 0
+  filter2Enabled: 0
+  filterIndexParameter1: 0
+  filterIndexParameter2: 0

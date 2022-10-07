@@ -1,0 +1,25 @@
+{
+  "name": "com.dteruel.toolnity.storyboardcreator",
+  "version": "2.0.0",
+  "displayName": "Toolnity Storyboard Creator",
+  "description": "Tool to generate storyboards using your scenes.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Storyboard",
+    "Creator"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

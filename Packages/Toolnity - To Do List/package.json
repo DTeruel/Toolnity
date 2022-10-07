@@ -1,0 +1,27 @@
+{
+  "name": "com.dteruel.toolnity.todolist",
+  "version": "2.0.0",
+  "displayName": "Toolnity To Do List",
+  "description": "Tool to manage your To Do Lists.\n\n* It includes an Overlay Toolbar",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "To Do",
+    "List",
+    "Tasks"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

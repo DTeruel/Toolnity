@@ -1,0 +1,25 @@
+{
+  "name": "com.dteruel.toolnity.favorites",
+  "version": "2.0.0",
+  "displayName": "Toolnity Favorites",
+  "description": "Panel to have quick access to files and folders.\n\n* It includes an Overlay Toolbar",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "Favorites"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

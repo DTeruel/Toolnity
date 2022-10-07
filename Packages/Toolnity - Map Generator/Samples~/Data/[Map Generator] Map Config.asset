@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfbc875d6502b424d893bb4dc2692f67, type: 3}
+  m_Name: '[Map Generator] Map Config'
+  m_EditorClassIdentifier: 
+  Description: Map Test
+  TokensConfig: {fileID: 11400000, guid: 5cc7ba20e478549438296c4f9abfab46, type: 2}
+  MapSource: {fileID: 2800000, guid: 07a7f786a44be934195da1b9cc471ae7, type: 3}
+  ScaleMultiplier: {x: 1, y: 1}

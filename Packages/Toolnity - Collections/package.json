@@ -1,0 +1,26 @@
+{
+  "name": "com.dteruel.toolnity.collections",
+  "version": "2.0.0",
+  "displayName": "Toolnity Collections",
+  "description": "Tool to create collections and register objects or classes.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "Collections",
+    "Sets"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

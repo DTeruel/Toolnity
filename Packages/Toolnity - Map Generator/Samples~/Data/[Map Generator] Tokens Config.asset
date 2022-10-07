@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4534231860c874999e34091b87fedb, type: 3}
+  m_Name: '[Map Generator] Tokens Config'
+  m_EditorClassIdentifier: 
+  AllTokens:
+  - Description: Platforms
+    ColorToMatch: {r: 0, g: 0, b: 0, a: 1}
+    probabilityOfSpawn: 1
+    SpawnType: 1
+    PrefabsToSpawn:
+    - {fileID: 8739836238249368757, guid: 4a5f3562a366f3a44bd6935dc62ce74b, type: 3}
+    - {fileID: 8296915298987628108, guid: 73c212bc7c789a541b6a06480877f5d7, type: 3}
+  - Description: Coins
+    ColorToMatch: {r: 1, g: 1, b: 0, a: 1}
+    probabilityOfSpawn: 0.5
+    SpawnType: 0
+    PrefabsToSpawn:
+    - {fileID: 8149438609565017312, guid: 395e59a70562dcc48ae75ae8d0f81494, type: 3}
+  - Description: Ramps
+    ColorToMatch: {r: 0.42, g: 0.427, b: 0.42, a: 1}
+    probabilityOfSpawn: 1
+    SpawnType: 0
+    PrefabsToSpawn:
+    - {fileID: 8739836238249368757, guid: 05d12a415e110b141aec4bfa3d1c744b, type: 3}

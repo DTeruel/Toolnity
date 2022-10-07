@@ -1,0 +1,27 @@
+{
+  "name": "com.dteruel.toolnity.autos",
+  "version": "2.0.0",
+  "displayName": "Toolnity Autos",
+  "description": "Different automated-actions scripts.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "auto",
+    "action",
+    "scripts"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+      {
+          "displayName": "Sample",
+          "description": "Contains sample of the current package",
+          "path": "Samples~"
+      }
+  ]
+}

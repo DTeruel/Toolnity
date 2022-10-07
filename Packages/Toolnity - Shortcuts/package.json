@@ -1,0 +1,24 @@
+{
+  "name": "com.dteruel.toolnity.shortcuts",
+  "version": "2.0.0",
+  "displayName": "Toolnity Shortcuts",
+  "description": "New shortcuts for Unity editor (Cameras, save all, multi object selector, teleport and create game object).\n\n* It includes an Overlay Toolbar",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Shortcuts"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}

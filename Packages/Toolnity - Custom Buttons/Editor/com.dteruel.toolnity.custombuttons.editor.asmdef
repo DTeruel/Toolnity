@@ -1,0 +1,16 @@
+{
+    "name": "com.dteruel.toolnity.custombuttons.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2009454efca238e439e9bb4f0bf95d21"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

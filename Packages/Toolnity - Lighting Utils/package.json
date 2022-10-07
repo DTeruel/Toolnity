@@ -1,0 +1,25 @@
+{
+  "name": "com.dteruel.toolnity.lightingutils",
+  "version": "2.0.0",
+  "displayName": "Toolnity Lighting Utils",
+  "description": "Different utilities and shortcuts related with lighting.\n\n* It includes an Overlay Toolbar",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Lighting",
+    "Lights"
+  ],
+  "author": {
+    "name": "DTeruel"
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Contains sample of the current package",
+      "path": "Samples~"
+    }
+  ]
+}
