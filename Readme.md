@@ -24,6 +24,8 @@ The repository is ready to be used directly in Unity without the need to downloa
 
 * You can use also OpenUPM to link **Toolnity** by version (**recommended**).
 
+<a href="https://openupm.com/packages/com.dteruel.toolnity/"><img src="https://img.shields.io/npm/v/com.dteruel.toolnity?label=openupm&amp;registry_uri=https://package.openupm.com" /></a>
+
 ![ScopedRegistries](.readme/ScopedRegistries.png)
 
  *The big part of the content is made from scratch, but some classes are from other authors or are inspired from other authors (in these cases, you will find the link inside the source)* 
