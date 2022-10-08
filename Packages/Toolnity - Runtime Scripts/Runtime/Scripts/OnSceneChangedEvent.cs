@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 namespace Toolnity.RuntimeScripts
 {
-	public class SceneChangeEvent : MonoBehaviour
+	public class OnSceneChangedEvent : MonoBehaviour
 	{
-		[SerializeField] private UnityEvent onSceneChangeEvent;
+		[SerializeField] private UnityEvent onSceneChangedEvent;
 
 		private void OnEnable()
 		{
@@ -20,7 +20,7 @@ namespace Toolnity.RuntimeScripts
 
 		private void SceneManagerOnActiveSceneChanged(Scene _, Scene __)
 		{
-			onSceneChangeEvent.Invoke();
+			onSceneChangedEvent.Invoke();
 		}
 	}
 }

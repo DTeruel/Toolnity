@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Toolnity.RuntimeScripts
 {
-	public class LoadScene : MonoBehaviour
+	public class SceneLoader : MonoBehaviour
 	{
 		[SerializeField] private string scene;
 		[SerializeField] private LoadSceneMode loadSceneMode = LoadSceneMode.Single;
