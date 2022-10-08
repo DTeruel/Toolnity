@@ -12,17 +12,23 @@
 #### Event Sequencer
 * Trigger Unity Events in sequence with delay timers
 
+#### Frame Rate Counter
+* Script to compute FPS and Milliseconds
+
+#### Frame Rate Display
+* Script to write in a TextMeshPro the Frame Rate counter (*Prefab included)
+
 #### Input Event Launcher
 * Trigger UnityEvents when an specific button/key is pressed
 
-#### Load Scene
-* Script to load an specific scene with a call
-
+#### On Scene Changed Event
+* Trigger Unity Events when an Scene has been loaded
+* 
 #### Quit Game
 * Exit the game when press Esc
 
-#### Scene Change Event
-* Trigger Unity Events when an Scene has been loaded
+#### Scene Loader
+* Script to load an specific scene with a call
 
 #### Singleton Mono Behaviour
 * Make Singleton any of your classes
