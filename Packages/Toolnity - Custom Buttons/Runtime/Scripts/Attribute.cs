@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Toolnity.CustomButtons
 {
@@ -22,5 +24,7 @@ namespace Toolnity.CustomButtons
 		public string Icon = "";
 		public bool ShowInRuntime = true;
 		public bool CloseMenuOnPressed = false;
+
+		public KeyCode[] Shortcut;
 	}
 }

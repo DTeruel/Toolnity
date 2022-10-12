@@ -53,5 +53,11 @@ namespace Toolnity.Test
         {
             Debug.Log("[Non Static Functions] Function on root called!");
         }
+
+        [CustomButton(Shortcut = new []{KeyCode.LeftShift, KeyCode.Alpha1})]
+        private void FunctionWithShortcut()
+        {
+            Debug.Log("[Non Static Functions] Function with shortcut called!");
+        }
     }
 }

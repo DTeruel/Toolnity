@@ -23,26 +23,27 @@ namespace Toolnity.CustomButtons
             public readonly Button ButtonInstance;
             public readonly MonoBehaviour Mono;
             public readonly bool StaticFunction;
+            public readonly MethodInfo MethodGetName;
+            public readonly KeyCode[] Shortcut;
 
-            private readonly MethodInfo methodGetName;
-
-            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodGetName)
+            public CustomButtonInstance(Button buttonInstance, MonoBehaviour mono, MethodInfo methodGetName, KeyCode[] shortcut)
             {
                 ButtonInstance = buttonInstance;
                 Mono = mono;
                 StaticFunction = mono == null;
-                this.methodGetName = methodGetName;
+                MethodGetName = methodGetName;
+                Shortcut = shortcut;
             }
 
             public void UpdateName()
             {
-                if (methodGetName == null)
+                if (MethodGetName == null)
                 {
                     return;
                 }
 
                 var buttonText = ButtonInstance.GetComponentInChildren<Text>();
-                var nameFunction = methodGetName.Invoke(Mono, null);
+                var nameFunction = MethodGetName.Invoke(Mono, null);
                 buttonText.text = nameFunction.ToString();
             }
         }

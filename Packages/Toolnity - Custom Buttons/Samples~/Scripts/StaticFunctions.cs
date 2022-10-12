@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Toolnity.CustomButtons;
 
@@ -29,10 +30,16 @@ namespace Toolnity.Test
             Debug.Log("[Static Functions] Function with icon called!");
         }
         
-        [CustomButton(ShowInRuntime = false)]
+        [CustomButton(ShowInRuntime = false, Shortcut = new []{KeyCode.LeftShift, KeyCode.Alpha3} /* This shortcut won't be called because is not in runtime*/)]
         private static void StaticFunctionHiddenInRuntime()
         {
             Debug.Log("[Static Functions] Function hidden in runtime called!");
+        }
+
+        [CustomButton(Shortcut = new []{KeyCode.LeftShift, KeyCode.Alpha2})]
+        private static void FunctionWithShortcut()
+        {
+            Debug.Log("[Static Functions] Function with shortcut called!");
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -323,6 +324,7 @@ namespace Toolnity.CustomButtons
                                 functionName,
                                 method, 
                                 methodGetName, 
+                                customButton.Shortcut,
                                 customButton.CloseMenuOnPressed,
                                 customButton.NameFunctionExecType);
                         }
@@ -339,6 +341,7 @@ namespace Toolnity.CustomButtons
             string functionName,
             MethodBase method,
             MethodInfo methodGetName,
+            KeyCode[] shortcut,
             bool closeMenuOnPressed,
             NameFunctionExecType nameFunctionExecType,
             MonoBehaviour monoBehaviour = null)
@@ -348,7 +351,15 @@ namespace Toolnity.CustomButtons
             var finalFolder = GetOrCreateSubfolders(subfolders, folder);
             var buttonName = subfolders[subfolders.Length - 1];
             
-            AddFunction(finalFolder, buttonName, method, monoBehaviour, methodGetName, closeMenuOnPressed, nameFunctionExecType);
+            AddFunction(
+                finalFolder, 
+                buttonName, 
+                method, 
+                monoBehaviour, 
+                methodGetName, 
+                shortcut,
+                closeMenuOnPressed, 
+                nameFunctionExecType);
         }
         
         private CustomButtonFolder GetOrCreateSubfolders(string[] subfolders, CustomButtonFolder finalFolder)
@@ -382,6 +393,7 @@ namespace Toolnity.CustomButtons
             MethodBase method,
             MonoBehaviour monoBehaviour,
             MethodInfo methodGetName,
+            KeyCode[] shortcut,
             bool closeMenuOnPressed, 
             NameFunctionExecType nameFunctionExecType)
         {
@@ -398,7 +410,11 @@ namespace Toolnity.CustomButtons
                 }
             });
 
-            var customButtonInstance = new CustomButtonInstance(buttonInstance, monoBehaviour, methodGetName);
+            var customButtonInstance = new CustomButtonInstance(
+                buttonInstance, 
+                monoBehaviour, 
+                methodGetName,
+                shortcut);
             if (nameFunctionExecType == NameFunctionExecType.OnPressed)
             {
                 customButtonInstance.ButtonInstance.onClick.AddListener(() =>
@@ -612,6 +628,7 @@ namespace Toolnity.CustomButtons
                             functionName,
                             method, 
                             methodGetName, 
+                            customButton.Shortcut,
                             customButton.CloseMenuOnPressed, 
                             customButton.NameFunctionExecType,
                             mono);
@@ -788,6 +805,71 @@ namespace Toolnity.CustomButtons
                 functionButtons[i].SetSiblingIndex(index);
                 index++;
             }
+        }
+
+        private void Update()
+        {
+            UpdateShortcutsInFolder(mainFolder);
+        }
+
+        private void UpdateShortcutsInFolder(CustomButtonFolder folder)
+        {
+            foreach(var function in folder.Functions)
+            {
+                UpdateFunctionShortcut(function);
+            }
+
+            foreach(var subfolder in folder.Subfolders)
+            {
+                UpdateShortcutsInFolder(subfolder);
+            }
+        }
+
+        private void UpdateFunctionShortcut(CustomButtonInstance function)
+        {
+            if (function.Shortcut == null || function.Shortcut.Length == 0)
+            {
+                return;
+            }
+
+            foreach(var key in function.Shortcut)
+            {
+                var checkJustPressed = true;
+
+                switch (key)
+                {
+                    case KeyCode.RightShift:
+                    case KeyCode.LeftShift:
+                    case KeyCode.RightControl:
+                    case KeyCode.LeftControl:
+                    case KeyCode.RightAlt:
+                    case KeyCode.LeftAlt:
+                    case KeyCode.LeftMeta:
+                    case KeyCode.LeftWindows:
+                    case KeyCode.RightMeta:
+                    case KeyCode.RightWindows:
+                    case KeyCode.AltGr:
+                        checkJustPressed = false;
+                        break;
+                }
+
+                if (checkJustPressed)
+                {
+                    if (!Input.GetKeyDown(key))
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (!Input.GetKey(key))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            function.ButtonInstance.onClick?.Invoke();
         }
     }
 }

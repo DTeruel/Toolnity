@@ -528,8 +528,12 @@ MonoBehaviour:
   m_text: '- Execute and view console
 
 
-    - Show Custom Buttons Overlay in Scene
-    Window'
+    - To execute functions with shortcuts
+    test it with: LeftShift + 1 and LeftShift + 2
+
+
+    - Enable Custom Buttons Overlay
+    in Scene Window'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
