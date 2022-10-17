@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity.editorextensions",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "displayName": "Toolnity Editor Extensions",
   "description": "Collection of several tools for the Editor:\n - Auto save on play\n - Find missing scripts\n - Load scene on play\n - Scene selector\n\n* It includes an Overlay Toolbar",
   "unity": "2021.2",
