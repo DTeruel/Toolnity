@@ -24,15 +24,19 @@ namespace Toolnity.EditorExtensions
                     EditorGUILayout.Space();
 
                     EditorGUILayout.BeginHorizontal();
-                    EditorExtensions.Config.autoSaveOnPlay = EditorGUILayout.Toggle("Auto-Save on play:", EditorExtensions.Config.autoSaveOnPlay);
+                    var saveOnPlay= EditorGUILayout.Toggle("Auto-Save on play:", EditorExtensions.Config.SaveOnPlay);
+                    if (!EditorExtensions.Config.SaveOnPlay.Equals(saveOnPlay))
+                    {
+                        EditorExtensions.Config.SaveOnPlay = saveOnPlay;
+                    }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.BeginHorizontal();
-                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.Config.loadSceneOnPlay);
-                    if (!EditorExtensions.Config.loadSceneOnPlay.Equals(loadSceneOnPlay))
+                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.Config.SceneOnPlay);
+                    if (!EditorExtensions.Config.SceneOnPlay.Equals(loadSceneOnPlay))
                     {
-                        EditorExtensions.Config.loadSceneOnPlay = loadSceneOnPlay;
+                        EditorExtensions.Config.SceneOnPlay = loadSceneOnPlay;
                         
                         if (loadSceneOnPlay)
                         {
@@ -43,7 +47,7 @@ namespace Toolnity.EditorExtensions
                     if (loadSceneOnPlay)
                     {
                         GUILayout.Space(20f);
-                        GUILayout.Label($"({EditorExtensions.Config.masterScene})");
+                        GUILayout.Label($"({EditorExtensions.Config.MasterScene})");
                     }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();

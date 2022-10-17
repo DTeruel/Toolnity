@@ -17,7 +17,7 @@ namespace Toolnity.EditorExtensions
 
 		private static void SaveProject(PlayModeStateChange state)
 		{
-			if (!EditorExtensions.Config.autoSaveOnPlay || EditorApplication.isPlaying)
+			if (!EditorExtensions.Config.SaveOnPlay || EditorApplication.isPlaying)
 			{
 				return;
 			}

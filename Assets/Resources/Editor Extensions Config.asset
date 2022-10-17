@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f7663c40ae4fe0b703e4da3e2afa6a, type: 3}
   m_Name: Editor Extensions Config
   m_EditorClassIdentifier: 
-  autoSaveOnPlay: 1
-  loadSceneOnPlay: 0
-  masterScene: 
-  previousScene: 
+  saveOnPlay: 1
+  sceneOnPlay: 0
+  masterScene: Assets/_Tests/BasicTest.unity

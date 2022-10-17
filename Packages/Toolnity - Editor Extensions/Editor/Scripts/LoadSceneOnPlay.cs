@@ -14,20 +14,20 @@ namespace Toolnity.EditorExtensions
 	{
 		public static bool LoadMasterOnPlay
 		{
-			get => EditorExtensions.Config.loadSceneOnPlay;
-			set => EditorExtensions.Config.loadSceneOnPlay = value;
+			get => EditorExtensions.Config.SceneOnPlay;
+			set => EditorExtensions.Config.SceneOnPlay = value;
 		}
 
 		public static string MasterScene
 		{
-			get => EditorExtensions.Config.masterScene;
-			set => EditorExtensions.Config.masterScene = value;
+			get => EditorExtensions.Config.MasterScene;
+			set => EditorExtensions.Config.MasterScene = value;
 		}
 
 		private static string PreviousScene
 		{
-			get => EditorExtensions.Config.previousScene;
-			set => EditorExtensions.Config.previousScene = value;
+			get => EditorExtensions.Config.PreviousScene;
+			set => EditorExtensions.Config.PreviousScene = value;
 		}
 		
 		static LoadSceneOnPlay()

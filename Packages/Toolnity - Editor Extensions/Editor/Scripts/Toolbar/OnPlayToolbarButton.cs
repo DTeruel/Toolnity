@@ -33,14 +33,14 @@ namespace Toolnity.EditorExtensions
 			var menu = new GenericMenu();
 			menu.AddItem(
 				new GUIContent(OptionsList[0]),
-				EditorExtensions.Config.autoSaveOnPlay,
+				EditorExtensions.Config.SaveOnPlay,
 				() =>
 				{
-					EditorExtensions.Config.autoSaveOnPlay = !EditorExtensions.Config.autoSaveOnPlay;
+					EditorExtensions.Config.SaveOnPlay = !EditorExtensions.Config.SaveOnPlay;
 				});
 			menu.AddItem(
 				new GUIContent(OptionsList[1]), 
-				EditorExtensions.Config.loadSceneOnPlay,
+				EditorExtensions.Config.SceneOnPlay,
 				LoadSceneOnPlay.SelectMasterScene);
 			menu.ShowAsContext();
 		}
