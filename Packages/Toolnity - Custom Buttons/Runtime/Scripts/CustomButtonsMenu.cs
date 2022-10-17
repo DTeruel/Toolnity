@@ -96,7 +96,7 @@ namespace Toolnity.CustomButtons
         public static void AutoLoader()
         {
             var customButtonsInstance = FindObjectOfType<CustomButtonsMenu>();
-            var enabledOption = Config.enabled;
+            var enabledOption = Config.Enabled;
             if (!enabledOption)
             {
                 if (customButtonsInstance != null)
@@ -186,7 +186,7 @@ namespace Toolnity.CustomButtons
             var anchorsMin = mainPanel.anchorMin;
             var anchorsMax = mainPanel.anchorMax;
             
-            switch (config.position)
+            switch (config.Position)
             {
                 case CustomButtonPositionNames.TopRight:
                     pivot.x = 1;
@@ -254,7 +254,7 @@ namespace Toolnity.CustomButtons
 
         private void CheckMainButtonVisibility()
         {
-            if (config.mainButtonVisible)
+            if (config.MainButtonVisible)
             {
                 return;
             }

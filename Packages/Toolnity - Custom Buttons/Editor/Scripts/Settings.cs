@@ -25,16 +25,16 @@ namespace Toolnity.CustomButtons
                     EditorGUILayout.Space();
 
                     EditorGUILayout.BeginHorizontal();
-                    CustomButtonsMenu.Config.enabled = EditorGUILayout.Toggle("Enabled in Runtime:", CustomButtonsMenu.Config.enabled);
+                    CustomButtonsMenu.Config.Enabled = EditorGUILayout.Toggle("Enabled in Runtime:", CustomButtonsMenu.Config.Enabled);
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
                     
-                    if (CustomButtonsMenu.Config.enabled)
+                    if (CustomButtonsMenu.Config.Enabled)
                     {
                         EditorGUILayout.BeginHorizontal();
                         GUILayout.Space(20f);
                         GUILayout.Label("Main Button Visible:    ");
-                        CustomButtonsMenu.Config.mainButtonVisible = EditorGUILayout.Toggle("", CustomButtonsMenu.Config.mainButtonVisible);
+                        CustomButtonsMenu.Config.MainButtonVisible = EditorGUILayout.Toggle("", CustomButtonsMenu.Config.MainButtonVisible);
                         GUILayout.FlexibleSpace();
                         EditorGUILayout.EndHorizontal();
                             
@@ -42,13 +42,13 @@ namespace Toolnity.CustomButtons
                         GUILayout.Space(20f);
                         GUILayout.Label("Position:                  ");
                         GUILayout.Space(20f);
-                        var index = CustomButtonsMenu.Config.position.GetHashCode();
+                        var index = CustomButtonsMenu.Config.Position.GetHashCode();
                         var newIndex = EditorGUILayout.Popup(
                             index, 
                             Enum.GetNames(typeof(CustomButtonsMenu.CustomButtonPositionNames)));
                         if (newIndex != index)
                         {
-                            CustomButtonsMenu.Config.position = (CustomButtonsMenu.CustomButtonPositionNames)newIndex;
+                            CustomButtonsMenu.Config.Position = (CustomButtonsMenu.CustomButtonPositionNames)newIndex;
                         }
                         GUILayout.FlexibleSpace();
                         EditorGUILayout.EndHorizontal();
