@@ -15,7 +15,9 @@ namespace Toolnity.EditorExtensions
             set
             {
                 saveOnPlay = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
         
@@ -27,7 +29,9 @@ namespace Toolnity.EditorExtensions
             set
             {
                 sceneOnPlay = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
 
@@ -39,7 +43,9 @@ namespace Toolnity.EditorExtensions
             set
             {
                 masterScene = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
         
