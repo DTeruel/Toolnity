@@ -1,3 +1,7 @@
+## [2.2.0] - 19-10-2022
+### Added
+- New custom Buttons window
+
 ## [2.1.2] - 18-10-2022
 ### Fix
 - Editor methods used in runtime scripts.

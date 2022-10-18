@@ -24,6 +24,13 @@ namespace Toolnity.CustomButtons
                 {
                     EditorGUILayout.Space();
 
+                    if (GUILayout.Button("Open Custom Buttons Window", GUILayout.Width(200f)))
+                    {
+                        CustomButtonsWindow.ShowWindow();
+                    }
+                    
+                    EditorGUILayout.Space();
+                    
                     EditorGUILayout.BeginHorizontal();
                     CustomButtonsMenu.Config.Enabled = EditorGUILayout.Toggle("Enabled in Runtime:", CustomButtonsMenu.Config.Enabled);
                     GUILayout.FlexibleSpace();

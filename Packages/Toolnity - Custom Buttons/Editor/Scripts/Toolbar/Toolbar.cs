@@ -12,6 +12,7 @@ namespace Toolnity.CustomButtons
 		private Toolbar() : base(
 			CustomButtonsToolbarButton.ID,
 			StaticCustomButtonsToolbarButton.ID,
+			CustomButtonsWindowToolbarButton.ID,
 			SettingsToolbarButton.ID
 			)
 		{ }
