@@ -14,7 +14,9 @@ namespace Toolnity.CustomButtons
             set
             {
                 enabled = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
         [SerializeField]
@@ -25,7 +27,9 @@ namespace Toolnity.CustomButtons
             set
             {
                 mainButtonVisible = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
         [SerializeField]
@@ -36,7 +40,9 @@ namespace Toolnity.CustomButtons
             set
             {
                 position = value;
+#if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
+#endif
             }
         }
     }

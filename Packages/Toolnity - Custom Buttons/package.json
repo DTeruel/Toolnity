@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity.custombuttons",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "displayName": "Toolnity Custom Buttons",
   "description": "Expose easily your methods as buttons in editor and runtime.\n\n* It includes an Overlay Toolbar",
   "unity": "2021.2",
