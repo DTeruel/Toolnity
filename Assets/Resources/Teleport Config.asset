@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33927f00c4988148a8152508f5277e7, type: 3}
   m_Name: Teleport Config
   m_EditorClassIdentifier: 
-  CopyAxisX: 1
-  CopyAxisY: 1
-  CopyAxisZ: 1
+  copyAxisX: 1
+  copyAxisY: 1
+  copyAxisZ: 1
