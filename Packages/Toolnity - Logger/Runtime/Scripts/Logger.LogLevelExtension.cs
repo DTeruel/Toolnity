@@ -69,6 +69,9 @@ namespace Toolnity.Logger
             if (logLevelsAsset.logsConfig == null)
             {
                 logLevelsAsset.logsConfig = new List<LogConfig>();
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(logLevelsAsset);
+                #endif
             }
             foreach(var loggerToAdd in LoggersCreatedInInitializers)
             {
@@ -91,6 +94,9 @@ namespace Toolnity.Logger
             if (!found)
             {
                 logLevelsAsset.logsConfig.Add(new LogConfig(name, loggerLogLevel));
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(logLevelsAsset);
+                #endif
             }
         }
 
