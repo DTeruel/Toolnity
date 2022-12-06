@@ -1,3 +1,7 @@
+## [2.1.0] - 06-12-2022
+### New
+- New Assets Preview tool.
+
 ## [2.0.2] - 18-10-2022
 ### Fix
 - Editor methods used in runtime scripts.
