@@ -14,8 +14,8 @@ namespace Toolnity.EditorExtensions
 	{
 		public static bool LoadMasterOnPlay
 		{
-			get => EditorExtensions.Config.SceneOnPlay;
-			set => EditorExtensions.Config.SceneOnPlay = value;
+			get => EditorExtensions.Config.LoadSceneOnPlay;
+			set => EditorExtensions.Config.LoadSceneOnPlay = value;
 		}
 
 		public static string MasterScene

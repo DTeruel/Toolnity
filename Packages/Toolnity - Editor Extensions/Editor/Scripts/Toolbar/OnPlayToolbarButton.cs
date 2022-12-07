@@ -40,7 +40,7 @@ namespace Toolnity.EditorExtensions
 				});
 			menu.AddItem(
 				new GUIContent(OptionsList[1]), 
-				EditorExtensions.Config.SceneOnPlay,
+				EditorExtensions.Config.LoadSceneOnPlay,
 				LoadSceneOnPlay.SelectMasterScene);
 			menu.ShowAsContext();
 		}

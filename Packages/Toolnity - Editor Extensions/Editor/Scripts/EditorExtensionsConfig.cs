@@ -22,13 +22,13 @@ namespace Toolnity.EditorExtensions
         }
         
         [SerializeField]
-        private bool sceneOnPlay = true;
-        public bool SceneOnPlay
+        private bool loadLoadSceneOnPlay;
+        public bool LoadSceneOnPlay
         {
-            get => sceneOnPlay;
+            get => loadLoadSceneOnPlay;
             set
             {
-                sceneOnPlay = value;
+                loadLoadSceneOnPlay = value;
 #if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
 #endif

@@ -9,8 +9,8 @@ namespace Toolnity.EditorExtensions
 	{
 		private GUIStyle numberStyle;
 		
-		private int currentFileType;
-		private int currentFileIndex;
+		private int currentFileType = -1;
+		private int currentFileIndex = -1;
 
 		public override void OnInspectorGUI()
 		{

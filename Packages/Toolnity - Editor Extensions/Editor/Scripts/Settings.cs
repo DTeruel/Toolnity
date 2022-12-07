@@ -33,10 +33,10 @@ namespace Toolnity.EditorExtensions
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.BeginHorizontal();
-                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.Config.SceneOnPlay);
-                    if (!EditorExtensions.Config.SceneOnPlay.Equals(loadSceneOnPlay))
+                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.Config.LoadSceneOnPlay);
+                    if (!EditorExtensions.Config.LoadSceneOnPlay.Equals(loadSceneOnPlay))
                     {
-                        EditorExtensions.Config.SceneOnPlay = loadSceneOnPlay;
+                        EditorExtensions.Config.LoadSceneOnPlay = loadSceneOnPlay;
                         
                         if (loadSceneOnPlay)
                         {

@@ -1,3 +1,7 @@
+## [2.1.1] - 07-12-2022
+### Fix
+- Minor Fix.
+
 ## [2.1.0] - 06-12-2022
 ### New
 - New Assets Preview tool.
