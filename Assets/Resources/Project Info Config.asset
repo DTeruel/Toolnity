@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectName: 'Toolnity '
   links:
-  - Name: 123
-    URL: www.google.com
-  - Name: Unity rwr
+  - Name: Explorer
+    URL: 'C:'
+  - Name: Unity
     URL: www.unity.com
