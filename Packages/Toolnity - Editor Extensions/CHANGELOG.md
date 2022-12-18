@@ -1,3 +1,7 @@
+## [2.1.2] - 18-12-2022
+### Sample
+- Moving Asset Preview scene to Samples.
+
 ## [2.1.1] - 07-12-2022
 ### Fix
 - Minor Fix.
