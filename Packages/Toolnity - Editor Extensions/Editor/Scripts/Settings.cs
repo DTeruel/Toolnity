@@ -15,7 +15,7 @@ namespace Toolnity.EditorExtensions
         }
         
         [SettingsProvider]
-        public static SettingsProvider CreateTeleportSettingsProvider()
+        public static SettingsProvider CreateSettingsProvider()
         {
             var provider = new SettingsProvider(EDITOR_EXTENSIONS_SETTINGS_NAME, SettingsScope.Project)
             {

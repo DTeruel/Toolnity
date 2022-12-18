@@ -1,0 +1,19 @@
+{
+  "name": "com.dteruel.toolnity.projectinfo",
+  "version": "0.1.0",
+  "displayName": "Toolnity Project Info",
+  "description": "Tool to centralize all the information about the project.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Tools",
+    "Utilities",
+    "Editor",
+    "Runtime",
+    "Tools",
+    "Extensions"
+  ],
+  "author": {
+    "name": "DTeruel"
+  }
+}

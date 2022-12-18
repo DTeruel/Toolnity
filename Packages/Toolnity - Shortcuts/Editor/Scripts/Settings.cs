@@ -15,7 +15,7 @@ namespace Toolnity.Shortcuts
         }
         
         [SettingsProvider]
-        public static SettingsProvider CreateTeleportSettingsProvider()
+        public static SettingsProvider CreateSettingsProvider()
         {
             var provider = new SettingsProvider(SHORTCUTS_SETTINGS_NAME, SettingsScope.Project)
             {

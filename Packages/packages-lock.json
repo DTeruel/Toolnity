@@ -60,6 +60,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.dteruel.toolnity.projectinfo": {
+      "version": "file:Toolnity - Project Info",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.dteruel.toolnity.runtimescripts": {
       "version": "file:Toolnity - Runtime Scripts",
       "depth": 0,
