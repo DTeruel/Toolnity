@@ -62,8 +62,6 @@ namespace Toolnity.ProjectInfo
 		[InitializeOnLoadMethod]
 		public static void RegenerateMenu()
 		{
-			Debug.Log("[Project Info] Regenerating Project Info Menu...");
-			
             var filePath = Application.dataPath + SCRIPT_PATH;
             var builder = new StringBuilder();
             
