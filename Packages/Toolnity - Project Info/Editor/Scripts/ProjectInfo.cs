@@ -38,6 +38,8 @@ namespace Toolnity.ProjectInfo
 
 			config = ScriptableObject.CreateInstance<ProjectInfoConfig>();
 			config.ProjectName = Application.productName;
+			config.Links = new List<ProjectInfoConfig.LinkInfo>();
+			
 			const string pathFolder = "Assets/Resources/";
 			const string assetName = "Project Info Config.asset";
 			if (!Directory.Exists("Assets/Resources"))
@@ -85,29 +87,32 @@ namespace Toolnity.ProjectInfo
             builder.AppendLine("\t}");
             builder.AppendLine("");
 
-            var namesUsed = new List<string>();
-            for (var i = 0; i < Config.Links.Count; i++)
+            if (Config != null && Config.Links != null)
             {
-	            if (i > 0)
+	            var namesUsed = new List<string>();
+	            for (var i = 0; i < Config.Links.Count; i++)
 	            {
-		            builder.AppendLine("");
+		            if (i > 0)
+		            {
+			            builder.AppendLine("");
+		            }
+
+		            var name = Config.Links[i].Name;
+		            if (namesUsed.Contains(name))
+		            {
+			            name += "_" + Random.Range(1000, 10000);
+		            }
+
+		            namesUsed.Add(name);
+		            builder.AppendLine("\t[MenuItem(\"" + Config.ProjectName + "/Links/" + name +
+		                               "\", priority = " + (MENU_LINK_PRIORITY_INDEX + i) + ")]");
+		            builder.AppendLine("\tprivate static void OpenURL" + i + "()");
+		            builder.AppendLine("\t{");
+		            builder.AppendLine("\t\tApplication.OpenURL(\"" + Config.Links[i].URL + "\");");
+		            builder.AppendLine("\t}");
 	            }
-	            
-	            var name = Config.Links[i].Name;
-	            if (namesUsed.Contains(name))
-	            {
-		            name += "_" + Random.Range(1000, 10000);
-	            }
-	            
-	            namesUsed.Add(name);
-	            builder.AppendLine("\t[MenuItem(\"" + Config.ProjectName + "/Links/" + name + 
-	                               "\", priority = " + (MENU_LINK_PRIORITY_INDEX + i) + ")]");
-	            builder.AppendLine("\tprivate static void OpenURL" + i + "()");
-	            builder.AppendLine("\t{");
-	            builder.AppendLine("\t\tApplication.OpenURL(\"" + Config.Links[i].URL + "\");");
-	            builder.AppendLine("\t}");
+	            namesUsed.Clear();
             }
-            namesUsed.Clear();
 
             builder.AppendLine("}");
             builder.AppendLine("#endif");

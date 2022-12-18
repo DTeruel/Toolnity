@@ -32,6 +32,17 @@ namespace Toolnity.ProjectInfo
         
         [SerializeField]
         private List<LinkInfo> links;
-        public List<LinkInfo> Links => links;
+        public List<LinkInfo> Links
+        {
+            get => links;
+            set
+            {
+                links = value;
+#if UNITY_EDITOR
+                EditorUtility.SetDirty(this);
+                ProjectInfo.RegenerateMenu();
+#endif
+            }
+        }
     }
 }
