@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity.projectinfo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Toolnity Project Info",
   "description": "Tool to centralize all the information about the project.",
   "unity": "2021.2",
@@ -15,5 +15,8 @@
   ],
   "author": {
     "name": "DTeruel"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
   }
 }

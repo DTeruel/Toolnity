@@ -34,6 +34,11 @@ namespace Toolnity.ProjectInfo
 			}
 
             #if UNITY_EDITOR
+			if (EditorApplication.isCompiling || EditorApplication.isUpdating)
+			{
+				return;
+			}
+
 			Debug.Log("[Project Info] No 'Project Info Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
 
 			config = ScriptableObject.CreateInstance<ProjectInfoConfig>();
@@ -62,6 +67,11 @@ namespace Toolnity.ProjectInfo
 		[InitializeOnLoadMethod]
 		public static void RegenerateMenu()
 		{
+			if (Config == null)
+			{
+				return;
+			}
+
             var filePath = Application.dataPath + SCRIPT_PATH;
             var builder = new StringBuilder();
             
@@ -85,7 +95,7 @@ namespace Toolnity.ProjectInfo
             builder.AppendLine("\t}");
             builder.AppendLine("");
 
-            if (Config != null && Config.Links != null)
+            if (Config.Links != null)
             {
 	            var namesUsed = new List<string>();
 	            for (var i = 0; i < Config.Links.Count; i++)
