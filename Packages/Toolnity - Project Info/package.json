@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity.projectinfo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Toolnity Project Info",
   "description": "Tool to centralize all the information about the project.",
   "unity": "2021.2",
