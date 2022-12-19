@@ -181,7 +181,6 @@ namespace Toolnity.Favorites
             {
                 if (EditorApplication.isCompiling || EditorApplication.isUpdating)
                 {
-                    Debug.Log("[Favorites] Favorites asset not found! But I cannot create the file because is compiling...");
                     return;
                 }
                     
