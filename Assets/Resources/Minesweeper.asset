@@ -9,8 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97bf55bb40ab8a54ab80651392ebcd6c, type: 3}
-  m_Name: Project Info Config
+  m_Script: {fileID: 11500000, guid: 69dd019aba5f4645b2d391bbc38532db, type: 3}
+  m_Name: Minesweeper
   m_EditorClassIdentifier: 
-  projectName: Toolnity
-  links: []
+  Nicknames:
+  - Clarke
+  - Ed
+  - Miki
+  - David
+  Scores:
+  - 30
+  - 42.06694129999994
+  - 64
+  - 82.1730666

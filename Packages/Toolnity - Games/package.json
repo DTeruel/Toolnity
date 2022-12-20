@@ -1,0 +1,14 @@
+{
+  "name": "com.dteruel.toolnity.games",
+  "version": "1.0.0",
+  "displayName": "Toolnity Games",
+  "description": "Games for the Unity editor to play during your development and compete with the other project members.",
+  "unity": "2021.2",
+  "keywords": [
+    "DTeruel",
+    "Games"
+  ],
+  "author": {
+    "name": "DTeruel"
+  }
+}

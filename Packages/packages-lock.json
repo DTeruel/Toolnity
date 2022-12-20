@@ -36,6 +36,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.dteruel.toolnity.games": {
+      "version": "file:Toolnity - Games",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.dteruel.toolnity.hierarchywindowextensions": {
       "version": "file:Toolnity - Hierarchy Window Extensions",
       "depth": 0,
