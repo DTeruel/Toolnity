@@ -7,7 +7,7 @@ Games for the Unity editor to play during your development and compete with the 
 
 ![Minesweeper](.readme/Minesweeper.png) 
 
-![Ranking](.readme/Minesweeper Ranking.png)
+![Ranking](.readme/Ranking.png)
 
 --------------------------------
 
