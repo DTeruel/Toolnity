@@ -1,3 +1,7 @@
+## [2.2.1] - 25-01-2023
+### Fix
+- Allow custom "CustomButtonsMenu" prefab not in the root.
+
 ## [2.2.0] - 19-10-2022
 ### Added
 - New custom Buttons window

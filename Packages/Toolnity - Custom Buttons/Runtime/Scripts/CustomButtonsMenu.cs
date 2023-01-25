@@ -149,10 +149,20 @@ namespace Toolnity.CustomButtons
 
         protected void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            InitGameObject();
             LoadOrCreateConfig();
             CheckEventSystem();
             InitMenu();
+        }
+
+        private void InitGameObject()
+        {
+            if (transform.parent != null)
+            {
+                transform.SetParent(null);
+            }
+            
+            DontDestroyOnLoad(gameObject);
         }
 
         private void CheckEventSystem()
