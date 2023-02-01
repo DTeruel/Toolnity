@@ -12,24 +12,6 @@ namespace Toolnity.EditorExtensions
 	[InitializeOnLoad]
 	internal static class LoadSceneOnPlay
 	{
-		public static bool LoadMasterOnPlay
-		{
-			get => EditorExtensions.Config.LoadSceneOnPlay;
-			set => EditorExtensions.Config.LoadSceneOnPlay = value;
-		}
-
-		public static string MasterScene
-		{
-			get => EditorExtensions.Config.MasterScene;
-			set => EditorExtensions.Config.MasterScene = value;
-		}
-
-		private static string PreviousScene
-		{
-			get => EditorExtensions.Config.PreviousScene;
-			set => EditorExtensions.Config.PreviousScene = value;
-		}
-		
 		static LoadSceneOnPlay()
 		{
 			EditorApplication.playModeStateChanged += OnPlayModeChanged;
@@ -41,18 +23,18 @@ namespace Toolnity.EditorExtensions
 			masterScene = masterScene.Replace(Application.dataPath, "Assets");
 			if (string.IsNullOrEmpty(masterScene))
 			{
-				LoadMasterOnPlay = false;
+				EditorExtensions.LoadSceneOnPlay = false;
 			}
 			else
 			{
-				MasterScene = masterScene;
-				LoadMasterOnPlay = true;
+				EditorExtensions.MasterScene = masterScene;
+				EditorExtensions.LoadSceneOnPlay = true;
 			}
 		}
 
 		private static void OnPlayModeChanged(PlayModeStateChange state)
 		{
-			if (!LoadMasterOnPlay)
+			if (!EditorExtensions.LoadSceneOnPlay)
 			{
 				return;
 			}
@@ -60,16 +42,16 @@ namespace Toolnity.EditorExtensions
 			if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
 			{
 				// User pressed play -- autoload master scene.
-				PreviousScene = SceneManager.GetActiveScene().path;
+				EditorExtensions.PreviousScene = SceneManager.GetActiveScene().path;
 				if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
 				{
 					try
 					{
-						EditorSceneManager.OpenScene(MasterScene);
+						EditorSceneManager.OpenScene(EditorExtensions.MasterScene);
 					}
 					catch
 					{
-						Debug.LogError($"error: scene not found: {MasterScene}");
+						Debug.LogError($"error: scene not found: {EditorExtensions.MasterScene}");
 						EditorApplication.isPlaying = false;
 
 					}
@@ -87,11 +69,11 @@ namespace Toolnity.EditorExtensions
 				// User pressed stop -- reload previous scene.
 				try
 				{
-					EditorSceneManager.OpenScene(PreviousScene);
+					EditorSceneManager.OpenScene(EditorExtensions.PreviousScene);
 				}
 				catch
 				{
-					Debug.LogError($"error: scene not found: {PreviousScene}");
+					Debug.LogError($"error: scene not found: {EditorExtensions.PreviousScene}");
 				}
 			}
 		}

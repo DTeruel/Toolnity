@@ -1,3 +1,10 @@
+## [2.1.3] - 01-02-2023
+### Update
+- 'Save on Play' & 'Load Scene on Play' are now local settings (not shared anymore).
+
+### Fix
+- 'Load Scene on Play' button in the toolbar when is active just toggle the feature without opening the File Panel.
+ 
 ## [2.1.2] - 18-12-2022
 ### Sample
 - Moving Asset Preview scene to Samples.

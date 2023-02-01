@@ -24,19 +24,19 @@ namespace Toolnity.EditorExtensions
                     EditorGUILayout.Space();
 
                     EditorGUILayout.BeginHorizontal();
-                    var saveOnPlay= EditorGUILayout.Toggle("Auto-Save on play:", EditorExtensions.Config.SaveOnPlay);
-                    if (!EditorExtensions.Config.SaveOnPlay.Equals(saveOnPlay))
+                    var saveOnPlay= EditorGUILayout.Toggle("Auto-Save on play:", EditorExtensions.SaveOnPlay);
+                    if (!EditorExtensions.SaveOnPlay.Equals(saveOnPlay))
                     {
-                        EditorExtensions.Config.SaveOnPlay = saveOnPlay;
+                        EditorExtensions.SaveOnPlay = saveOnPlay;
                     }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.BeginHorizontal();
-                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.Config.LoadSceneOnPlay);
-                    if (!EditorExtensions.Config.LoadSceneOnPlay.Equals(loadSceneOnPlay))
+                    var loadSceneOnPlay = EditorGUILayout.Toggle("Load scene on play:", EditorExtensions.LoadSceneOnPlay);
+                    if (!EditorExtensions.LoadSceneOnPlay.Equals(loadSceneOnPlay))
                     {
-                        EditorExtensions.Config.LoadSceneOnPlay = loadSceneOnPlay;
+                        EditorExtensions.LoadSceneOnPlay = loadSceneOnPlay;
                         
                         if (loadSceneOnPlay)
                         {
@@ -47,7 +47,7 @@ namespace Toolnity.EditorExtensions
                     if (loadSceneOnPlay)
                     {
                         GUILayout.Space(20f);
-                        GUILayout.Label($"({EditorExtensions.Config.MasterScene})");
+                        GUILayout.Label($"({EditorExtensions.MasterScene})");
                     }
                     GUILayout.FlexibleSpace();
                     EditorGUILayout.EndHorizontal();

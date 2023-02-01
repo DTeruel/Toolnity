@@ -1,50 +1,78 @@
-﻿using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Toolnity.EditorExtensions
 {
 	public static class EditorExtensions
 	{
-		private static EditorExtensionsConfig config;
-		public static EditorExtensionsConfig Config
+		private static bool saveOnPlay;
+		public static bool SaveOnPlay
 		{
 			get
 			{
-				if (config == null)
+				if (!valuesUpdated)
 				{
-					LoadOrCreateConfig();
+					UpdateLocalValues();
 				}
-
-				return config;
+				
+				return saveOnPlay;
+			}
+			set
+			{
+				saveOnPlay = value;
+				EditorPrefs.SetBool(Application.productName + nameof(saveOnPlay), saveOnPlay);
 			}
 		}
 
-		private static void LoadOrCreateConfig()
+		private static bool loadSceneOnPlay;
+		public static bool LoadSceneOnPlay
 		{
-			var allAssets = Resources.LoadAll<EditorExtensionsConfig>("");
-			if (allAssets.Length > 0)
+			get
 			{
-				config = allAssets[0];
-				return;
+				if (!valuesUpdated)
+				{
+					UpdateLocalValues();
+				}
+
+				return loadSceneOnPlay;
 			}
-
-            #if UNITY_EDITOR
-			Debug.Log("[Editor Extensions] No 'Editor Extensions Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
-
-			config = ScriptableObject.CreateInstance<EditorExtensionsConfig>();
-			const string pathFolder = "Assets/Resources/";
-			const string assetName = "Editor Extensions Config.asset";
-			if (!Directory.Exists("Assets/Resources"))
+			set
 			{
-				Directory.CreateDirectory("Assets/Resources");
+				loadSceneOnPlay = value;
+				EditorPrefs.SetBool(Application.productName + nameof(loadSceneOnPlay), loadSceneOnPlay);
 			}
-			AssetDatabase.CreateAsset(config, pathFolder + assetName);
-			AssetDatabase.SaveAssets();
-			AssetDatabase.Refresh();
-            #else
-            Debug.LogError("[Editor Extensions] No 'Editor Extensions Config' file found in the Resources folders. Create one in the editor. ");
-            #endif
+		}
+
+		private static string masterScene;
+		public static string MasterScene 
+		{
+			get
+			{
+				if (!valuesUpdated)
+				{
+					UpdateLocalValues();
+				}
+
+				return masterScene; 
+			}
+			set
+			{
+				masterScene = value;
+				EditorPrefs.SetString(Application.productName + nameof(masterScene), masterScene);
+			}
+		}
+        
+		public static string PreviousScene { get; set; }
+
+		private static bool valuesUpdated;
+
+		private static void UpdateLocalValues()
+		{
+			saveOnPlay = EditorPrefs.GetBool(Application.productName + nameof(saveOnPlay), true);
+			loadSceneOnPlay = EditorPrefs.GetBool(Application.productName + nameof(loadSceneOnPlay), false);
+			masterScene = EditorPrefs.GetString(Application.productName + nameof(masterScene), string.Empty);
+
+			valuesUpdated = true;
 		}
 	}
 }
