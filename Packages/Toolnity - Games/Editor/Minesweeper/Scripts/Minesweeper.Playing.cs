@@ -179,14 +179,30 @@ namespace Toolnity.Games
 				GUILayout.EndHorizontal();
 			}
 		}
-        
+
+		private static readonly Color DisabledButtonColor = new (0.7f, 0.7f, 0.7f, 1);
 		private static void DrawCell(int i, int j)
 		{
 			if (grid[i][j].IsRevealed)
 			{
-				EditorGUI.BeginDisabledGroup(true);
-				var buttonStyle = GetRevealedCellButton(i, j);
-				GUILayout.Button(buttonStyle, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
+				EditorGUI.BeginDisabledGroup(grid[i][j].MinesAround == 0);
+				
+				var buttonContent = GetRevealedCellButton(i, j);
+				var defaultBackgroundColor = GUI.backgroundColor;
+				GUI.backgroundColor = DisabledButtonColor;
+				
+				if (GUILayout.Button(
+					    buttonContent, 
+					    GUILayout.Width(CELL_SIZE), 
+					    GUILayout.Height(CELL_SIZE)))
+				{
+					if (Event.current.button == 2) // Center click
+					{
+						CheckCellsMarkedAndDiscoverCellsAround(i, j);
+					}
+				}
+				GUI.backgroundColor = defaultBackgroundColor;
+
 				EditorGUI.EndDisabledGroup();
 			}
 			else
@@ -194,16 +210,14 @@ namespace Toolnity.Games
 				var buttonStyle = GetUnrevealedCellButton(i, j);
 				if (GUILayout.Button(buttonStyle, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE)))
 				{
-					if (Event.current.button == 0) // Left Click
+					switch (Event.current.button)
 					{
-						if (grid[i][j].State == CellState.Default)
-						{
+						case 0:	// Left Click
 							CellPressed(i, j);
-						}
-					}
-					else if (Event.current.button == 1) // Right click
-					{
-						SwitchCellState(i, j);
+							break;
+						case 1: // Right click
+							SwitchCellState(i, j);
+							break;
 					}
 				}
 			}
@@ -288,11 +302,16 @@ namespace Toolnity.Games
 
         private static void CellPressed(int i, int j)
         {
+	        if (grid[i][j].State != CellState.Default)
+	        {
+		        return;
+	        }
+	        
             if (gameState == GameState.MainScreen)
             {
                 SetState(GameState.Playing);
             }
-            
+	            
             if (grid[i][j].HasMine)
             {
                 grid[i][j].IsRevealed = true;
@@ -302,6 +321,156 @@ namespace Toolnity.Games
             {
                 RevealCell(i, j);
             }
+        }
+
+        private static void CheckCellsMarkedAndDiscoverCellsAround(int i, int j)
+        {
+	        if (!grid[i][j].IsRevealed || grid[i][j].MinesAround == 0)
+	        {
+		        return;
+	        }
+
+	        var cellsMarkedAround = GetNumCellsMarkedAround(i, j);
+	        if (cellsMarkedAround == grid[i][j].MinesAround)
+	        {
+		        RevealCellsNotMarkedAround(i, j);
+	        }
+        }
+
+        private static int GetNumCellsMarkedAround(int i, int j)
+        {
+	        var numCellsMarkedAround = 0;
+	      
+	        if (i > 0)
+	        {
+		        if (j > 0)
+		        {
+			        if (grid[i - 1][j - 1].State == CellState.Marked)
+			        {
+				        numCellsMarkedAround++;
+			        }
+			        else if (grid[i - 1][j - 1].State == CellState.Question)
+			        {
+				        return -1;
+			        }
+		        }
+		        if (grid[i - 1][j].State == CellState.Marked)
+		        {
+			        numCellsMarkedAround++;
+		        }
+		        else if (grid[i - 1][j].State == CellState.Question)
+		        {
+			        return -1;
+		        }
+		        if (j < GRID_SIZE - 1)
+		        {
+			        if (grid[i - 1][j + 1].State == CellState.Marked)
+			        {
+				        numCellsMarkedAround++;
+			        }
+			        else if (grid[i - 1][j + 1].State == CellState.Question)
+			        {
+				        return -1;
+			        }
+		        }
+	        }
+                
+	        if (j > 0)
+	        {
+		        if (grid[i][j - 1].State == CellState.Marked)
+		        {
+			        numCellsMarkedAround++;
+		        }
+		        else if (grid[i][j - 1].State == CellState.Question)
+		        {
+			        return -1;
+		        }
+	        }
+	        if (j < GRID_SIZE - 1)
+	        {
+		        if (grid[i][j + 1].State == CellState.Marked)
+		        {
+			        numCellsMarkedAround++;
+		        }
+		        else if (grid[i][j + 1].State == CellState.Question)
+		        {
+			        return -1;
+		        }
+	        }
+                
+	        if (i < GRID_SIZE - 1)
+	        {
+		        if (j > 0)
+		        {
+			        if (grid[i + 1][j - 1].State == CellState.Marked)
+			        {
+				        numCellsMarkedAround++;
+			        }
+			        else if (grid[i + 1][j - 1].State == CellState.Question)
+			        {
+				        return -1;
+			        }
+		        }
+		        if (grid[i + 1][j].State == CellState.Marked)
+		        {
+			        numCellsMarkedAround++;
+		        }
+		        else if (grid[i + 1][j].State == CellState.Question)
+		        {
+			        return -1;
+		        }
+		        if (j < GRID_SIZE - 1)
+		        {
+			        if (grid[i + 1][j + 1].State == CellState.Marked)
+			        {
+				        numCellsMarkedAround++;
+			        }
+			        else if (grid[i + 1][j + 1].State == CellState.Question)
+			        {
+				        return -1;
+			        }
+		        }
+	        }
+
+	        return numCellsMarkedAround;
+        }
+
+        private static void RevealCellsNotMarkedAround(int i, int j)
+        {
+	        if (i > 0)
+	        {
+		        if (j > 0)
+		        {
+			        CellPressed(i - 1, j - 1);
+		        }
+		        CellPressed(i - 1, j);
+		        if (j < GRID_SIZE - 1)
+		        {
+			        CellPressed(i - 1, j + 1);
+		        }
+	        }
+                    
+	        if (j > 0)
+	        {
+		        CellPressed(i, j - 1);
+	        }
+	        if (j < GRID_SIZE - 1)
+	        {
+		        CellPressed(i, j + 1);
+	        }
+                    
+	        if (i < GRID_SIZE - 1)
+	        {
+		        if (j > 0)
+		        {
+			        CellPressed(i + 1, j - 1);
+		        }
+		        CellPressed(i + 1, j);
+		        if (j < GRID_SIZE - 1)
+		        {
+			        CellPressed(i + 1, j + 1);
+		        }
+	        }
         }
 
         private static void RevealCell(int i, int j)
@@ -318,6 +487,7 @@ namespace Toolnity.Games
             else
             {
                 grid[i][j].IsRevealed = true;
+                grid[i][j].State = CellState.Default;
                 OnCellRevealed();
             }
         }
@@ -342,6 +512,7 @@ namespace Toolnity.Games
             }
             
             grid[i][j].IsRevealed = true;
+            grid[i][j].State = CellState.Default;
             if (OnCellRevealed())
             {
                 return;
