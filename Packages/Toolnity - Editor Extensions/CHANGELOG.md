@@ -1,3 +1,7 @@
+## [2.1.4] - 13-02-2023
+### Fix
+- Fixing build errors
+
 ## [2.1.3] - 01-02-2023
 ### Update
 - 'Save on Play' & 'Load Scene on Play' are now local settings (not shared anymore).
