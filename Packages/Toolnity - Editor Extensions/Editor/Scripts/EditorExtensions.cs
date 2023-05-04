@@ -63,7 +63,24 @@ namespace Toolnity.EditorExtensions
 			}
 		}
         
-		public static string PreviousScene { get; set; }
+		private static string previousScene;
+		public static string PreviousScene
+		{
+			get
+			{
+				if (!valuesUpdated)
+				{
+					UpdateLocalValues();
+				}
+
+				return previousScene; 
+			}
+			set
+			{
+				previousScene = value;
+				EditorPrefs.SetString(Application.productName + nameof(previousScene), previousScene);
+			}
+		}
 
 		private static bool valuesUpdated;
 
@@ -72,6 +89,7 @@ namespace Toolnity.EditorExtensions
 			saveOnPlay = EditorPrefs.GetBool(Application.productName + nameof(saveOnPlay), true);
 			loadSceneOnPlay = EditorPrefs.GetBool(Application.productName + nameof(loadSceneOnPlay), false);
 			masterScene = EditorPrefs.GetString(Application.productName + nameof(masterScene), string.Empty);
+			previousScene = EditorPrefs.GetString(Application.productName + nameof(previousScene), string.Empty);
 
 			valuesUpdated = true;
 		}

@@ -1,3 +1,7 @@
+## [2.1.5] - 04-05-2023
+### Fix
+- Fix reloading scene after play
+
 ## [2.1.4] - 13-02-2023
 ### Fix
 - Fixing build errors
