@@ -10,8 +10,15 @@ namespace Toolnity.MapGenerator
 {
     public class MapGenerator : MonoBehaviour
     {
+        private enum GenerationAxis
+        {
+            XY,
+            XZ
+        }
+        
         [SerializeField] private MapConfig mapConfig;
         [SerializeField] private bool clearAndGenerateOnPlay;
+        [SerializeField] private GenerationAxis generationAxis;
 
         private Dictionary<string, GameObject> rootGameObjects = new (); 
 
@@ -137,6 +144,13 @@ namespace Toolnity.MapGenerator
             {
                 Debug.LogError("[Map Generator] Invalid Prefab assigned. Please, check your Scriptable Object MapTokenConfig.");
                 return;
+            }
+
+            var finalPosition = (Vector3)position;
+            if (generationAxis == GenerationAxis.XZ)
+            {
+                finalPosition.z = finalPosition.y;
+                finalPosition.y = 0;
             }
             var newObject = Instantiate(prefabToSpawn, position, Quaternion.identity, rootGameObjects[tokenDescription].transform);
             #if UNITY_EDITOR
