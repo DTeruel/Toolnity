@@ -78,7 +78,8 @@ namespace Toolnity.MapGenerator
                 {
                     transform =
                     {
-                        parent = gameObject.transform
+                        parent = gameObject.transform,
+                        transform = { localPosition = Vector3.zero }
                     }
                 };
                 rootGameObjects.Add(token.Description + token.ColorToMatchV3, go);
