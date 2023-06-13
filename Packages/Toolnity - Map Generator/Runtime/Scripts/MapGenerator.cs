@@ -61,6 +61,8 @@ namespace Toolnity.MapGenerator
                     GenerateTile(x, y);
                 }
             }
+
+            EndGeneration();
             
             Debug.Log("[Map Generator] Generation done!");
         }
@@ -78,10 +80,19 @@ namespace Toolnity.MapGenerator
                 {
                     transform =
                     {
-                        parent = gameObject.transform
+                        transform = { localPosition = Vector3.zero }
                     }
                 };
                 rootGameObjects.Add(token.Description + token.ColorToMatchV3, go);
+            }
+        }
+
+        private void EndGeneration()
+        {
+            foreach (var go in rootGameObjects)
+            {
+                go.Value.transform.SetParent(gameObject.transform);
+                go.Value.transform.localPosition = Vector3.zero;
             }
         }
 
