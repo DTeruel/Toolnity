@@ -163,10 +163,11 @@ namespace Toolnity.MapGenerator
                 finalPosition.z = finalPosition.y;
                 finalPosition.y = 0;
             }
-            var newObject = Instantiate(prefabToSpawn, finalPosition, Quaternion.identity, rootGameObjects[tokenDescription].transform);
+            var newObject = (GameObject)PrefabUtility.InstantiatePrefab(prefabToSpawn, rootGameObjects[tokenDescription].transform);
             #if UNITY_EDITOR
                 Undo.RegisterCreatedObjectUndo(newObject, "Create object");
             #endif
+            newObject.transform.position = finalPosition;
         }
     }
 }
