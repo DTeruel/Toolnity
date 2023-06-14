@@ -170,8 +170,7 @@ namespace Toolnity.MapGenerator
                 Undo.RegisterCreatedObjectUndo(newObject, "Create object");
                 newObject.transform.position = finalPosition;
             #else
-                var newObject = Instantiate(prefabToSpawn, finalPosition, Quaternion.identity, rootGameObjects[tokenDescription].transform);
-                Undo.RegisterCreatedObjectUndo(newObject, "Create object");
+                Instantiate(prefabToSpawn, finalPosition, Quaternion.identity, rootGameObjects[tokenDescription].transform);
             #endif
         }
     }
