@@ -17,8 +17,9 @@ namespace Toolnity.MapGenerator
         }
         
         [SerializeField] private MapConfig mapConfig;
-        [SerializeField] private bool clearAndGenerateOnPlay;
         [SerializeField] private GenerationAxis generationAxis;
+        [SerializeField] private bool showColorNotFoundMessages;
+        [SerializeField] private bool clearAndGenerateOnPlay;
 
         private Dictionary<string, GameObject> rootGameObjects = new (); 
 
@@ -122,7 +123,7 @@ namespace Toolnity.MapGenerator
                 }
             }
 
-            if (!colorFound)
+            if (!colorFound && showColorNotFoundMessages)
             {
                 Debug.LogWarning("[Map Generator] Color not found: " + pixelColorV3);
             }
@@ -163,11 +164,15 @@ namespace Toolnity.MapGenerator
                 finalPosition.z = finalPosition.y;
                 finalPosition.y = 0;
             }
-            var newObject = (GameObject)PrefabUtility.InstantiatePrefab(prefabToSpawn, rootGameObjects[tokenDescription].transform);
+            
             #if UNITY_EDITOR
+                var newObject = (GameObject)PrefabUtility.InstantiatePrefab(prefabToSpawn, rootGameObjects[tokenDescription].transform);
+                Undo.RegisterCreatedObjectUndo(newObject, "Create object");
+                newObject.transform.position = finalPosition;
+            #else
+                var newObject = Instantiate(prefabToSpawn, finalPosition, Quaternion.identity, rootGameObjects[tokenDescription].transform);
                 Undo.RegisterCreatedObjectUndo(newObject, "Create object");
             #endif
-            newObject.transform.position = finalPosition;
         }
     }
 }
