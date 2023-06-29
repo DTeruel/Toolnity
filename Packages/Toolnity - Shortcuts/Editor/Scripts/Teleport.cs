@@ -33,7 +33,6 @@ namespace Toolnity.Shortcuts
 				return;
 			}
 
-            #if UNITY_EDITOR
 			Debug.Log("[Teleport] No 'Teleport Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
             
 			config = ScriptableObject.CreateInstance<TeleportConfig>();
@@ -46,9 +45,6 @@ namespace Toolnity.Shortcuts
 			AssetDatabase.CreateAsset(config, pathFolder + assetName);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
-            #else
-            Debug.LogError("[Teleport] No 'Teleport Config' file found in the Resources folders. Create one in the editor. ");
-            #endif
 		}
 
 		private static GameObject[] selectedObjects;

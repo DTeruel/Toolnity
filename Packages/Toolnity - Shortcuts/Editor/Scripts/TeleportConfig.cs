@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -14,9 +15,7 @@ namespace Toolnity.Shortcuts
 			set
 			{
 				copyAxisX = value;
-#if UNITY_EDITOR
 				EditorUtility.SetDirty(this);
-#endif
 			}
 		}
 		
@@ -28,9 +27,7 @@ namespace Toolnity.Shortcuts
 			set
 			{
 				copyAxisY = value;
-#if UNITY_EDITOR
 				EditorUtility.SetDirty(this);
-#endif
 			}
 		}
 		
@@ -42,10 +39,9 @@ namespace Toolnity.Shortcuts
 			set
 			{
 				copyAxisZ = value;
-#if UNITY_EDITOR
 				EditorUtility.SetDirty(this);
-#endif
 			}
 		}
 	}
 }
+#endif
