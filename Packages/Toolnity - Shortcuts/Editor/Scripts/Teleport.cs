@@ -33,14 +33,14 @@ namespace Toolnity.Shortcuts
 				return;
 			}
 
-			Debug.Log("[Teleport] No 'Teleport Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Resources\"");
+			Debug.Log("[Teleport] No 'Teleport Config' file found in the Resources folders. Creating a new one in \"\\Assets\\Editor\\Resources\"");
             
 			config = ScriptableObject.CreateInstance<TeleportConfig>();
-			const string pathFolder = "Assets/Resources/";
+			const string pathFolder = "Assets/Editor/Resources/";
 			const string assetName = "Teleport Config.asset";
-			if (!Directory.Exists("Assets/Resources"))
+			if (!Directory.Exists("Assets/Editor/Resources"))
 			{
-				Directory.CreateDirectory("Assets/Resources");
+				Directory.CreateDirectory("Assets/Editor/Resources");
 			}
 			AssetDatabase.CreateAsset(config, pathFolder + assetName);
 			AssetDatabase.SaveAssets();
