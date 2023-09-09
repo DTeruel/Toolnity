@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Object = UnityEngine.Object;
 
 public class ScriptableObjectsEditor : EditorWindow
 {
@@ -13,6 +14,10 @@ public class ScriptableObjectsEditor : EditorWindow
     private Vector2 rightScrollPos;
     private string[] typeOptions;
     private bool[] selectedTypeVisible;
+    private Object objectSelected;
+    private int objectSelectedIndex;
+    private GUIStyle defaultAssetButton;
+    private GUIStyle selectedAssetButton;
 
     [MenuItem("Tools/Toolnity/Scriptable Objects Editor")]
     private static void Init()
@@ -24,7 +29,6 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         RefreshAllData();
     }
-    
     
     private void OnGUI()
     {
@@ -106,10 +110,11 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         var typesWithAssets = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.BaseType == typeof(ScriptableObject) && !type.IsAbstract)
+            .Where(type => type.IsSubclassOf(typeof(ScriptableObject)) && !type.IsAbstract)
             .ToList();
-            // Replace type.BaseType by .IsSubclassOf(typeof(ScriptableObject)) for more depth search
-            
+        // Replace type.BaseType by .IsSubclassOf(typeof(ScriptableObject)) for more depth search
+
+        var typeNameToAssetFolder = new Dictionary<string, string>();
         for (var i = typesWithAssets.Count - 1; i >= 0; i--)
         {
             var assets = AssetDatabase.FindAssets("t:" + typesWithAssets[i].Name);
@@ -123,23 +128,30 @@ public class ScriptableObjectsEditor : EditorWindow
                     && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
                 {
                     removeType = false;
+                    typeNameToAssetFolder[typesWithAssets[i].Name] = path;
                 }
             }
-            
-            if(removeType)
+
+            if (removeType)
             {
                 typesWithAssets.RemoveAt(i);
             }
         }
 
-        typeOptions = typesWithAssets.Select(type => type.Name).ToArray();
+        // Natural Order: typeOptions = typesWithAssets.Select(type => type.Name).ToArray();
+        typeOptions = typeNameToAssetFolder.OrderBy(pair => pair.Value)
+            .Select(pair => pair.Key)
+            .ToArray();
+        
         selectedTypeVisible = new bool[typeOptions.Length];
     }
 
 
+
     private void RefreshScriptableObjects()
     {
-        Selection.activeObject = null;
+        objectSelected = null;
+        objectSelectedIndex = -1;
         
         scriptableObjects.Clear();
 
@@ -180,13 +192,14 @@ public class ScriptableObjectsEditor : EditorWindow
         var panelSize = (position.width / 2f) - (margins * 3f);
         
         EditorGUILayout.Space(margins);
-        leftScrollPos = GUILayout.BeginScrollView(leftScrollPos, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
+        
+        leftScrollPos = GUILayout.BeginScrollView(leftScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
         DisplayScriptableObjects();
         GUILayout.EndScrollView();
 
         EditorGUILayout.Space(margins);
         
-        rightScrollPos = GUILayout.BeginScrollView(rightScrollPos, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
+        rightScrollPos = GUILayout.BeginScrollView(rightScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
         DisplayInspector();
         GUILayout.EndScrollView();
 
@@ -194,28 +207,62 @@ public class ScriptableObjectsEditor : EditorWindow
 
         GUILayout.EndHorizontal();
     }
-
+    
     private void DisplayScriptableObjects()
     {
-        foreach (var obj in scriptableObjects)
+        CheckGUIStyles();
+        
+        for (var i = 0; i < scriptableObjects.Count; i++)
         {
+            var obj = scriptableObjects[i];
             var buttonName = obj.name;
             if (showPath)
             {
                 buttonName = AssetDatabase.GetAssetPath(obj);
             }
             
-            if (GUILayout.Button(buttonName, GUILayout.ExpandWidth(true)))
+            var style = defaultAssetButton;
+            if (objectSelectedIndex == i)
             {
-                Selection.activeObject = obj;
+                style = selectedAssetButton;
+                buttonName = "> " + buttonName + " <";
+            }
+            if (GUILayout.Button(buttonName, style, GUILayout.ExpandWidth(true)))
+            {
+                objectSelected = obj;
+                objectSelectedIndex = i;
+                EditorGUIUtility.PingObject(objectSelected);
             }
         }
     }
 
-    private static void DisplayInspector()
+    private void CheckGUIStyles()
     {
-        if (Selection.activeObject is ScriptableObject scriptableObject)
+        if (defaultAssetButton == null)
         {
+            defaultAssetButton = GUI.skin.button;
+        }
+        
+        if (selectedAssetButton == null)
+        {
+            selectedAssetButton = new GUIStyle(GUI.skin.button)
+            {
+                fontStyle = FontStyle.Bold
+            };
+        }
+    }
+
+    private void DisplayInspector()
+    {
+        if (objectSelected is ScriptableObject scriptableObject)
+        {
+            if (GUILayout.Button("Select Asset", GUILayout.ExpandWidth(true)))
+            {
+                EditorGUIUtility.PingObject(objectSelected);
+            }
+            
+            EditorGUILayout.Space();
+            
             EditorGUI.BeginChangeCheck();
             var serializedObject = new SerializedObject(scriptableObject);
             serializedObject.Update();
