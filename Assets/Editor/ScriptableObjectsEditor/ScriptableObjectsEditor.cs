@@ -7,7 +7,14 @@ using Object = UnityEngine.Object;
 
 public class ScriptableObjectsEditor : EditorWindow
 {
-    private bool showPath;
+    private class FolderInfo
+    {
+        public string Name;
+        public bool Folded;
+        public List<FolderInfo> SubFolders;
+        public List<ScriptableObject> Objects;
+    }
+    
     private bool searchInPackages;
     private readonly List<ScriptableObject> scriptableObjects = new();
     private Vector2 leftScrollPos;
@@ -18,6 +25,7 @@ public class ScriptableObjectsEditor : EditorWindow
     private int objectSelectedIndex;
     private GUIStyle defaultAssetButton;
     private GUIStyle selectedAssetButton;
+    private readonly List<FolderInfo> assetFolders = new();
 
     [MenuItem("Tools/Toolnity/Scriptable Objects Editor")]
     private static void Init()
@@ -29,14 +37,32 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         RefreshAllData();
     }
-    
+
     private void OnGUI()
     {
+        CheckGUIStyles();
+
         DrawOptions();
 
         EditorGUILayout.Space();
-        
+
         DrawAssets();
+    }
+
+    private void CheckGUIStyles()
+    {
+        if (defaultAssetButton == null)
+        {
+            defaultAssetButton = GUI.skin.button;
+        }
+
+        if (selectedAssetButton == null)
+        {
+            selectedAssetButton = new GUIStyle(GUI.skin.button)
+            {
+                fontStyle = FontStyle.Bold
+            };
+        }
     }
 
     #region DRAW OPTIONS
@@ -45,11 +71,7 @@ public class ScriptableObjectsEditor : EditorWindow
         EditorGUILayout.Space(25f);
 
         EditorGUILayout.BeginHorizontal();
-        
-        EditorGUILayout.Space();
-        
-        GUILayout.Label("Show Path: ");
-        showPath = EditorGUILayout.Toggle(showPath, GUILayout.Width(25f));
+
 
         EditorGUILayout.Space();
 
@@ -63,21 +85,13 @@ public class ScriptableObjectsEditor : EditorWindow
                     selectedMask |= 1 << i;
                 }
             }
-        
-            GUILayout.Label("Search In Packages: ");
-            var newSearchInPackages = EditorGUILayout.Toggle(searchInPackages, GUILayout.Width(70f));
-            if (searchInPackages != newSearchInPackages)
-            {
-                searchInPackages = newSearchInPackages;
-                RefreshScriptableObjects();
-            }
-            
+
             GUILayout.Label("Types: ");
             var newSelectedMask = EditorGUILayout.MaskField(selectedMask, typeOptions, GUILayout.Width(250f));
             if (selectedMask != newSelectedMask)
             {
                 selectedMask = newSelectedMask;
-                
+
                 for (var i = 0; i < typeOptions.Length; i++)
                 {
                     selectedTypeVisible[i] = (selectedMask & (1 << i)) != 0;
@@ -87,15 +101,23 @@ public class ScriptableObjectsEditor : EditorWindow
             }
 
             EditorGUILayout.Space();
+
+            GUILayout.Label("Search In Packages: ");
+            var newSearchInPackages = EditorGUILayout.Toggle(searchInPackages, GUILayout.Width(70f));
+            if (searchInPackages != newSearchInPackages)
+            {
+                searchInPackages = newSearchInPackages;
+                RefreshScriptableObjects();
+            }
         }
-        
+
         GUILayout.FlexibleSpace();
-        
+
         if (GUILayout.Button("Refresh"))
         {
             RefreshAllData();
         }
-        
+
         EditorGUILayout.Space();
         EditorGUILayout.EndHorizontal();
     }
@@ -105,7 +127,7 @@ public class ScriptableObjectsEditor : EditorWindow
         RefreshScriptableTypesWithAssets();
         RefreshScriptableObjects();
     }
-    
+
     private void RefreshScriptableTypesWithAssets()
     {
         var typesWithAssets = AppDomain.CurrentDomain.GetAssemblies()
@@ -124,7 +146,7 @@ public class ScriptableObjectsEditor : EditorWindow
             {
                 var path = AssetDatabase.GUIDToAssetPath(assets[j]);
                 var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-                if (asset != null 
+                if (asset != null
                     && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
                 {
                     removeType = false;
@@ -142,7 +164,7 @@ public class ScriptableObjectsEditor : EditorWindow
         typeOptions = typeNameToAssetFolder.OrderBy(pair => pair.Value)
             .Select(pair => pair.Key)
             .ToArray();
-        
+
         selectedTypeVisible = new bool[typeOptions.Length];
     }
 
@@ -152,8 +174,9 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         objectSelected = null;
         objectSelectedIndex = -1;
-        
+
         scriptableObjects.Clear();
+        assetFolders.Clear();
 
         var selectedTypes = new List<string>();
         for (var i = 0; i < selectedTypeVisible.Length; i++)
@@ -164,17 +187,43 @@ public class ScriptableObjectsEditor : EditorWindow
             }
         }
 
-        foreach (var selectedType in selectedTypes)
+        foreach(var selectedType in selectedTypes)
         {
             var guids = AssetDatabase.FindAssets("t:" + selectedType);
-            foreach (var guid in guids)
+            foreach(var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-                if (asset != null 
+                if (asset != null
                     && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
                 {
                     scriptableObjects.Add(asset);
+                    
+                    var folders = path.Split('/');
+                    var folderPath = string.Join("/", folders.Take(folders.Length - 1));
+                    var folderExist = false;
+                    foreach(var folder in assetFolders)
+                    {
+                        if (folder.Name == folderPath)
+                        {
+                            folderExist = true;
+                            folder.Objects.Add(asset);
+                        }
+                    }
+                    if (!folderExist)
+                    {
+                        var newFolder = new FolderInfo
+                        {
+                            Name = folderPath,
+                            Folded = true,
+                            Objects = new List<ScriptableObject>
+                            {
+                                asset
+                            }
+                        };
+
+                        assetFolders.Add(newFolder);
+                    }
                 }
             }
         }
@@ -182,36 +231,32 @@ public class ScriptableObjectsEditor : EditorWindow
         Repaint();
     }
     #endregion
-    
+
     #region DRAW ASSETS
     private void DrawAssets()
     {
         GUILayout.BeginHorizontal();
-        
+
         const float margins = 5f;
         var panelSize = (position.width / 2f) - (margins * 3f);
-        
-        EditorGUILayout.Space(margins);
-        
-        leftScrollPos = GUILayout.BeginScrollView(leftScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
-        DisplayScriptableObjects();
-        GUILayout.EndScrollView();
 
         EditorGUILayout.Space(margins);
-        
-        rightScrollPos = GUILayout.BeginScrollView(rightScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
-        DisplayInspector();
-        GUILayout.EndScrollView();
+
+        DisplayScriptableObjects(panelSize);
+
+        EditorGUILayout.Space(margins);
+
+        DisplayInspector(panelSize);
 
         EditorGUILayout.Space(margins);
 
         GUILayout.EndHorizontal();
     }
-    
-    private void DisplayScriptableObjects()
+
+    /*private void DisplayScriptableObjects()
     {
         CheckGUIStyles();
-        
+
         for (var i = 0; i < scriptableObjects.Count; i++)
         {
             var obj = scriptableObjects[i];
@@ -220,7 +265,7 @@ public class ScriptableObjectsEditor : EditorWindow
             {
                 buttonName = AssetDatabase.GetAssetPath(obj);
             }
-            
+
             var style = defaultAssetButton;
             if (objectSelectedIndex == i)
             {
@@ -234,42 +279,112 @@ public class ScriptableObjectsEditor : EditorWindow
                 EditorGUIUtility.PingObject(objectSelected);
             }
         }
-    }
-
-    private void CheckGUIStyles()
-    {
-        if (defaultAssetButton == null)
-        {
-            defaultAssetButton = GUI.skin.button;
-        }
+    }*/
         
-        if (selectedAssetButton == null)
+    private void DisplayScriptableObjects(float panelSize)
+    { 
+        leftScrollPos = GUILayout.BeginScrollView(leftScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
+        RenderFolders();
+        GUILayout.EndScrollView();
+    }
+
+    private void RenderFolders()
+    {
+        const float indentationSpace = 15f;
+
+        foreach(var folder in assetFolders)
         {
-            selectedAssetButton = new GUIStyle(GUI.skin.button)
+            folder.Folded = EditorGUILayout.Foldout(folder.Folded, folder.Name, true);
+            if (folder.Folded)
             {
-                fontStyle = FontStyle.Bold
-            };
+                //RenderAssetFolder(subFolder);
+                foreach(var asset in folder.Objects)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Space(indentationSpace);
+                    RenderAssetButton(asset);
+                    GUILayout.EndHorizontal();
+                }
+            }
+        }
+    }
+    
+   /* private void RenderAssetFolder(string folderPath)
+    {
+        if (folderPath == null || !assetFolders.ContainsKey(folderPath))
+        {
+            return;
+        }
+
+        var assetsInFolder = assetFolders[folderPath];
+
+       * foreach(var asset in assetsInFolder)
+        {
+            RenderAssetButton(asset);
+        }*
+
+        foreach(var subFolder in assetFolders.Keys)
+        {
+            if (subFolder.StartsWith(folderPath) && subFolder != folderPath)
+            {
+                var subFolderPath = subFolder.Substring(folderPath.Length);
+                if (subFolderPath.StartsWith("/"))
+                {
+                    subFolderPath = subFolderPath.Substring(1);
+                }
+
+                if (subFolderPath.Contains("/"))
+                {
+                    var subFolderName = subFolderPath.Split('/')[0];
+                    if (EditorGUILayout.Foldout(true, subFolderName, true))
+                    {
+                        EditorGUI.indentLevel++;
+                        RenderAssetFolder(subFolder);
+                        EditorGUI.indentLevel--;
+                    }
+                }
+            }
+        }
+    }*/
+
+    private void RenderAssetButton(ScriptableObject obj)
+    {
+        var buttonName = obj.name;
+        var style = defaultAssetButton;
+
+        if (objectSelected == obj)
+        {
+            style = selectedAssetButton;
+            buttonName = "> " + buttonName + " <";
+        }
+
+        if (GUILayout.Button(buttonName, style))
+        {
+            objectSelected = obj;
+            EditorGUIUtility.PingObject(objectSelected);
         }
     }
 
-    private void DisplayInspector()
+    private void DisplayInspector(float panelSize)
     {
+        rightScrollPos = GUILayout.BeginScrollView(rightScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
+
         if (objectSelected is ScriptableObject scriptableObject)
         {
             if (GUILayout.Button("Select Asset", GUILayout.ExpandWidth(true)))
             {
                 EditorGUIUtility.PingObject(objectSelected);
             }
-            
+
             EditorGUILayout.Space();
-            
+
             EditorGUI.BeginChangeCheck();
             var serializedObject = new SerializedObject(scriptableObject);
             serializedObject.Update();
 
             var iterator = serializedObject.GetIterator();
             var enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
+            while(iterator.NextVisible(enterChildren))
             {
                 EditorGUILayout.PropertyField(iterator, true);
                 enterChildren = false;
@@ -281,6 +396,8 @@ public class ScriptableObjectsEditor : EditorWindow
                 EditorUtility.SetDirty(scriptableObject);
             }
         }
+        
+        GUILayout.EndScrollView();
     }
     #endregion
 }
