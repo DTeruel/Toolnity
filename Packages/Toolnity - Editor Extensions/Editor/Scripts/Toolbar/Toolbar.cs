@@ -13,6 +13,7 @@ namespace Toolnity.EditorExtensions
             OnPlayToolbarButton.ID,
             SceneSelectorToolbarButton.ID,
             SaveAllToolbarButton.ID,
+            ScriptableObjectViewerToolbarButton.ID,
             SettingsToolbarButton.ID
             )
         {

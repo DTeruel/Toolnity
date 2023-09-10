@@ -16,7 +16,6 @@ namespace Toolnity.SceneTools
 
     public class ReplaceTool : EditorWindow
     {
-        private static ReplaceTool replaceToolWindow;
         private Vector2 selectObjectScrollPosition;
         private ReplaceData data;
         private SerializedObject serializedData;
@@ -25,7 +24,7 @@ namespace Toolnity.SceneTools
         [MenuItem("Tools/Toolnity/Replace Tool", priority = 3000)]
         public static void ShowWindow()
         {
-            replaceToolWindow = GetWindow<ReplaceTool>("Replace Tool");
+            var replaceToolWindow = GetWindow<ReplaceTool>("Replace Tool");
             replaceToolWindow.titleContent = new GUIContent("Replace Tool", EditorGUIUtility.IconContent("d_RotateTool On").image);
             replaceToolWindow.Show();
         }

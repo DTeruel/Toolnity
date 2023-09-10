@@ -1,3 +1,7 @@
+## [2.1.6] - 10-09-2023
+### Feature
+- New Scriptable Object Viewer
+
 ## [2.1.5] - 04-05-2023
 ### Fix
 - Fix reloading scene after play

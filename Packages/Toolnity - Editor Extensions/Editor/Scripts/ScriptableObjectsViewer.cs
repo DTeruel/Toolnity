@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Object = UnityEngine.Object;
 
-public class ScriptableObjectsEditor : EditorWindow
+public class ScriptableObjectsViewer : EditorWindow
 {
     private class FolderInfo
     {
@@ -30,10 +30,14 @@ public class ScriptableObjectsEditor : EditorWindow
     private GUIStyle selectedAssetButton;
     private readonly List<FolderInfo> assetFolders = new();
 
-    [MenuItem("Tools/Toolnity/Scriptable Objects Editor")]
-    private static void Init()
+    [MenuItem("Tools/Toolnity/Scriptable Objects Viewer", priority = 3000)]
+    public static void ShowWindow()
     {
-        GetWindow<ScriptableObjectsEditor>("Scriptable Objects Editor");
+        var scriptableObjectsEditorWindow = GetWindow<ScriptableObjectsViewer>("Scriptable Objects Viewer");
+        scriptableObjectsEditorWindow.titleContent = new GUIContent(
+            "Scriptable Objects Viewer", 
+            EditorGUIUtility.IconContent("d_ScriptableObject Icon").image);
+        scriptableObjectsEditorWindow.Show();
     }
 
     private void GetParameters()

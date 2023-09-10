@@ -7,7 +7,6 @@ namespace Toolnity.SceneTools
 {
     public class PropPlacementTool : EditorWindow
     {
-        private static PropPlacementTool propPlacementToolWindow;
         private static GUIStyle titleToggle;
         private static Transform[] transformsToModify;
         private static Vector2 selectObjectScrollPosition;
@@ -32,7 +31,7 @@ namespace Toolnity.SceneTools
         [MenuItem("Tools/Toolnity/Prop Placement Tool", priority = 3000)]
         public static void ShowWindow()
         {
-            propPlacementToolWindow = GetWindow<PropPlacementTool>("Prop Placement Tool");
+            var propPlacementToolWindow = GetWindow<PropPlacementTool>("Prop Placement Tool");
             propPlacementToolWindow.titleContent = new GUIContent("Prop Placement Tool", EditorGUIUtility.IconContent("d_TransformTool").image);
             propPlacementToolWindow.Show();
         }
