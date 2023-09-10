@@ -17,6 +17,7 @@ public class ScriptableObjectsEditor : EditorWindow
     
     private bool showAttachedInspector;
     private bool searchInPackages;
+    private bool showClassType;
     private Vector2 leftScrollPos;
     private Vector2 rightScrollPos;
     private string[] typeOptions;
@@ -49,14 +50,15 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         if (defaultAssetButton == null)
         {
-            defaultAssetButton = GUI.skin.button;
+            defaultAssetButton = GUI.skin.label;
         }
 
         if (selectedAssetButton == null)
         {
-            selectedAssetButton = new GUIStyle(GUI.skin.button)
+            selectedAssetButton = new GUIStyle(GUI.skin.label)
             {
-                fontStyle = FontStyle.Bold
+                fontStyle = FontStyle.Bold,
+                fontSize = 14
             };
         }
     }
@@ -66,22 +68,22 @@ public class ScriptableObjectsEditor : EditorWindow
     {
         EditorGUILayout.Space(15f);
         
+        // ATTACKED INSPECTOR
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
         GUILayout.Label("Attached Inspector: ", GUILayout.Width(125f));
         showAttachedInspector = EditorGUILayout.Toggle(showAttachedInspector, GUILayout.Width(20f));
         GUILayout.FlexibleSpace();
-
         if (GUILayout.Button("Refresh"))
         {
             RefreshAllData();
         }
-
         EditorGUILayout.Space();
         EditorGUILayout.EndHorizontal();
         
         EditorGUILayout.Space();
         
+        // SEARCH IN PACKAGES
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
         GUILayout.Label("Search In Packages: ", GUILayout.Width(125f));
@@ -93,9 +95,20 @@ public class ScriptableObjectsEditor : EditorWindow
         }
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.Space();
+        
+        // SHOW CLASS TYPE
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.Space();
+        GUILayout.Label("Show Class Type: ", GUILayout.Width(125f));
+        showClassType = EditorGUILayout.Toggle(showClassType, GUILayout.Width(20f));
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
 
+        // TYPES
         EditorGUILayout.BeginHorizontal();
 
         EditorGUILayout.Space();
@@ -129,6 +142,9 @@ public class ScriptableObjectsEditor : EditorWindow
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
     }
+    #endregion
+    
+    #region ASSETS
 
     private void RefreshAllData()
     {
@@ -200,37 +216,53 @@ public class ScriptableObjectsEditor : EditorWindow
                 if (asset != null
                     && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
                 {
-                    var folders = path.Split('/');
-                    var folderPath = string.Join("/", folders.Take(folders.Length - 1));
-                    var folderExist = false;
-                    foreach(var folder in assetFolders)
-                    {
-                        if (folder.Name == folderPath)
-                        {
-                            folderExist = true;
-                            folder.Objects.Add(asset);
-                        }
-                    }
-                    if (!folderExist)
-                    {
-                        var newFolder = new FolderInfo
-                        {
-                            Name = folderPath,
-                            Folded = true,
-                            Objects = new List<ScriptableObject>
-                            {
-                                asset
-                            },
-                            SubFolders = new List<FolderInfo>()
-                        };
-
-                        assetFolders.Add(newFolder);
-                    }
+                    var assetPath = path.Split('/').ToList();
+                    //var folderPath = string.Join("/", folders.Take(folders.Count - 1));
+                    assetPath.RemoveAt(assetPath.Count - 1);
+                    AddAsset(assetFolders, assetPath, asset);
                 }
             }
         }
 
         Repaint();
+    }
+    
+    private void AddAsset(List<FolderInfo> foldersInfo, List<string> assetPath, ScriptableObject asset)
+    {
+        FolderInfo currentFolder = null;
+        var folderFound = false;
+        foreach(var folder in foldersInfo)
+        {
+            if (folder.Name == assetPath[0])
+            {
+                folderFound = true;
+                currentFolder = folder;
+                break;
+            }
+        }
+
+        if (!folderFound)
+        {
+            currentFolder = new FolderInfo
+            {
+                Name = assetPath[0], 
+                Folded = true, 
+                Objects = new List<ScriptableObject>(), 
+                SubFolders = new List<FolderInfo>()
+            };
+            
+            foldersInfo.Add(currentFolder);
+        }
+
+        if (assetPath.Count == 1)
+        {
+            currentFolder.Objects.Add(asset);
+        }
+        else
+        {
+            assetPath.RemoveAt(0);
+            AddAsset(currentFolder.SubFolders, assetPath, asset);
+        }
     }
     #endregion
 
@@ -284,35 +316,68 @@ public class ScriptableObjectsEditor : EditorWindow
             folder.Folded = EditorGUILayout.Foldout(folder.Folded, folder.Name, true);
             if (folder.Folded)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(indentationSpace);
+                
+                GUILayout.BeginVertical();
                 RenderFolders(folder.SubFolders);
                 foreach(var asset in folder.Objects)
                 {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Space(indentationSpace);
                     RenderAssetButton(asset);
-                    GUILayout.EndHorizontal();
                 }
+                GUILayout.EndVertical();
+                
+                GUILayout.EndHorizontal();
             }
         }
     }
     
     private void RenderAssetButton(ScriptableObject obj)
     {
+        if (obj == null)
+        {
+            RefreshScriptableObjects();
+            return;
+        }
+        
         var buttonName = obj.name;
         var style = defaultAssetButton;
-
         if (objectSelected == obj)
         {
             style = selectedAssetButton;
-            buttonName = "> " + buttonName + " <";
+            buttonName = "> " + buttonName;
         }
 
+        var buttonPressed = false;
+        GUILayout.BeginHorizontal();
         if (GUILayout.Button(buttonName, style))
+        {
+            buttonPressed = true;
+        }
+        
+        if (showClassType)
+        {
+            GUILayout.FlexibleSpace();
+            
+            var type = obj.GetType();
+            var typeName = type.Name;
+            if (objectSelected == obj)
+            {
+                typeName += " <";
+            }
+            if (GUILayout.Button(typeName, style))
+            {
+                buttonPressed = true;
+            }
+        }
+
+        if (buttonPressed)
         {
             objectSelected = obj;
             Selection.activeObject = obj;
             EditorGUIUtility.PingObject(objectSelected);
         }
+        GUILayout.EndHorizontal();
     }
 
     private void DisplayInspector(float panelSize)
