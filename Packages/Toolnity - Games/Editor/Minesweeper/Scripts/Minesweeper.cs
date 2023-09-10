@@ -17,7 +17,7 @@ namespace Toolnity.Games
         private static Minesweeper instance;
         private static GameState gameState;
 
-        [MenuItem("Tools/Toolnity/Games/Minesweeper", priority = 3500)]
+        [MenuItem("Tools/Toolnity/Games/Minesweeper", priority = 2500)]
         public static void ShowWindow()
         {
             instance = GetWindow<Minesweeper>("Minesweeper");

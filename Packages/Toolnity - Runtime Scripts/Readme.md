@@ -33,6 +33,9 @@
 #### Singleton Mono Behaviour
 * Make Singleton any of your classes
 
+### State Machine Generator
+* Utility to generate an Script Class with a custom FSM
+
 --------------------------------
 
 ## Support

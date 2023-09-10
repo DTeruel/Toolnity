@@ -58,13 +58,13 @@ namespace Toolnity.Games
 			{
 				matchWon = true;
 				MarkAllMinesAsFlags();
-				GetInstance().ShowNotification(new GUIContent("You won!"));
+				GetInstance().ShowNotification(new GUIContent("You Win!"));
 			}
 			else
 			{
 				matchWon = false;
 				RevealAllCells();
-				GetInstance().ShowNotification(new GUIContent("You lost!"));
+				GetInstance().ShowNotification(new GUIContent("You Lose!"));
 			}
 
 			SetState(GameState.Finished);

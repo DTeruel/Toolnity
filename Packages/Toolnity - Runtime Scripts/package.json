@@ -1,6 +1,6 @@
 {
   "name": "com.dteruel.toolnity.runtimescripts",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "displayName": "Toolnity Runtime Scripts",
   "description": "Collection of scripts for runtime:\n- AnyButtonEvent\n- DontDestroy\n- Event Sequencer\n- FrameRateCounter\n- FrameRateDisplay\n- InputEventLauncher\n- OnSceneChangeEvent\n- QuitGame\n- SceneLoader\n-SingletonMonoBehaviour",
   "unity": "2021.2",

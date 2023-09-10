@@ -17,6 +17,9 @@
 ### Find Missing Scripts
 * Utility to find missing scripts in all the game objects selected
 
+### Scriptable Objects Viewer
+* Utility to find all the Scriptable Objects in your project
+
 --------------------------------
 
 ## Support
