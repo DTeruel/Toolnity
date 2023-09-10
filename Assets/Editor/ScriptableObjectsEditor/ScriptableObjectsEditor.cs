@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -18,10 +19,12 @@ public class ScriptableObjectsEditor : EditorWindow
     private bool showAttachedInspector;
     private bool searchInPackages;
     private bool showClassType;
+    private int selectedMask;
+    
+    private bool[] selectedTypeVisible;
     private Vector2 leftScrollPos;
     private Vector2 rightScrollPos;
     private string[] typeOptions;
-    private bool[] selectedTypeVisible;
     private Object objectSelected;
     private GUIStyle defaultAssetButton;
     private GUIStyle selectedAssetButton;
@@ -33,9 +36,22 @@ public class ScriptableObjectsEditor : EditorWindow
         GetWindow<ScriptableObjectsEditor>("Scriptable Objects Editor");
     }
 
+    private void GetParameters()
+    {
+        showAttachedInspector = EditorPrefs.GetBool(Application.productName + "_showAttachedInspector", false);
+        searchInPackages = EditorPrefs.GetBool(Application.productName + "_searchInPackages", false);
+        showClassType = EditorPrefs.GetBool(Application.productName + "_showClassType", false);
+        selectedMask = EditorPrefs.GetInt(Application.productName + "_selectedMask", 0);
+    }
+
     private void OnEnable()
     {
         RefreshAllData();
+    }
+    
+    private void OnFocus()
+    {
+        GetParameters();
     }
 
     private void OnGUI()
@@ -72,7 +88,12 @@ public class ScriptableObjectsEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
         GUILayout.Label("Attached Inspector: ", GUILayout.Width(125f));
-        showAttachedInspector = EditorGUILayout.Toggle(showAttachedInspector, GUILayout.Width(20f));
+        var newShowAttachedInspector = EditorGUILayout.Toggle(showAttachedInspector, GUILayout.Width(20f));
+        if (showAttachedInspector != newShowAttachedInspector)
+        {
+            showAttachedInspector = newShowAttachedInspector;
+            EditorPrefs.SetBool(Application.productName + "_showAttachedInspector", showAttachedInspector);
+        }
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Refresh"))
         {
@@ -91,6 +112,7 @@ public class ScriptableObjectsEditor : EditorWindow
         if (searchInPackages != newSearchInPackages)
         {
             searchInPackages = newSearchInPackages;
+            EditorPrefs.SetBool(Application.productName + "_searchInPackages", searchInPackages);
             RefreshScriptableObjects();
         }
         GUILayout.FlexibleSpace();
@@ -102,7 +124,12 @@ public class ScriptableObjectsEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
         GUILayout.Label("Show Class Type: ", GUILayout.Width(125f));
-        showClassType = EditorGUILayout.Toggle(showClassType, GUILayout.Width(20f));
+        var newShowClassType = EditorGUILayout.Toggle(showClassType, GUILayout.Width(20f));
+        if (showClassType != newShowClassType)
+        {
+            showClassType = newShowClassType;
+            EditorPrefs.SetBool(Application.productName + "_showClassType", showClassType);
+        }
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
 
@@ -115,20 +142,12 @@ public class ScriptableObjectsEditor : EditorWindow
 
         if (typeOptions != null && typeOptions.Length > 0)
         {
-            var selectedMask = 0;
-            for (var i = 0; i < typeOptions.Length; i++)
-            {
-                if (selectedTypeVisible[i])
-                {
-                    selectedMask |= 1 << i;
-                }
-            }
-
             GUILayout.Label("Types: ");
             var newSelectedMask = EditorGUILayout.MaskField(selectedMask, typeOptions, GUILayout.Width(250f));
             if (selectedMask != newSelectedMask)
             {
                 selectedMask = newSelectedMask;
+                EditorPrefs.SetInt(Application.productName + "_selectedMask", selectedMask);
 
                 for (var i = 0; i < typeOptions.Length; i++)
                 {
@@ -148,6 +167,7 @@ public class ScriptableObjectsEditor : EditorWindow
 
     private void RefreshAllData()
     {
+        GetParameters();
         RefreshScriptableTypesWithAssets();
         RefreshScriptableObjects();
     }
@@ -190,6 +210,10 @@ public class ScriptableObjectsEditor : EditorWindow
             .ToArray();
 
         selectedTypeVisible = new bool[typeOptions.Length];
+        for (var i = 0; i < typeOptions.Length; i++)
+        {
+            selectedTypeVisible[i] = (selectedMask & (1 << i)) != 0;
+        }
     }
 
     private void RefreshScriptableObjects()
@@ -393,7 +417,7 @@ public class ScriptableObjectsEditor : EditorWindow
             }
 
             EditorGUILayout.Space();
-
+            
             EditorGUI.BeginChangeCheck();
             var serializedObject = new SerializedObject(scriptableObject);
             serializedObject.Update();
@@ -417,3 +441,4 @@ public class ScriptableObjectsEditor : EditorWindow
     }
     #endregion
 }
+#endif
