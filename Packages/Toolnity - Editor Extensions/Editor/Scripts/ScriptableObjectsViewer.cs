@@ -19,16 +19,16 @@ public class ScriptableObjectsViewer : EditorWindow
     private bool showAttachedInspector;
     private bool searchInPackages;
     private bool showClassType;
-    private int selectedMask;
     
-    private bool[] selectedTypeVisible;
     private Vector2 leftScrollPos;
     private Vector2 rightScrollPos;
-    private string[] typeOptions;
+    private string[] classTypesFilterNames;
+    private bool[] classTypesFilterVisibility;
     private Object objectSelected;
     private GUIStyle defaultAssetButton;
     private GUIStyle selectedAssetButton;
     private readonly List<FolderInfo> assetFolders = new();
+    private bool editingTypesFilter;
 
     [MenuItem("Tools/Toolnity/Scriptable Objects Viewer", priority = 3000)]
     public static void ShowWindow()
@@ -45,7 +45,6 @@ public class ScriptableObjectsViewer : EditorWindow
         showAttachedInspector = EditorPrefs.GetBool(Application.productName + "_showAttachedInspector", false);
         searchInPackages = EditorPrefs.GetBool(Application.productName + "_searchInPackages", false);
         showClassType = EditorPrefs.GetBool(Application.productName + "_showClassType", false);
-        selectedMask = EditorPrefs.GetInt(Application.productName + "_selectedMask", 0);
     }
 
     private void OnEnable()
@@ -141,23 +140,14 @@ public class ScriptableObjectsViewer : EditorWindow
 
         // TYPES
         EditorGUILayout.BeginHorizontal();
-
         EditorGUILayout.Space();
-
-        if (typeOptions != null && typeOptions.Length > 0)
+        GUILayout.Label("Class Types Filter: ", GUILayout.Width(125f));
+        
+        if (GUILayout.Button(editingTypesFilter?"Close":"Edit "))
         {
-            GUILayout.Label("Types: ");
-            var newSelectedMask = EditorGUILayout.MaskField(selectedMask, typeOptions, GUILayout.Width(250f));
-            if (selectedMask != newSelectedMask)
+            editingTypesFilter = !editingTypesFilter;
+            if (!editingTypesFilter)
             {
-                selectedMask = newSelectedMask;
-                EditorPrefs.SetInt(Application.productName + "_selectedMask", selectedMask);
-
-                for (var i = 0; i < typeOptions.Length; i++)
-                {
-                    selectedTypeVisible[i] = (selectedMask & (1 << i)) != 0;
-                }
-
                 RefreshScriptableObjects();
             }
         }
@@ -209,14 +199,14 @@ public class ScriptableObjectsViewer : EditorWindow
         }
 
         // Natural Order: typeOptions = typesWithAssets.Select(type => type.Name).ToArray();
-        typeOptions = typeNameToAssetFolder.OrderBy(pair => pair.Value)
+        classTypesFilterNames = typeNameToAssetFolder.OrderBy(pair => pair.Value)
             .Select(pair => pair.Key)
             .ToArray();
 
-        selectedTypeVisible = new bool[typeOptions.Length];
-        for (var i = 0; i < typeOptions.Length; i++)
+        classTypesFilterVisibility = new bool[classTypesFilterNames.Length];
+        for (var i = 0; i < classTypesFilterNames.Length; i++)
         {
-            selectedTypeVisible[i] = (selectedMask & (1 << i)) != 0;
+            classTypesFilterVisibility[i] =  EditorPrefs.GetBool(Application.productName + "_filter_" + classTypesFilterNames[i], true);
         }
     }
 
@@ -225,27 +215,22 @@ public class ScriptableObjectsViewer : EditorWindow
         objectSelected = null;
         assetFolders.Clear();
 
-        var selectedTypes = new List<string>();
-        for (var i = 0; i < selectedTypeVisible.Length; i++)
+        for (var i = 0; i < classTypesFilterNames.Length; i++)
         {
-            if (selectedTypeVisible[i])
+            if (!classTypesFilterVisibility[i])
             {
-                selectedTypes.Add(typeOptions[i]);
+                continue;
             }
-        }
-
-        foreach(var selectedType in selectedTypes)
-        {
+                
+            var selectedType = classTypesFilterNames[i];
             var guids = AssetDatabase.FindAssets("t:" + selectedType);
             foreach(var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-                if (asset != null
-                    && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
+                if (asset != null && (searchInPackages || (!searchInPackages && path.StartsWith("Assets/"))))
                 {
                     var assetPath = path.Split('/').ToList();
-                    //var folderPath = string.Join("/", folders.Take(folders.Count - 1));
                     assetPath.RemoveAt(assetPath.Count - 1);
                     AddAsset(assetFolders, assetPath, asset);
                 }
@@ -314,7 +299,14 @@ public class ScriptableObjectsViewer : EditorWindow
         
         EditorGUILayout.Space(margins);
 
-        DisplayScriptableObjects(panelSize);
+        if (editingTypesFilter)
+        {
+            DisplayClassTypesFilter(panelSize);
+        }
+        else
+        {
+            DisplayScriptableObjects(panelSize);
+        }
 
         if (showAttachedInspector)
         {
@@ -326,6 +318,57 @@ public class ScriptableObjectsViewer : EditorWindow
         EditorGUILayout.Space(margins);
 
         GUILayout.EndHorizontal();
+    }
+
+    private void DisplayClassTypesFilter(float panelSize)
+    {
+        leftScrollPos = GUILayout.BeginScrollView(leftScrollPos, GUI.skin.box, GUILayout.Width(panelSize), GUILayout.ExpandHeight(true));
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Select All"))
+        {
+            for (var i = 0; i < classTypesFilterVisibility.Length; i++)
+            {
+                classTypesFilterVisibility[i] = true;
+                EditorPrefs.SetBool(Application.productName + "_filter_" + classTypesFilterNames[i], true);
+            }
+        }
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Select None"))
+        {
+            for (var i = 0; i < classTypesFilterVisibility.Length; i++)
+            {
+                classTypesFilterVisibility[i] = false;
+                EditorPrefs.SetBool(Application.productName + "_filter_" + classTypesFilterNames[i], false);
+            }
+        }
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Close"))
+        {
+            editingTypesFilter = !editingTypesFilter;
+            if (!editingTypesFilter)
+            {
+                RefreshScriptableObjects();
+            }
+        }
+        GUILayout.EndHorizontal();
+        
+        EditorGUILayout.Space();
+        for (var i = 0; i < classTypesFilterNames.Length; i++)
+        {
+            GUILayout.BeginHorizontal();
+            var visible = EditorGUILayout.Toggle(classTypesFilterVisibility[i], GUILayout.Width(15f));
+            if (classTypesFilterVisibility[i] != visible)
+            {
+                classTypesFilterVisibility[i] = visible;
+                EditorPrefs.SetBool(Application.productName + "_filter_" + classTypesFilterNames[i], visible);
+            }
+            GUILayout.Label(classTypesFilterNames[i]);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.EndScrollView();
     }
 
     private void DisplayScriptableObjects(float panelSize)
@@ -370,10 +413,17 @@ public class ScriptableObjectsViewer : EditorWindow
         
         var buttonName = obj.name;
         var style = defaultAssetButton;
+        
+        if (showClassType)
+        {
+            var type = obj.GetType();
+            buttonName += " :: " + type.Name + "";
+        }
+        
         if (objectSelected == obj)
         {
             style = selectedAssetButton;
-            buttonName = "> " + buttonName;
+            buttonName = "> " + buttonName + " <";
         }
 
         var buttonPressed = false;
@@ -381,22 +431,6 @@ public class ScriptableObjectsViewer : EditorWindow
         if (GUILayout.Button(buttonName, style))
         {
             buttonPressed = true;
-        }
-        
-        if (showClassType)
-        {
-            GUILayout.FlexibleSpace();
-            
-            var type = obj.GetType();
-            var typeName = type.Name;
-            if (objectSelected == obj)
-            {
-                typeName += " <";
-            }
-            if (GUILayout.Button(typeName, style))
-            {
-                buttonPressed = true;
-            }
         }
 
         if (buttonPressed)

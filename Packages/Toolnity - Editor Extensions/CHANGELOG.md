@@ -1,3 +1,7 @@
+## [2.1.7] - 15-09-2023
+### Fix
+- Fix Scriptable Object Viewer filter
+
 ## [2.1.6] - 10-09-2023
 ### Feature
 - New Scriptable Object Viewer
